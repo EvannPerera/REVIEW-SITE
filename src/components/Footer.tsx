@@ -38,16 +38,17 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Brand Info */}
           <div style={{ maxWidth: '380px' }}>
             <div
+              className="text-3d-brand"
               style={{
-                fontFamily: 'var(--font-display)',
+                fontFamily: 'var(--font-brand)',
                 fontWeight: 900,
-                fontSize: '1.4rem',
-                letterSpacing: '0.08em',
+                fontSize: '1.45rem',
+                letterSpacing: '-0.01em',
                 color: '#FFFFFF',
                 marginBottom: '0.75rem',
               }}
             >
-              ÉVANN<span style={{ color: 'var(--red-accent)' }}>_</span>STORIES
+              Évann<span style={{ color: 'var(--red-accent)' }}>_</span>stories
             </div>
             <p
               style={{

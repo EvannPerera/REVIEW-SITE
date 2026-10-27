@@ -59,14 +59,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           transition: 'height 300ms ease',
         }}
       >
-        {/* Brand Wordmark */}
+        {/* Brand Wordmark & Founder Avatar */}
         <button
           onClick={() => handleNavClick('hero')}
-          aria-label="ÉVANN_STORIES Home"
+          aria-label="Évann_stories Home"
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '8px',
+            gap: '12px',
             background: 'none',
             border: 'none',
             cursor: 'pointer',
@@ -74,30 +74,71 @@ export const Navbar: React.FC<NavbarProps> = ({
             textAlign: 'left',
           }}
         >
-          <span
+          {/* Founder Avatar with Glowing Crimson Ring */}
+          <div
             style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 900,
-              fontSize: '1.25rem',
-              letterSpacing: '0.08em',
-              color: '#FFFFFF',
-              display: 'inline-flex',
-              alignItems: 'center',
+              position: 'relative',
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              flexShrink: 0,
             }}
           >
-            ÉVANN<span style={{ color: 'var(--red-accent)' }}>_</span>STORIES
-          </span>
-          <span
-            style={{
-              display: 'inline-block',
-              width: '6px',
-              height: '6px',
-              borderRadius: '50%',
-              backgroundColor: 'var(--red-accent)',
-              boxShadow: '0 0 8px var(--red-accent)',
-              marginLeft: '2px',
-            }}
-          />
+            <img
+              src="./evann-avatar.jpg"
+              alt="Évann Avatar"
+              onError={(e) => {
+                // Fallback to absolute path or SVG icon if relative path fails
+                const target = e.currentTarget;
+                if (!target.src.includes('evann-avatar.jpg')) return;
+                target.src = '/evann-avatar.jpg';
+              }}
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: '50%',
+                objectFit: 'cover',
+                border: '2px solid var(--red-accent)',
+                boxShadow: '0 0 14px rgba(255, 23, 68, 0.5), inset 0 0 8px rgba(0, 0, 0, 0.6)',
+                display: 'block',
+              }}
+            />
+            {/* Live Status Pulse Dot */}
+            <span
+              style={{
+                position: 'absolute',
+                bottom: '0px',
+                right: '0px',
+                width: '10px',
+                height: '10px',
+                borderRadius: '50%',
+                backgroundColor: '#00E676',
+                border: '2px solid #090909',
+                boxShadow: '0 0 8px #00E676',
+              }}
+              title="Verified Online Moderator"
+            />
+          </div>
+
+          {/* 3D Brand Title in Nexa Round */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span
+              className="text-3d-brand"
+              style={{
+                fontFamily: 'var(--font-brand)',
+                fontWeight: 900,
+                fontSize: '1.35rem',
+                letterSpacing: '-0.01em',
+                color: '#FFFFFF',
+                display: 'inline-flex',
+                alignItems: 'center',
+                textShadow:
+                  '0 1px 0 #FFFFFF, 0 2px 0 #CBD5E1, 0 3px 0 #850017, 0 4px 0 #52000D, 0 6px 12px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 23, 68, 0.4)',
+              }}
+            >
+              Évann<span style={{ color: 'var(--red-accent)', textShadow: '0 0 12px rgba(255, 23, 68, 0.8)' }}>_</span>stories
+            </span>
+          </div>
         </button>
 
         {/* Desktop Navigation Links */}
