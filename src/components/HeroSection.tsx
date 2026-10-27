@@ -132,8 +132,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </span>
         </div>
 
-        {/* Main Interactive Brand Typography */}
-        <div style={{ margin: '0.5rem 0 1rem' }}>
+        {/* Main Interactive Brand Typography (Full Screen Dominance) */}
+        <div
+          style={{
+            margin: '0.75rem calc(-50vw + 50%) 1.5rem',
+            width: '100vw',
+            display: 'flex',
+            justifyContent: 'center',
+            overflow: 'visible',
+          }}
+        >
           <InteractiveTypography />
         </div>
 
