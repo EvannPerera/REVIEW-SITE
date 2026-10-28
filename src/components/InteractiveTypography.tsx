@@ -14,11 +14,14 @@ export const InteractiveTypography: React.FC = () => {
   const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const animationFrameRef = useRef<number | null>(null);
 
-  // Dynamic calculated font size that fills ~90% of the screen width
+  // Dynamic calculated font size that fills ~90% of screen without mobile clipping
   const [fontSizePx, setFontSizePx] = useState<number>(() => {
     if (typeof window !== 'undefined') {
-      const targetWidth = Math.min(window.innerWidth * 0.92, 1600);
-      return Math.max(32, Math.min(Math.round(targetWidth / 7.1), 180));
+      const vpWidth = window.innerWidth;
+      const factor = vpWidth <= 360 ? 0.86 : (vpWidth <= 480 ? 0.88 : (vpWidth <= 768 ? 0.91 : 0.90));
+      const ratio = vpWidth <= 360 ? 7.7 : (vpWidth <= 480 ? 7.5 : 7.3);
+      const targetWidth = Math.min(vpWidth * factor, 1600);
+      return Math.max(22, Math.min(Math.round(targetWidth / ratio), 185));
     }
     return 90;
   });
@@ -27,13 +30,25 @@ export const InteractiveTypography: React.FC = () => {
   const updateFitToScreen = useCallback(() => {
     if (typeof window === 'undefined') return;
     const vpWidth = window.innerWidth;
-    // We target 90% of screen width on desktop and 94% on mobile
-    const percentage = vpWidth < 768 ? 0.94 : 0.90;
-    const targetWidth = Math.min(vpWidth * percentage, 1600);
     
-    // In Russo One, the 13 characters 'Évann_stories' have an average width ratio of ~7.1em
-    const calculated = Math.round(targetWidth / 7.1);
-    const bounded = Math.max(28, Math.min(calculated, 190));
+    // Width ratio adjustment: smaller screens need slightly more breathing room for 3D extrusion
+    let ratio = 7.3;
+    let factor = 0.90;
+    
+    if (vpWidth <= 360) {
+      factor = 0.86;
+      ratio = 7.7;
+    } else if (vpWidth <= 480) {
+      factor = 0.88;
+      ratio = 7.5;
+    } else if (vpWidth <= 768) {
+      factor = 0.91;
+      ratio = 7.3;
+    }
+    
+    const targetWidth = Math.min(vpWidth * factor, 1600);
+    const calculated = Math.round(targetWidth / ratio);
+    const bounded = Math.max(22, Math.min(calculated, 185));
     setFontSizePx(bounded);
   }, []);
 
@@ -258,8 +273,8 @@ export const InteractiveTypography: React.FC = () => {
         userSelect: 'none',
         touchAction: 'none',
         width: '100%',
-        maxWidth: '100vw',
-        padding: '1.5rem 0',
+        maxWidth: '100%',
+        padding: '1.25rem 0',
         perspective: '1400px',
         overflow: 'visible',
       }}
@@ -272,7 +287,7 @@ export const InteractiveTypography: React.FC = () => {
           alignItems: 'center',
           justifyContent: 'center',
           margin: 0,
-          padding: '0 0.5rem',
+          padding: '0 0.25rem',
           fontFamily: "'Russo One', 'Dela Gothic One', 'Syne', sans-serif",
           fontWeight: 900,
           // Screen-filling dynamic font size: automatically fills ~90% of viewport width!
@@ -282,7 +297,7 @@ export const InteractiveTypography: React.FC = () => {
           color: '#FFFFFF',
           transformStyle: 'preserve-3d',
           width: 'auto',
-          maxWidth: '100vw',
+          maxWidth: '100%',
           overflow: 'visible',
         }}
       >

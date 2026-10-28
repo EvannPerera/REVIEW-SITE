@@ -20,6 +20,7 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import { Review, ReviewStatus } from '../types/database';
+import { getCountryByCode } from '../data/countries';
 
 interface AdminDashboardProps {
   isOpen: boolean;
@@ -104,7 +105,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     const uidMatch = r.codm_uid_private
       ? r.codm_uid_private.toLowerCase().includes(q)
       : false;
-    return nameMatch || textMatch || uidMatch;
+    const countryMatch =
+      (r.country_name && r.country_name.toLowerCase().includes(q)) ||
+      (r.country_code && r.country_code.toLowerCase().includes(q));
+    return nameMatch || textMatch || uidMatch || countryMatch;
   });
 
   const pendingCount = reviews.filter((r) => r.status === 'pending').length;
@@ -148,7 +152,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '1rem 2rem',
+          padding: '0.85rem clamp(1rem, 3vw, 2rem)',
           backgroundColor: '#070709',
           borderBottom: '1px solid rgba(255, 23, 68, 0.25)',
         }}
@@ -167,11 +171,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <div>
             <h2
               style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '1.15rem',
-                fontWeight: 900,
+                fontFamily: 'var(--font-heading)',
+                fontSize: 'clamp(0.95rem, 2.5vw, 1.15rem)',
+                fontWeight: 700,
                 color: '#FFFFFF',
-                letterSpacing: '0.04em',
+                letterSpacing: '0.02em',
                 margin: 0,
               }}
             >
@@ -251,15 +255,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       </header>
 
       {/* Main Content Area */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '2rem' }}>
-        <div className="container" style={{ maxWidth: '1200px' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: 'clamp(1rem, 3vw, 2rem)' }}>
+        <div className="container" style={{ maxWidth: '1200px', padding: 0 }}>
           {!isAdminLoggedIn ? (
             /* --- Admin Login Form --- */
             <div
               style={{
                 maxWidth: '440px',
-                margin: '4rem auto',
-                padding: '2.5rem',
+                margin: 'clamp(1.5rem, 5vw, 4rem) auto',
+                padding: 'clamp(1.25rem, 5vw, 2.5rem)',
                 backgroundColor: '#09090C',
                 border: '1px solid rgba(255, 23, 68, 0.35)',
                 borderRadius: '12px',
@@ -284,8 +288,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
                 <h3
                   style={{
-                    fontFamily: 'var(--font-display)',
+                    fontFamily: 'var(--font-heading)',
                     fontSize: '1.4rem',
+                    fontWeight: 700,
                     color: '#FFFFFF',
                   }}
                 >
@@ -420,6 +425,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <div
                   style={{
                     display: 'flex',
+                    flexWrap: 'wrap',
                     gap: '0.5rem',
                     backgroundColor: 'rgba(5, 5, 8, 0.7)',
                     padding: '4px',
@@ -529,8 +535,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <h4
                               style={{
-                                fontFamily: 'var(--font-display)',
+                                fontFamily: 'var(--font-heading)',
                                 fontSize: '1.1rem',
+                                fontWeight: 600,
                                 color: '#FFFFFF',
                                 margin: 0,
                               }}
@@ -541,7 +548,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                               style={{
                                 padding: '2px 8px',
                                 borderRadius: '4px',
-                                backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                                backgroundColor: 'var(--bg-elevated)',
                                 fontSize: '0.72rem',
                                 fontFamily: 'var(--font-tech)',
                                 color: 'var(--text-secondary)',
@@ -549,6 +556,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             >
                               {review.platform}
                             </span>
+                            {(review.country_code || review.country_name) && (
+                              <span
+                                style={{
+                                  padding: '2px 8px',
+                                  borderRadius: '4px',
+                                  backgroundColor: 'var(--bg-elevated)',
+                                  fontSize: '0.72rem',
+                                  fontFamily: 'var(--font-tech)',
+                                  color: 'var(--text-secondary)',
+                                }}
+                              >
+                                {getCountryByCode(review.country_code)?.flag || '🌐'} {review.country_name || review.country_code}
+                              </span>
+                            )}
                             <span
                               style={{
                                 fontSize: '0.74rem',
@@ -800,7 +821,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ fontFamily: 'var(--font-display)', color: '#FFFFFF', fontSize: '1.2rem' }}>
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, color: '#FFFFFF', fontSize: '1.2rem' }}>
                 Administrator Reply to {replyingReview.customer_name}
               </h3>
               <button onClick={() => setReplyingReview(null)} style={{ color: 'var(--text-muted)' }}>
@@ -878,7 +899,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             }}
           >
             <AlertTriangle size={36} color="var(--red-accent)" style={{ marginBottom: '0.75rem' }} />
-            <h3 style={{ fontFamily: 'var(--font-display)', color: '#FFFFFF', marginBottom: '0.5rem' }}>
+            <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, color: '#FFFFFF', marginBottom: '0.5rem' }}>
               Delete Review Permanently?
             </h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.5, marginBottom: '1.5rem' }}>
@@ -983,9 +1004,9 @@ const modalInputStyle: React.CSSProperties = {
   width: '100%',
   padding: '10px 14px',
   borderRadius: '8px',
-  backgroundColor: 'rgba(5, 5, 8, 0.8)',
-  border: '1px solid rgba(255, 255, 255, 0.12)',
-  color: '#FFFFFF',
+  backgroundColor: 'var(--input-bg)',
+  border: '1px solid var(--input-border)',
+  color: 'var(--input-text)',
   fontFamily: 'var(--font-body)',
   fontSize: '0.9rem',
   outline: 'none',

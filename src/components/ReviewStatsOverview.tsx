@@ -54,7 +54,7 @@ export const ReviewStatsOverview: React.FC<ReviewStatsOverviewProps> = ({
     >
       <div className="container">
         {/* Section Heading */}
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+        <div className="section-header-cinema" style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <span
             style={{
               fontFamily: 'var(--font-tech)',
@@ -70,19 +70,19 @@ export const ReviewStatsOverview: React.FC<ReviewStatsOverviewProps> = ({
             Audited Performance Metrics
           </span>
           <h2
+            className="cinema-section-heading"
             style={{
               fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
-              fontFamily: 'var(--font-display)',
-              fontWeight: 900,
-              color: '#FFFFFF',
+              fontFamily: 'var(--font-heading)',
+              fontWeight: 700,
               letterSpacing: '-0.02em',
             }}
           >
             Review Metrics & Integrity
           </h2>
           <p
+            className="cinema-section-subtitle"
             style={{
-              color: 'var(--text-secondary)',
               fontSize: '0.98rem',
               maxWidth: '540px',
               margin: '0.5rem auto 0',
@@ -144,8 +144,9 @@ export const ReviewStatsOverview: React.FC<ReviewStatsOverviewProps> = ({
               <h3
                 style={{
                   fontSize: '1.35rem',
-                  fontFamily: 'var(--font-display)',
-                  color: '#FFFFFF',
+                  fontFamily: 'var(--font-heading)',
+                  fontWeight: 600,
+                  color: 'var(--heading-color)',
                 }}
               >
                 No Customer Reviews Recorded Yet
@@ -165,31 +166,33 @@ export const ReviewStatsOverview: React.FC<ReviewStatsOverviewProps> = ({
           ) : (
             /* Full Stats Grid */
             <div
+              className="stats-grid-container"
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                gap: '2.5rem',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+                gap: '2rem',
                 alignItems: 'center',
               }}
             >
               {/* Score Display */}
               <div
+                className="stats-score-column"
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   textAlign: 'center',
-                  borderRight: '1px solid rgba(255, 255, 255, 0.06)',
+                  borderRight: '1px solid var(--border-subtle)',
                   paddingRight: '1.5rem',
                 }}
               >
                 <div
                   style={{
                     fontSize: 'clamp(3.8rem, 6vw, 5rem)',
-                    fontFamily: 'var(--font-display)',
-                    fontWeight: 900,
+                    fontFamily: 'var(--font-heading)',
+                    fontWeight: 800,
                     lineHeight: 1,
-                    color: '#FFFFFF',
+                    color: 'var(--heading-color)',
                     textShadow: '0 0 25px rgba(255, 23, 68, 0.3)',
                   }}
                 >
@@ -237,7 +240,7 @@ export const ReviewStatsOverview: React.FC<ReviewStatsOverviewProps> = ({
                   }}
                 >
                   Based on{' '}
-                  <strong style={{ color: '#FFFFFF' }}>{displayedTotal}</strong>{' '}
+                  <strong style={{ color: 'var(--heading-color)' }}>{displayedTotal}</strong>{' '}
                   approved {stats.totalReviews === 1 ? 'review' : 'reviews'}
                 </div>
 

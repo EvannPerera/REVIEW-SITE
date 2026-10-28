@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { NewReviewSubmission, ReviewPlatform } from '../types/database';
+import { CountrySelect } from './CountrySelect';
+import { Country } from '../data/countries';
 
 interface ReviewSubmissionFormProps {
   onSubmit: (submission: NewReviewSubmission) => Promise<{ success: boolean; error?: string }>;
@@ -21,6 +23,8 @@ interface ReviewSubmissionFormProps {
 export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSubmit }) => {
   // Form fields
   const [customerName, setCustomerName] = useState('');
+  const [countryCode, setCountryCode] = useState('');
+  const [countryName, setCountryName] = useState('');
   const [platform, setPlatform] = useState<ReviewPlatform>('Discord');
   const [rating, setRating] = useState<number>(5);
   const [hoverRating, setHoverRating] = useState<number | null>(null);
@@ -96,6 +100,12 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
       return;
     }
 
+    // Validate Country (Required field)
+    if (!countryCode || !countryName) {
+      setFormError('Please select your country before submitting.');
+      return;
+    }
+
     // Validate Rating (1-5)
     if (!rating || rating < 1 || rating > 5) {
       setFormError('Please select a star rating between 1 and 5.');
@@ -133,6 +143,8 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
     try {
       const result = await onSubmit({
         customer_name: trimmedName,
+        country_code: countryCode,
+        country_name: countryName,
         platform,
         rating,
         review_text: trimmedText,
@@ -157,6 +169,8 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
 
       // Reset form
       setCustomerName('');
+      setCountryCode('');
+      setCountryName('');
       setPlatform('Discord');
       setRating(5);
       setReviewText('');
@@ -181,7 +195,7 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
     >
       <div className="container" style={{ maxWidth: '820px' }}>
         {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+        <div className="section-header-cinema" style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <span
             style={{
               fontFamily: 'var(--font-tech)',
@@ -197,19 +211,19 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
             Share Your Experience
           </span>
           <h2
+            className="cinema-section-heading"
             style={{
               fontSize: 'clamp(2rem, 3.8vw, 2.8rem)',
-              fontFamily: 'var(--font-display)',
-              fontWeight: 900,
-              color: '#FFFFFF',
+              fontFamily: 'var(--font-heading)',
+              fontWeight: 700,
               letterSpacing: '-0.02em',
             }}
           >
             Submit an Authenticated Review
           </h2>
           <p
+            className="cinema-section-subtitle"
             style={{
-              color: 'var(--text-secondary)',
               fontSize: '0.98rem',
               maxWidth: '540px',
               margin: '0.5rem auto 0',
@@ -250,9 +264,9 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
             <h3
               style={{
                 fontSize: '1.6rem',
-                fontFamily: 'var(--font-display)',
-                fontWeight: 800,
-                color: '#FFFFFF',
+                fontFamily: 'var(--font-heading)',
+                fontWeight: 700,
+                color: 'var(--heading-color)',
                 marginBottom: '0.75rem',
               }}
             >
@@ -296,10 +310,10 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
             onSubmit={handleSubmit}
             className="glass-panel"
             style={{
-              padding: 'clamp(1.5rem, 4vw, 2.8rem)',
+              padding: 'clamp(1.1rem, 3.5vw, 2.8rem)',
               display: 'flex',
               flexDirection: 'column',
-              gap: '1.6rem',
+              gap: '1.5rem',
             }}
             noValidate
           >
@@ -328,11 +342,11 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
               <label
                 style={{
                   display: 'block',
-                  fontFamily: 'var(--font-tech)',
+                  fontFamily: 'var(--font-heading)',
                   fontWeight: 600,
                   fontSize: '0.88rem',
-                  letterSpacing: '0.04em',
-                  color: '#FFFFFF',
+                  letterSpacing: '0.02em',
+                  color: 'var(--heading-color)',
                   marginBottom: '0.5rem',
                 }}
               >
@@ -345,8 +359,8 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
                   gap: '8px',
                   padding: '8px 12px',
                   borderRadius: '10px',
-                  backgroundColor: 'rgba(5, 5, 8, 0.6)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--border-subtle)',
                 }}
                 role="radiogroup"
                 aria-label="Star rating selection"
@@ -390,11 +404,11 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
               </div>
             </div>
 
-            {/* 2. Customer Name & Platform Grid */}
+            {/* 2. Customer Name, Country & Platform Grid */}
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
                 gap: '1.25rem',
               }}
             >
@@ -404,11 +418,11 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
                   htmlFor="customer_name"
                   style={{
                     display: 'block',
-                    fontFamily: 'var(--font-tech)',
+                    fontFamily: 'var(--font-heading)',
                     fontWeight: 600,
                     fontSize: '0.88rem',
-                    letterSpacing: '0.04em',
-                    color: '#FFFFFF',
+                    letterSpacing: '0.02em',
+                    color: 'var(--heading-color)',
                     marginBottom: '0.4rem',
                   }}
                 >
@@ -429,17 +443,34 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
                 </span>
               </div>
 
+              {/* Required Country Selector */}
+              <div>
+                <CountrySelect
+                  id="review_country"
+                  value={countryCode}
+                  required={true}
+                  onChange={(c: Country) => {
+                    setCountryCode(c.code);
+                    setCountryName(c.name);
+                    if (formError && formError.includes('country')) {
+                      setFormError(null);
+                    }
+                  }}
+                />
+                <span style={inputHelpStyle}>Country or territory of origin</span>
+              </div>
+
               {/* Contact Platform Selector */}
               <div>
                 <label
                   htmlFor="review_platform"
                   style={{
                     display: 'block',
-                    fontFamily: 'var(--font-tech)',
+                    fontFamily: 'var(--font-heading)',
                     fontWeight: 600,
                     fontSize: '0.88rem',
-                    letterSpacing: '0.04em',
-                    color: '#FFFFFF',
+                    letterSpacing: '0.02em',
+                    color: 'var(--heading-color)',
                     marginBottom: '0.4rem',
                   }}
                 >
@@ -452,7 +483,7 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
                   style={{ ...inputStyle, cursor: 'pointer' }}
                 >
                   {platforms.map((p) => (
-                    <option key={p} value={p} style={{ backgroundColor: '#09090D' }}>
+                    <option key={p} value={p} style={{ backgroundColor: 'var(--bg-elevated)', color: 'var(--text-primary)' }}>
                       {p}
                     </option>
                   ))}
@@ -474,11 +505,11 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
                 <label
                   htmlFor="review_text"
                   style={{
-                    fontFamily: 'var(--font-tech)',
+                    fontFamily: 'var(--font-heading)',
                     fontWeight: 600,
                     fontSize: '0.88rem',
-                    letterSpacing: '0.04em',
-                    color: '#FFFFFF',
+                    letterSpacing: '0.02em',
+                    color: 'var(--heading-color)',
                   }}
                 >
                   Review Narrative <span style={{ color: 'var(--red-accent)' }}>*</span>
@@ -518,8 +549,8 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
             {/* 4. Private CODM Account UID (Crucial Security Isolation) */}
             <div
               style={{
-                backgroundColor: 'rgba(15, 15, 20, 0.7)',
-                border: '1px solid rgba(255, 23, 68, 0.22)',
+                backgroundColor: 'var(--bg-elevated)',
+                border: '1px solid var(--border-glass)',
                 borderRadius: '10px',
                 padding: '1.2rem',
               }}
@@ -536,10 +567,10 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
                 <label
                   htmlFor="codm_uid"
                   style={{
-                    fontFamily: 'var(--font-tech)',
-                    fontWeight: 700,
+                    fontFamily: 'var(--font-heading)',
+                    fontWeight: 600,
                     fontSize: '0.9rem',
-                    color: '#FFFFFF',
+                    color: 'var(--heading-color)',
                   }}
                 >
                   CODM Account UID (Strictly Private Verification Field){' '}
@@ -583,11 +614,11 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
               <label
                 style={{
                   display: 'block',
-                  fontFamily: 'var(--font-tech)',
+                  fontFamily: 'var(--font-heading)',
                   fontWeight: 600,
                   fontSize: '0.88rem',
-                  letterSpacing: '0.04em',
-                  color: '#FFFFFF',
+                  letterSpacing: '0.02em',
+                  color: 'var(--heading-color)',
                   marginBottom: '0.4rem',
                 }}
               >
@@ -598,11 +629,11 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
                 <div
                   onClick={() => fileInputRef.current?.click()}
                   style={{
-                    border: '1px dashed rgba(255, 23, 68, 0.35)',
+                    border: '1px dashed var(--border-glass)',
                     borderRadius: '10px',
                     padding: '1.75rem 1rem',
                     textAlign: 'center',
-                    backgroundColor: 'rgba(5, 5, 8, 0.45)',
+                    backgroundColor: 'var(--bg-elevated)',
                     cursor: 'pointer',
                     transition: 'all 200ms ease',
                   }}
@@ -611,9 +642,10 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
                   <Upload size={28} color="var(--red-accent)" style={{ marginBottom: '8px' }} />
                   <div
                     style={{
-                      fontFamily: 'var(--font-tech)',
+                      fontFamily: 'var(--font-heading)',
+                      fontWeight: 500,
                       fontSize: '0.88rem',
-                      color: '#FFFFFF',
+                      color: 'var(--heading-color)',
                     }}
                   >
                     Click or drag & drop purchase proof
@@ -635,20 +667,21 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
                     position: 'relative',
                     borderRadius: '8px',
                     overflow: 'hidden',
-                    border: '1px solid rgba(255, 23, 68, 0.35)',
+                    border: '1px solid var(--border-glass)',
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '12px',
                     padding: '8px 14px',
-                    backgroundColor: 'rgba(15, 15, 20, 0.8)',
+                    backgroundColor: 'var(--bg-elevated)',
                   }}
                 >
                   <ImageIcon size={20} color="var(--red-accent)" />
                   <span
                     style={{
-                      fontFamily: 'var(--font-tech)',
+                      fontFamily: 'var(--font-heading)',
+                      fontWeight: 500,
                       fontSize: '0.85rem',
-                      color: '#FFFFFF',
+                      color: 'var(--heading-color)',
                     }}
                   >
                     {screenshotFile?.name}
@@ -781,9 +814,9 @@ const inputStyle: React.CSSProperties = {
   width: '100%',
   padding: '11px 14px',
   borderRadius: '8px',
-  backgroundColor: 'rgba(5, 5, 8, 0.75)',
-  border: '1px solid rgba(255, 255, 255, 0.1)',
-  color: '#FFFFFF',
+  backgroundColor: 'var(--input-bg)',
+  border: '1px solid var(--input-border)',
+  color: 'var(--input-text)',
   fontSize: '0.92rem',
   fontFamily: 'var(--font-body)',
   outline: 'none',

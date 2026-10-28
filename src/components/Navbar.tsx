@@ -1,37 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Menu, X, Star, MessageSquarePlus, Info, Home } from 'lucide-react';
+import { Shield, Menu, X, Star, MessageSquarePlus, Info, Home, Share2, FileText } from 'lucide-react';
+import { useRouter, AppRoute } from '../routes/router';
+import { ThemeToggle } from './ThemeToggle';
 
 interface NavbarProps {
   onOpenAdmin: () => void;
-  onNavigateToSection: (sectionId: string) => void;
   isAdminLoggedIn?: boolean;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   onOpenAdmin,
-  onNavigateToSection,
   isAdminLoggedIn = false,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { currentRoute, navigate } = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
+      setIsScrolled(window.scrollY > 30);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (sectionId: string) => {
+  const handleRouteClick = (route: AppRoute, sectionId?: string) => {
     setMobileMenuOpen(false);
-    onNavigateToSection(sectionId);
+    navigate(route, sectionId);
   };
+
+  const navItems: { label: string; route: AppRoute; sectionId?: string; isCTA?: boolean }[] = [
+    { label: 'Home', route: 'home' },
+    { label: 'Reviews', route: 'reviews' },
+    { label: 'Submit Review', route: 'home', sectionId: 'submit-review' },
+    { label: 'About Évann', route: 'about' },
+    { label: 'My Socials', route: 'socials' },
+  ];
 
   return (
     <header
-      role="navigation"
+      role="banner"
       aria-label="Main Navigation"
       style={{
         position: 'fixed',
@@ -40,13 +49,13 @@ export const Navbar: React.FC<NavbarProps> = ({
         right: 0,
         zIndex: 50,
         transition: 'all 300ms cubic-bezier(0.16, 1, 0.3, 1)',
-        backgroundColor: isScrolled ? 'rgba(9, 9, 9, 0.88)' : 'transparent',
+        backgroundColor: isScrolled ? 'var(--nav-bg)' : 'transparent',
         backdropFilter: isScrolled ? 'blur(16px)' : 'none',
         WebkitBackdropFilter: isScrolled ? 'blur(16px)' : 'none',
         borderBottom: isScrolled
-          ? '1px solid rgba(255, 23, 68, 0.18)'
+          ? '1px solid var(--border-glass)'
           : '1px solid transparent',
-        boxShadow: isScrolled ? '0 10px 30px -10px rgba(0, 0, 0, 0.8)' : 'none',
+        boxShadow: isScrolled ? 'var(--shadow-subtle)' : 'none',
       }}
     >
       <div
@@ -61,7 +70,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       >
         {/* Brand Wordmark & Founder Avatar */}
         <button
-          onClick={() => handleNavClick('hero')}
+          onClick={() => handleRouteClick('home')}
           aria-label="Évann_stories Home"
           style={{
             display: 'flex',
@@ -88,7 +97,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               src="./evann-avatar.jpg"
               alt="Évann Avatar"
               onError={(e) => {
-                // Fallback to absolute path or SVG icon if relative path fails
                 const target = e.currentTarget;
                 if (!target.src.includes('evann-avatar.jpg')) return;
                 target.src = '/evann-avatar.jpg';
@@ -99,7 +107,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 borderRadius: '50%',
                 objectFit: 'cover',
                 border: '2px solid var(--red-accent)',
-                boxShadow: '0 0 14px rgba(255, 23, 68, 0.5), inset 0 0 8px rgba(0, 0, 0, 0.6)',
+                boxShadow: '0 0 14px var(--red-glow)',
                 display: 'block',
               }}
             />
@@ -129,14 +137,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 fontWeight: 900,
                 fontSize: '1.35rem',
                 letterSpacing: '-0.01em',
-                color: '#FFFFFF',
                 display: 'inline-flex',
                 alignItems: 'center',
-                textShadow:
-                  '0 1px 0 #FFFFFF, 0 2px 0 #CBD5E1, 0 3px 0 #850017, 0 4px 0 #52000D, 0 6px 12px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 23, 68, 0.4)',
               }}
             >
-              Évann<span style={{ color: 'var(--red-accent)', textShadow: '0 0 12px rgba(255, 23, 68, 0.8)' }}>_</span>stories
+              Évann<span style={{ color: 'var(--red-accent)' }}>_</span>stories
             </span>
           </div>
         </button>
@@ -146,38 +151,49 @@ export const Navbar: React.FC<NavbarProps> = ({
           style={{
             display: 'none',
             alignItems: 'center',
-            gap: '2rem',
+            gap: '1.6rem',
           }}
           className="desktop-nav"
+          aria-label="Desktop Navigation Links"
         >
-          <button
-            onClick={() => handleNavClick('hero')}
-            style={navLinkStyle}
-            aria-label="Navigate to Home"
-          >
-            Home
-          </button>
-          <button
-            onClick={() => handleNavClick('reviews-list')}
-            style={navLinkStyle}
-            aria-label="Navigate to Customer Reviews"
-          >
-            Reviews
-          </button>
-          <button
-            onClick={() => handleNavClick('submit-review')}
-            style={navLinkStyle}
-            aria-label="Navigate to Submit a Review"
-          >
-            Leave a Review
-          </button>
-          <button
-            onClick={() => handleNavClick('trust-process')}
-            style={navLinkStyle}
-            aria-label="Navigate to Verification Process and Trust"
-          >
-            About & Trust
-          </button>
+          {navItems.map((item) => {
+            const isActive = currentRoute === item.route && !item.sectionId;
+
+            return (
+              <button
+                key={item.label}
+                onClick={() => handleRouteClick(item.route, item.sectionId)}
+                style={{
+                  ...navLinkStyle,
+                  color: isActive ? 'var(--red-accent)' : 'var(--text-secondary)',
+                  fontWeight: isActive ? 700 : 500,
+                }}
+                aria-current={isActive ? 'page' : undefined}
+                className={`nav-item ${isActive ? 'active' : ''}`}
+              >
+                <span>{item.label}</span>
+                {isActive && (
+                  <span
+                    style={{
+                      position: 'absolute',
+                      bottom: '-4px',
+                      left: '0',
+                      right: '0',
+                      height: '2px',
+                      backgroundColor: 'var(--red-accent)',
+                      borderRadius: '2px',
+                      boxShadow: '0 0 8px var(--red-accent)',
+                    }}
+                  />
+                )}
+              </button>
+            );
+          })}
+
+          {/* Theme Toggle (Light / Dark Mode) */}
+          <div style={{ marginLeft: '0.4rem' }}>
+            <ThemeToggle size="md" />
+          </div>
 
           {/* Discreet Admin Portal Link */}
           <button
@@ -194,7 +210,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               color: isAdminLoggedIn ? 'var(--red-accent)' : 'var(--text-muted)',
               border: isAdminLoggedIn
                 ? '1px solid rgba(255, 23, 68, 0.4)'
-                : '1px solid rgba(255, 255, 255, 0.08)',
+                : '1px solid var(--border-subtle)',
               backgroundColor: isAdminLoggedIn ? 'rgba(255, 23, 68, 0.08)' : 'transparent',
               transition: 'all 200ms ease',
             }}
@@ -206,25 +222,38 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
         </nav>
 
-        {/* Mobile Hamburger Toggle */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}
+        {/* Mobile Right Controls: Theme Toggle & Hamburger */}
+        <div
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            width: '42px',
-            height: '42px',
-            borderRadius: '8px',
-            border: '1px solid rgba(255, 23, 68, 0.2)',
-            backgroundColor: 'rgba(15, 15, 18, 0.7)',
-            color: '#FFFFFF',
+            gap: '8px',
           }}
-          className="mobile-toggle"
+          className="mobile-controls"
         >
-          {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+          <div className="mobile-theme-btn" style={{ display: 'flex' }}>
+            <ThemeToggle size="sm" />
+          </div>
+
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '40px',
+              height: '40px',
+              borderRadius: '8px',
+              border: '1px solid var(--border-glass)',
+              backgroundColor: 'var(--bg-card)',
+              color: 'var(--text-primary)',
+            }}
+            className="mobile-toggle"
+          >
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Animated Drawer Menu */}
@@ -235,52 +264,77 @@ export const Navbar: React.FC<NavbarProps> = ({
             top: '100%',
             left: 0,
             right: 0,
-            backgroundColor: 'rgba(9, 9, 12, 0.98)',
+            backgroundColor: 'var(--nav-drawer-bg)',
             backdropFilter: 'blur(24px)',
             WebkitBackdropFilter: 'blur(24px)',
-            borderBottom: '1px solid rgba(255, 23, 68, 0.25)',
-            boxShadow: '0 25px 40px rgba(0, 0, 0, 0.9)',
+            borderBottom: '1px solid var(--border-glass)',
+            boxShadow: 'var(--shadow-subtle)',
             padding: '1.5rem',
             display: 'flex',
             flexDirection: 'column',
-            gap: '1rem',
+            gap: '0.85rem',
           }}
         >
           <button
-            onClick={() => handleNavClick('hero')}
-            style={mobileNavLinkStyle}
+            onClick={() => handleRouteClick('home')}
+            style={{
+              ...mobileNavLinkStyle,
+              color: currentRoute === 'home' ? 'var(--red-accent)' : 'var(--text-primary)',
+            }}
           >
             <Home size={18} color="var(--red-accent)" />
             <span>Home</span>
           </button>
+
           <button
-            onClick={() => handleNavClick('reviews-list')}
-            style={mobileNavLinkStyle}
+            onClick={() => handleRouteClick('reviews')}
+            style={{
+              ...mobileNavLinkStyle,
+              color: currentRoute === 'reviews' ? 'var(--red-accent)' : 'var(--text-primary)',
+            }}
           >
             <Star size={18} color="var(--red-accent)" />
             <span>Reviews</span>
           </button>
+
           <button
-            onClick={() => handleNavClick('submit-review')}
+            onClick={() => handleRouteClick('home', 'submit-review')}
             style={mobileNavLinkStyle}
           >
             <MessageSquarePlus size={18} color="var(--red-accent)" />
-            <span>Leave a Review</span>
+            <span>Submit a Review</span>
           </button>
+
           <button
-            onClick={() => handleNavClick('trust-process')}
-            style={mobileNavLinkStyle}
+            onClick={() => handleRouteClick('about')}
+            style={{
+              ...mobileNavLinkStyle,
+              color: currentRoute === 'about' ? 'var(--red-accent)' : 'var(--text-primary)',
+            }}
           >
-            <Info size={18} color="var(--red-accent)" />
-            <span>About & Trust</span>
+            <FileText size={18} color="var(--red-accent)" />
+            <span>About Évann</span>
           </button>
+
+          <button
+            onClick={() => handleRouteClick('socials')}
+            style={{
+              ...mobileNavLinkStyle,
+              color: currentRoute === 'socials' ? 'var(--red-accent)' : 'var(--text-primary)',
+            }}
+          >
+            <Share2 size={18} color="var(--red-accent)" />
+            <span>My Socials</span>
+          </button>
+
           <div
             style={{
               height: '1px',
-              backgroundColor: 'rgba(255, 255, 255, 0.08)',
+              backgroundColor: 'var(--border-subtle)',
               margin: '0.5rem 0',
             }}
           />
+
           <button
             onClick={() => {
               setMobileMenuOpen(false);
@@ -303,13 +357,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Embedded CSS for responsive media query */}
       <style>{`
-        @media (min-width: 820px) {
+        @media (min-width: 860px) {
           .desktop-nav {
             display: flex !important;
           }
-          .mobile-toggle {
+          .mobile-controls {
             display: none !important;
           }
+        }
+        .nav-item:hover {
+          color: var(--red-accent) !important;
         }
       `}</style>
     </header>
@@ -320,10 +377,12 @@ const navLinkStyle: React.CSSProperties = {
   fontFamily: 'var(--font-tech)',
   fontSize: '0.9rem',
   letterSpacing: '0.04em',
-  color: 'var(--text-secondary)',
   transition: 'color 200ms ease',
   padding: '6px 0',
   position: 'relative',
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
 };
 
 const mobileNavLinkStyle: React.CSSProperties = {
@@ -332,8 +391,11 @@ const mobileNavLinkStyle: React.CSSProperties = {
   gap: '12px',
   fontFamily: 'var(--font-tech)',
   fontSize: '1.05rem',
-  color: '#FFFFFF',
+  color: 'var(--text-primary)',
   padding: '0.6rem 0.5rem',
   textAlign: 'left',
   width: '100%',
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
 };

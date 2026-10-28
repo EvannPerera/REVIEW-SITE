@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { ThreeBackground } from './components/ThreeBackground';
+import { GlobalVideoBackground } from './components/GlobalVideoBackground';
 import { Navbar } from './components/Navbar';
-import { HeroSection } from './components/HeroSection';
-import { ReviewStatsOverview } from './components/ReviewStatsOverview';
-import { PublicReviewsList } from './components/PublicReviewsList';
-import { ReviewSubmissionForm } from './components/ReviewSubmissionForm';
-import { TrustSection } from './components/TrustSection';
 import { Footer } from './components/Footer';
 import { AdminDashboard } from './components/AdminDashboard';
+import { HomePage } from './pages/HomePage';
+import { ReviewsPage } from './pages/ReviewsPage';
+import { SocialsPage } from './pages/SocialsPage';
+import { AboutPage } from './pages/AboutPage';
+import { ThemeProvider } from './context/ThemeContext';
+import { RouterProvider, useRouter } from './routes/router';
 import { supabase, isSupabaseConfigured } from './lib/supabase';
 import {
   Review,
@@ -27,7 +28,9 @@ import {
   deleteReview,
 } from './services/reviewService';
 
-export const App: React.FC = () => {
+const AppContent: React.FC = () => {
+  const { currentRoute, navigate, targetSection, clearTargetSection } = useRouter();
+
   // Public data
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
@@ -102,6 +105,29 @@ export const App: React.FC = () => {
       }
     }
   }, [loadPublicData, loadAdminData]);
+
+  // Handle auto-scroll to target section on route transition
+  useEffect(() => {
+    if (targetSection) {
+      const timer = setTimeout(() => {
+        const element = document.getElementById(targetSection);
+        if (element) {
+          const yOffset = -80;
+          const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+        clearTargetSection();
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [targetSection, currentRoute, clearTargetSection]);
+
+  // Open admin dashboard if /admin route is accessed
+  useEffect(() => {
+    if (currentRoute === 'admin') {
+      setIsAdminOpen(true);
+    }
+  }, [currentRoute]);
 
   // 2. Computed Live Metrics from approved reviews
   const stats: ReviewStats = useMemo(() => {
@@ -280,61 +306,53 @@ export const App: React.FC = () => {
     return success;
   };
 
-  // 6. Navigation Smooth Scroll
-  const navigateToSection = (sectionId: string) => {
-    const el = document.getElementById(sectionId);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
-    <div className="evann-stories-app" style={{ position: 'relative' }}>
-      {/* Three.js Procedural Background */}
-      <ThreeBackground />
+    <div className="evann-stories-app" style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* Persistent Full-Viewport Cinematic Video Background (Active across EVERY route) */}
+      <GlobalVideoBackground />
 
-      {/* Main Navigation */}
+      {/* Main Responsive Navigation with Light/Dark Mode Toggle */}
       <Navbar
         onOpenAdmin={() => setIsAdminOpen(true)}
-        onNavigateToSection={navigateToSection}
         isAdminLoggedIn={isAdminLoggedIn}
       />
 
-      <main>
-        {/* Hero Section with Interactive Typography */}
-        <HeroSection
-          onExploreReviews={() => navigateToSection('reviews-list')}
-          onLeaveReview={() => navigateToSection('submit-review')}
-        />
+      {/* Main Page Content Routed Dynamically */}
+      <main style={{ flex: 1, position: 'relative', zIndex: 2 }}>
+        {currentRoute === 'home' && (
+          <HomePage
+            stats={stats}
+            loading={loading}
+            onReviewSubmit={handleReviewSubmit}
+          />
+        )}
 
-        {/* Real Review Overview & Distribution Metrics */}
-        <ReviewStatsOverview stats={stats} loading={loading} />
+        {currentRoute === 'reviews' && (
+          <ReviewsPage
+            reviews={reviews}
+            stats={stats}
+            loading={loading}
+            onReact={handleReact}
+          />
+        )}
 
-        {/* Public Reviews List with Verified Badge, Reactions, and Filters */}
-        <PublicReviewsList
-          reviews={reviews}
-          loading={loading}
-          onReact={handleReact}
-          onOpenSubmitForm={() => navigateToSection('submit-review')}
-        />
+        {currentRoute === 'socials' && <SocialsPage />}
 
-        {/* Review Submission Form with UID & Evidence Upload */}
-        <ReviewSubmissionForm onSubmit={handleReviewSubmit} />
-
-        {/* Trust & Process Verification Details */}
-        <TrustSection />
+        {currentRoute === 'about' && <AboutPage />}
       </main>
 
-      {/* Footer */}
-      <Footer
-        onNavigateToSection={navigateToSection}
-        onOpenAdmin={() => setIsAdminOpen(true)}
-      />
+      {/* Professional Responsive Footer */}
+      <Footer onOpenAdmin={() => setIsAdminOpen(true)} />
 
-      {/* Private Admin Dashboard Modal */}
+      {/* Private Admin Dashboard Modal (Protected & Row Level Security Enforced) */}
       <AdminDashboard
         isOpen={isAdminOpen}
-        onClose={() => setIsAdminOpen(false)}
+        onClose={() => {
+          setIsAdminOpen(false);
+          if (currentRoute === 'admin') {
+            navigate('home');
+          }
+        }}
         isAdminLoggedIn={isAdminLoggedIn}
         onLogin={handleAdminLogin}
         onLogout={handleAdminLogout}
@@ -347,7 +365,7 @@ export const App: React.FC = () => {
         onRefreshData={loadAdminData}
       />
 
-      {/* Toast Notification */}
+      {/* Accessible Toast Notification Banner */}
       {toastMessage && (
         <aside
           role="status"
@@ -356,12 +374,12 @@ export const App: React.FC = () => {
             position: 'fixed',
             bottom: '24px',
             right: '24px',
-            backgroundColor: '#0E0E12',
+            backgroundColor: 'var(--bg-card-solid)',
             border: '1px solid var(--red-accent)',
-            boxShadow: '0 0 25px rgba(255, 23, 68, 0.4)',
+            boxShadow: '0 0 25px var(--red-glow)',
             borderRadius: '8px',
             padding: '12px 20px',
-            color: '#FFFFFF',
+            color: 'var(--text-primary)',
             fontFamily: 'var(--font-tech)',
             fontSize: '0.9rem',
             zIndex: 300,
@@ -382,6 +400,16 @@ export const App: React.FC = () => {
         </aside>
       )}
     </div>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <ThemeProvider>
+      <RouterProvider>
+        <AppContent />
+      </RouterProvider>
+    </ThemeProvider>
   );
 };
 

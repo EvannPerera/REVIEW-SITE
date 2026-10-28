@@ -8,8 +8,10 @@ import {
   CheckCircle2,
   Maximize2,
   X,
+  Globe,
 } from 'lucide-react';
 import type { Review, ReviewPlatform, ReactionType } from '../types/database';
+import { getCountryByCode } from '../data/countries';
 
 interface PublicReviewsListProps {
   reviews: Review[];
@@ -28,7 +30,24 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [platformFilter, setPlatformFilter] = useState<string>('all');
   const [starFilter, setStarFilter] = useState<string>('all');
+  const [countryFilter, setCountryFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'newest' | 'highest'>('newest');
+
+  // Available countries derived from reviews
+  const availableCountries = useMemo(() => {
+    const map = new Map<string, { code: string; name: string; flag: string }>();
+    reviews.forEach((r) => {
+      if (r.country_code) {
+        const countryInfo = getCountryByCode(r.country_code);
+        map.set(r.country_code, {
+          code: r.country_code,
+          name: r.country_name || countryInfo?.name || r.country_code,
+          flag: countryInfo?.flag || '🌐',
+        });
+      }
+    });
+    return Array.from(map.values());
+  }, [reviews]);
 
   // Pagination state
   const [visibleCount, setVisibleCount] = useState(6);
@@ -49,13 +68,19 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
       result = result.filter(
         (r) =>
           r.customer_name.toLowerCase().includes(q) ||
-          r.review_text.toLowerCase().includes(q)
+          r.review_text.toLowerCase().includes(q) ||
+          (r.country_name && r.country_name.toLowerCase().includes(q))
       );
     }
 
     // Platform filter
     if (platformFilter !== 'all') {
       result = result.filter((r) => r.platform === platformFilter);
+    }
+
+    // Country filter
+    if (countryFilter !== 'all') {
+      result = result.filter((r) => r.country_code?.toUpperCase() === countryFilter.toUpperCase());
     }
 
     // Star filter
@@ -74,7 +99,7 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
     });
 
     return result;
-  }, [reviews, searchQuery, platformFilter, starFilter, sortBy]);
+  }, [reviews, searchQuery, platformFilter, starFilter, countryFilter, sortBy]);
 
   const displayedReviews = filteredReviews.slice(0, visibleCount);
   const canLoadMore = visibleCount < filteredReviews.length;
@@ -113,7 +138,7 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
     >
       <div className="container">
         {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+        <div className="section-header-cinema" style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <span
             style={{
               fontFamily: 'var(--font-tech)',
@@ -129,19 +154,19 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
             Verified Client Feedback
           </span>
           <h2
+            className="cinema-section-heading"
             style={{
               fontSize: 'clamp(2rem, 4vw, 3rem)',
-              fontFamily: 'var(--font-display)',
-              fontWeight: 900,
-              color: '#FFFFFF',
+              fontFamily: 'var(--font-heading)',
+              fontWeight: 700,
               letterSpacing: '-0.02em',
             }}
           >
             Real Stories. Real Proof.
           </h2>
           <p
+            className="cinema-section-subtitle"
             style={{
-              color: 'var(--text-secondary)',
               fontSize: '1rem',
               maxWidth: '560px',
               margin: '0.5rem auto 0',
@@ -188,10 +213,10 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
               style={{
                 width: '100%',
                 padding: '10px 12px 10px 38px',
-                backgroundColor: 'rgba(5, 5, 8, 0.7)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                backgroundColor: 'var(--input-bg)',
+                border: '1px solid var(--input-border)',
                 borderRadius: '8px',
-                color: '#FFFFFF',
+                color: 'var(--input-text)',
                 fontSize: '0.9rem',
                 outline: 'none',
               }}
@@ -236,6 +261,25 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
                 </option>
               ))}
             </select>
+
+            {/* Country Selector (if practical) */}
+            {availableCountries.length > 0 && (
+              <select
+                value={countryFilter}
+                onChange={(e) => setCountryFilter(e.target.value)}
+                aria-label="Filter by country"
+                style={selectStyle}
+              >
+                <option value="all" style={optionStyle}>
+                  All Countries ({availableCountries.length})
+                </option>
+                {availableCountries.map((c) => (
+                  <option key={c.code} value={c.code} style={optionStyle}>
+                    {c.flag} {c.name}
+                  </option>
+                ))}
+              </select>
+            )}
 
             {/* Star Rating Selector */}
             <select
@@ -286,7 +330,7 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))',
               gap: '1.5rem',
             }}
           >
@@ -321,8 +365,8 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-              gap: '1.75rem',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))',
+              gap: '1.5rem',
             }}
           >
             {displayedReviews.map((review) => {
@@ -340,7 +384,7 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
                   key={review.id}
                   className="glass-panel review-card"
                   style={{
-                    padding: '1.6rem',
+                    padding: 'clamp(1.1rem, 3vw, 1.6rem)',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
@@ -361,24 +405,49 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
                       }}
                     >
                       <div>
-                        <h3
-                          style={{
-                            fontSize: '1.15rem',
-                            fontWeight: 700,
-                            fontFamily: 'var(--font-display)',
-                            color: '#FFFFFF',
-                            letterSpacing: '0.01em',
-                            margin: 0,
-                          }}
-                        >
-                          {review.customer_name}
-                        </h3>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                          <h3
+                            style={{
+                              fontSize: '1.15rem',
+                              fontWeight: 600,
+                              fontFamily: 'var(--font-heading)',
+                              color: 'var(--heading-color)',
+                              letterSpacing: '0.01em',
+                              margin: 0,
+                            }}
+                          >
+                            {review.customer_name}
+                          </h3>
+
+                          {/* Country Badge */}
+                          {(review.country_code || review.country_name) && (
+                            <span
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                padding: '2px 8px',
+                                borderRadius: '4px',
+                                backgroundColor: 'var(--bg-elevated)',
+                                border: '1px solid var(--border-subtle)',
+                                fontSize: '0.74rem',
+                                fontFamily: 'var(--font-tech)',
+                                color: 'var(--text-secondary)',
+                              }}
+                              title={`Customer from ${review.country_name || review.country_code}`}
+                            >
+                              <span>{getCountryByCode(review.country_code)?.flag || '🌐'}</span>
+                              <span>{review.country_name || getCountryByCode(review.country_code)?.name || review.country_code}</span>
+                            </span>
+                          )}
+                        </div>
+
                         <div
                           style={{
                             display: 'flex',
                             alignItems: 'center',
                             gap: '8px',
-                            marginTop: '4px',
+                            marginTop: '6px',
                           }}
                         >
                           {/* Platform Pill */}
@@ -682,8 +751,8 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
                 borderRadius: '6px',
                 border: '1px solid rgba(255, 23, 68, 0.4)',
                 backgroundColor: 'rgba(255, 23, 68, 0.1)',
-                color: '#FFFFFF',
-                fontFamily: 'var(--font-tech)',
+                color: 'var(--heading-color)',
+                fontFamily: 'var(--font-heading)',
                 fontSize: '0.85rem',
               }}
             >
@@ -700,14 +769,14 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
               style={{
                 padding: '12px 32px',
                 borderRadius: '8px',
-                backgroundColor: 'rgba(15, 15, 18, 0.85)',
-                border: '1px solid rgba(255, 23, 68, 0.35)',
-                color: '#FFFFFF',
-                fontFamily: 'var(--font-tech)',
+                backgroundColor: 'var(--bg-elevated)',
+                border: '1px solid var(--border-glass)',
+                color: 'var(--heading-color)',
+                fontFamily: 'var(--font-heading)',
                 fontWeight: 600,
                 fontSize: '0.9rem',
-                letterSpacing: '0.06em',
-                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.5)',
+                letterSpacing: '0.04em',
+                boxShadow: 'var(--shadow-subtle)',
                 transition: 'all 200ms ease',
               }}
               className="load-more-btn"
@@ -807,10 +876,10 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
 };
 
 const selectStyle: React.CSSProperties = {
-  backgroundColor: 'rgba(5, 5, 8, 0.7)',
-  border: '1px solid rgba(255, 255, 255, 0.1)',
+  backgroundColor: 'var(--input-bg)',
+  border: '1px solid var(--input-border)',
   borderRadius: '8px',
-  color: '#FFFFFF',
+  color: 'var(--input-text)',
   padding: '10px 14px',
   fontSize: '0.88rem',
   fontFamily: 'var(--font-tech)',
@@ -819,8 +888,8 @@ const selectStyle: React.CSSProperties = {
 };
 
 const optionStyle: React.CSSProperties = {
-  backgroundColor: '#0A0A0E',
-  color: '#FFFFFF',
+  backgroundColor: 'var(--bg-elevated)',
+  color: 'var(--text-primary)',
 };
 
 const reactionBtnStyle = (isActive?: boolean): React.CSSProperties => ({

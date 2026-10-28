@@ -13,7 +13,7 @@ export const TrustSection: React.FC = () => {
     >
       <div className="container">
         {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+        <div className="section-header-cinema" style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <span
             style={{
               fontFamily: 'var(--font-tech)',
@@ -29,19 +29,19 @@ export const TrustSection: React.FC = () => {
             Integrity Standard
           </span>
           <h2
+            className="cinema-section-heading"
             style={{
               fontSize: 'clamp(2rem, 3.8vw, 2.8rem)',
-              fontFamily: 'var(--font-display)',
-              fontWeight: 900,
-              color: '#FFFFFF',
+              fontFamily: 'var(--font-heading)',
+              fontWeight: 700,
               letterSpacing: '-0.02em',
             }}
           >
             Verification Protocol & Trust
           </h2>
           <p
+            className="cinema-section-subtitle"
             style={{
-              color: 'var(--text-secondary)',
               fontSize: '1rem',
               maxWidth: '580px',
               margin: '0.5rem auto 0',
@@ -55,8 +55,8 @@ export const TrustSection: React.FC = () => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '1.75rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+            gap: '1.5rem',
             marginBottom: '3rem',
           }}
         >
@@ -64,7 +64,7 @@ export const TrustSection: React.FC = () => {
           <div
             className="glass-panel"
             style={{
-              padding: '2rem 1.75rem',
+              padding: 'clamp(1.25rem, 3.5vw, 2rem) clamp(1rem, 3vw, 1.75rem)',
               display: 'flex',
               flexDirection: 'column',
               gap: '1rem',
@@ -86,9 +86,10 @@ export const TrustSection: React.FC = () => {
             </div>
             <h3
               style={{
-                fontFamily: 'var(--font-display)',
+                fontFamily: 'var(--font-heading)',
                 fontSize: '1.25rem',
-                color: '#FFFFFF',
+                fontWeight: 600,
+                color: 'var(--heading-color)',
               }}
             >
               Manual Human Moderation
@@ -111,7 +112,7 @@ export const TrustSection: React.FC = () => {
           <div
             className="glass-panel"
             style={{
-              padding: '2rem 1.75rem',
+              padding: 'clamp(1.25rem, 3.5vw, 2rem) clamp(1rem, 3vw, 1.75rem)',
               display: 'flex',
               flexDirection: 'column',
               gap: '1rem',
@@ -133,9 +134,10 @@ export const TrustSection: React.FC = () => {
             </div>
             <h3
               style={{
-                fontFamily: 'var(--font-display)',
+                fontFamily: 'var(--font-heading)',
                 fontSize: '1.25rem',
-                color: '#FFFFFF',
+                fontWeight: 600,
+                color: 'var(--heading-color)',
               }}
             >
               Verified Purchase Badge
@@ -158,7 +160,7 @@ export const TrustSection: React.FC = () => {
           <div
             className="glass-panel"
             style={{
-              padding: '2rem 1.75rem',
+              padding: 'clamp(1.25rem, 3.5vw, 2rem) clamp(1rem, 3vw, 1.75rem)',
               display: 'flex',
               flexDirection: 'column',
               gap: '1rem',
@@ -180,9 +182,10 @@ export const TrustSection: React.FC = () => {
             </div>
             <h3
               style={{
-                fontFamily: 'var(--font-display)',
+                fontFamily: 'var(--font-heading)',
                 fontSize: '1.25rem',
-                color: '#FFFFFF',
+                fontWeight: 600,
+                color: 'var(--heading-color)',
               }}
             >
               Zero Privacy Exposure
@@ -205,8 +208,8 @@ export const TrustSection: React.FC = () => {
         {/* Clear Policy Notice */}
         <div
           style={{
-            backgroundColor: 'rgba(9, 9, 12, 0.7)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
+            backgroundColor: 'var(--bg-elevated)',
+            border: '1px solid var(--border-subtle)',
             borderRadius: '10px',
             padding: '1.5rem',
             display: 'flex',
@@ -216,7 +219,7 @@ export const TrustSection: React.FC = () => {
         >
           <FileText size={20} color="var(--red-accent)" style={{ flexShrink: 0, marginTop: '2px' }} />
           <div style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-            <strong style={{ color: '#FFFFFF' }}>Transparency Notice:</strong> While we perform
+            <strong style={{ color: 'var(--heading-color)' }}>Transparency Notice:</strong> While we perform
             rigorous manual reviews, an online testimonial, username, screenshot, or UID does not
             constitute legal proof of identity. ÉVANN_STORIES maintains strict impartiality and will
             never manufacture false reviews or manipulate community ratings.

@@ -1,26 +1,24 @@
-import React, { useState } from 'react';
-import { Shield, FileCheck, Lock, X } from 'lucide-react';
+import React from 'react';
+import { Shield } from 'lucide-react';
+import { useRouter } from '../routes/router';
 
 interface FooterProps {
-  onNavigateToSection: (sectionId: string) => void;
   onOpenAdmin: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({
-  onNavigateToSection,
-  onOpenAdmin,
-}) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
   const currentYear = new Date().getFullYear();
-  const [modalType, setModalType] = useState<'privacy' | 'guidelines' | null>(null);
+  const { navigate } = useRouter();
 
   return (
     <footer
       style={{
         position: 'relative',
-        backgroundColor: '#030303',
-        borderTop: '1px solid rgba(255, 23, 68, 0.15)',
+        backgroundColor: 'var(--bg-elevated)',
+        borderTop: '1px solid var(--border-glass)',
         padding: '3.5rem 0 2rem',
         zIndex: 2,
+        transition: 'background-color 300ms ease',
       }}
     >
       <div className="container">
@@ -32,7 +30,7 @@ export const Footer: React.FC<FooterProps> = ({
             alignItems: 'flex-start',
             gap: '2.5rem',
             paddingBottom: '2.5rem',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+            borderBottom: '1px solid var(--border-subtle)',
           }}
         >
           {/* Brand Info */}
@@ -44,7 +42,6 @@ export const Footer: React.FC<FooterProps> = ({
                 fontWeight: 900,
                 fontSize: '1.45rem',
                 letterSpacing: '-0.01em',
-                color: '#FFFFFF',
                 marginBottom: '0.75rem',
               }}
             >
@@ -90,7 +87,7 @@ export const Footer: React.FC<FooterProps> = ({
             >
               <li>
                 <button
-                  onClick={() => onNavigateToSection('hero')}
+                  onClick={() => navigate('home')}
                   style={footerLinkStyle}
                 >
                   Home
@@ -98,15 +95,7 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <button
-                  onClick={() => onNavigateToSection('review-overview')}
-                  style={footerLinkStyle}
-                >
-                  Overview & Stats
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onNavigateToSection('reviews-list')}
+                  onClick={() => navigate('reviews')}
                   style={footerLinkStyle}
                 >
                   Client Reviews
@@ -114,7 +103,7 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <button
-                  onClick={() => onNavigateToSection('submit-review')}
+                  onClick={() => navigate('home', 'submit-review')}
                   style={footerLinkStyle}
                 >
                   Submit a Review
@@ -122,10 +111,18 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <button
-                  onClick={() => onNavigateToSection('trust-process')}
+                  onClick={() => navigate('about')}
                   style={footerLinkStyle}
                 >
-                  Trust & Verification
+                  About Évann
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => navigate('socials')}
+                  style={footerLinkStyle}
+                >
+                  My Socials
                 </button>
               </li>
             </ul>
@@ -144,7 +141,7 @@ export const Footer: React.FC<FooterProps> = ({
                 marginBottom: '1rem',
               }}
             >
-              Policies & Legal
+              Policies & Standards
             </h4>
             <ul
               style={{
@@ -159,7 +156,7 @@ export const Footer: React.FC<FooterProps> = ({
             >
               <li>
                 <button
-                  onClick={() => setModalType('privacy')}
+                  onClick={() => navigate('about', 'sec-privacy')}
                   style={footerLinkStyle}
                 >
                   Privacy Policy
@@ -167,10 +164,26 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <button
-                  onClick={() => setModalType('guidelines')}
+                  onClick={() => navigate('about', 'sec-verification')}
                   style={footerLinkStyle}
                 >
-                  Review Guidelines
+                  Review & Verification Policy
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => navigate('about', 'sec-payment')}
+                  style={footerLinkStyle}
+                >
+                  Purchase & Payment Terms
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => navigate('about', 'sec-refund')}
+                  style={footerLinkStyle}
+                >
+                  Refund & Cancellation Policy
                 </button>
               </li>
               <li>
@@ -214,103 +227,6 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
         </div>
       </div>
-
-      {/* Policy Modals */}
-      {modalType && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          onClick={() => setModalType(null)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            backgroundColor: 'rgba(5, 5, 5, 0.88)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            zIndex: 110,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '1.5rem',
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="glass-panel"
-            style={{
-              maxWidth: '600px',
-              width: '100%',
-              maxHeight: '80vh',
-              overflowY: 'auto',
-              padding: '2rem',
-              position: 'relative',
-              border: '1px solid rgba(255, 23, 68, 0.35)',
-            }}
-          >
-            <button
-              onClick={() => setModalType(null)}
-              style={{
-                position: 'absolute',
-                top: '16px',
-                right: '16px',
-                color: 'var(--text-muted)',
-              }}
-              aria-label="Close modal"
-            >
-              <X size={20} />
-            </button>
-
-            {modalType === 'privacy' ? (
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
-                  <Lock size={22} color="var(--red-accent)" />
-                  <h3 style={{ fontFamily: 'var(--font-display)', color: '#FFFFFF', fontSize: '1.4rem' }}>
-                    Privacy Notice
-                  </h3>
-                </div>
-                <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.65, display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                  <p>
-                    <strong>1. Private Data Isolation:</strong> Your CODM Account UID and transaction evidence are stored
-                    in encrypted database tables protected by PostgreSQL Row Level Security (RLS). Public visitors can never
-                    query or view your UID.
-                  </p>
-                  <p>
-                    <strong>2. Public Information:</strong> Only your chosen Customer Display Name, contact platform, star rating,
-                    and review narrative are rendered publicly upon approval.
-                  </p>
-                  <p>
-                    <strong>3. Data Retention:</strong> Unapproved or rejected submissions and their associated screenshot files are
-                    purged periodically in accordance with our data safety policy.
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
-                  <FileCheck size={22} color="var(--red-accent)" />
-                  <h3 style={{ fontFamily: 'var(--font-display)', color: '#FFFFFF', fontSize: '1.4rem' }}>
-                    Review Guidelines
-                  </h3>
-                </div>
-                <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.65, display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                  <p>
-                    <strong>1. Genuine Transactions:</strong> Submissions must relate directly to an actual transaction or service
-                    encounter with ÉVANN_STORIES.
-                  </p>
-                  <p>
-                    <strong>2. Civil Language:</strong> Profanity, harassment, hate speech, and spam links are strictly prohibited
-                    and will lead to immediate rejection.
-                  </p>
-                  <p>
-                    <strong>3. Verification Protocol:</strong> The "Verified Purchase" badge is applied manually only after the administrator
-                    verifies the order against private sales logs.
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </footer>
   );
 };
@@ -319,10 +235,10 @@ const footerLinkStyle: React.CSSProperties = {
   background: 'none',
   border: 'none',
   padding: 0,
-  cursor: 'pointer',
-  color: 'inherit',
   fontFamily: 'inherit',
   fontSize: 'inherit',
+  color: 'inherit',
+  cursor: 'pointer',
   textAlign: 'left',
-  transition: 'color 180ms ease',
+  transition: 'color 150ms ease',
 };

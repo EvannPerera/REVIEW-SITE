@@ -6,11 +6,15 @@ import gsap from 'gsap';
 interface HeroSectionProps {
   onExploreReviews: () => void;
   onLeaveReview: () => void;
+  onNavigateToAbout: () => void;
+  onNavigateToSocials: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onExploreReviews,
   onLeaveReview,
+  onNavigateToAbout,
+  onNavigateToSocials,
 }) => {
   const heroRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
@@ -39,7 +43,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         .fromTo(
           ctaContainerRef.current?.children || [],
           { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, stagger: 0.15, duration: 0.8 },
+          { opacity: 1, y: 0, stagger: 0.1, duration: 0.8 },
           '-=0.5'
         )
         .fromTo(
@@ -70,13 +74,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       ref={heroRef}
       style={{
         position: 'relative',
-        minHeight: '100vh',
+        minHeight: '92vh',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         paddingTop: '6rem',
-        paddingBottom: '4rem',
+        paddingBottom: '3.5rem',
         textAlign: 'center',
         overflow: 'hidden',
         zIndex: 1,
@@ -124,7 +128,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             style={{
               fontFamily: 'var(--font-tech)',
               fontSize: '0.74rem',
-              color: 'var(--text-secondary)',
+              color: '#CBD5E1',
               letterSpacing: '0.04em',
             }}
           >
@@ -134,9 +138,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
         {/* Main Interactive Brand Typography (Full Screen Dominance) */}
         <div
+          className="hero-typography-container"
           style={{
-            margin: '0.75rem calc(-50vw + 50%) 1.5rem',
-            width: '100vw',
+            margin: '0.5rem auto 1.25rem',
+            width: '100%',
+            maxWidth: '100%',
             display: 'flex',
             justifyContent: 'center',
             overflow: 'visible',
@@ -145,49 +151,53 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <InteractiveTypography />
         </div>
 
-        {/* Cinematic Subtitle */}
+        {/* Cinematic Subtitle / Introduction */}
         <p
           ref={subtitleRef}
           style={{
             maxWidth: '680px',
-            margin: '0 auto 2.5rem',
+            margin: '0 auto 2.2rem',
             fontFamily: 'var(--font-body)',
-            fontSize: 'clamp(1.05rem, 2vw, 1.3rem)',
-            color: 'var(--text-secondary)',
+            fontSize: 'clamp(0.95rem, 2vw, 1.25rem)',
+            color: '#E2E8F0',
             lineHeight: 1.65,
             fontWeight: 400,
+            textShadow: '0 2px 14px rgba(0, 0, 0, 0.85)',
+            padding: '0 0.5rem',
           }}
         >
           Authentic customer narratives, privately verified transactions, and
           unfiltered experiences. Every word reviewed; every purchase manually confirmed.
         </p>
 
-        {/* Dual Call to Actions */}
+        {/* 4 Action Buttons as requested */}
         <div
           ref={ctaContainerRef}
+          className="hero-cta-group"
           style={{
             display: 'flex',
             flexWrap: 'wrap',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '1.25rem',
-            marginBottom: '3rem',
+            gap: '0.85rem',
+            marginBottom: '2.5rem',
           }}
         >
+          {/* Button 1: View Reviews */}
           <button
             onClick={onExploreReviews}
             className="hero-primary-btn"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '10px',
-              padding: '14px 28px',
+              gap: '8px',
+              padding: '13px 24px',
               borderRadius: '10px',
               backgroundColor: 'var(--red-accent)',
               color: '#FFFFFF',
               fontFamily: 'var(--font-tech)',
               fontWeight: 700,
-              fontSize: '0.95rem',
+              fontSize: '0.92rem',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
               border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -195,33 +205,84 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               transition: 'all 250ms cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
-            <ArrowDown size={18} />
-            <span>Explore Reviews</span>
+            <ArrowDown size={17} />
+            <span>Customer Reviews</span>
           </button>
 
+          {/* Button 2: Submit a Review (Scrolls down on homepage) */}
           <button
             onClick={onLeaveReview}
             className="hero-secondary-btn"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '10px',
-              padding: '14px 28px',
+              gap: '8px',
+              padding: '13px 24px',
               borderRadius: '10px',
-              backgroundColor: 'rgba(15, 15, 18, 0.7)',
-              color: '#F5F5F5',
+              backgroundColor: 'var(--bg-card)',
+              color: 'var(--text-primary)',
               fontFamily: 'var(--font-tech)',
               fontWeight: 600,
-              fontSize: '0.95rem',
+              fontSize: '0.92rem',
               letterSpacing: '0.06em',
-              border: '1px solid rgba(255, 23, 68, 0.3)',
+              border: '1px solid var(--border-glass)',
               backdropFilter: 'blur(12px)',
               WebkitBackdropFilter: 'blur(12px)',
               transition: 'all 250ms cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
-            <MessageSquarePlus size={18} color="var(--red-accent)" />
-            <span>Leave Your Review</span>
+            <MessageSquarePlus size={17} color="var(--red-accent)" />
+            <span>Submit a Review</span>
+          </button>
+
+          {/* Button 3: About Évann */}
+          <button
+            onClick={onNavigateToAbout}
+            className="hero-tertiary-btn"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '13px 24px',
+              borderRadius: '10px',
+              backgroundColor: 'var(--bg-card)',
+              color: 'var(--text-primary)',
+              fontFamily: 'var(--font-tech)',
+              fontWeight: 600,
+              fontSize: '0.92rem',
+              letterSpacing: '0.06em',
+              border: '1px solid var(--border-subtle)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              transition: 'all 250ms cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+          >
+            <span>About Évann</span>
+          </button>
+
+          {/* Button 4: My Socials */}
+          <button
+            onClick={onNavigateToSocials}
+            className="hero-socials-btn"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '13px 24px',
+              borderRadius: '10px',
+              backgroundColor: 'rgba(255, 23, 68, 0.1)',
+              color: 'var(--red-accent)',
+              fontFamily: 'var(--font-tech)',
+              fontWeight: 700,
+              fontSize: '0.92rem',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              border: '1px solid rgba(255, 23, 68, 0.4)',
+              boxShadow: '0 0 15px rgba(255, 23, 68, 0.18)',
+              transition: 'all 250ms cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+          >
+            <span>MY SOCIALS</span>
           </button>
         </div>
 
@@ -233,8 +294,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             gap: '6px',
             fontSize: '0.82rem',
             fontFamily: 'var(--font-tech)',
-            color: 'var(--text-muted)',
+            color: '#CBD5E1',
             letterSpacing: '0.02em',
+            textShadow: '0 1px 8px rgba(0, 0, 0, 0.85)',
           }}
         >
           <ShieldCheck size={16} color="var(--red-accent)" />
@@ -254,7 +316,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           alignItems: 'center',
           gap: '6px',
           cursor: 'pointer',
-          color: 'var(--text-muted)',
+          color: '#CBD5E1',
+          textShadow: '0 1px 8px rgba(0, 0, 0, 0.85)',
           transition: 'color 200ms ease',
         }}
         aria-label="Scroll down to view reviews"
@@ -280,10 +343,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           box-shadow: 0 0 35px rgba(255, 23, 68, 0.65) !important;
         }
         .hero-secondary-btn:hover {
-          background-color: rgba(30, 20, 24, 0.9) !important;
-          border-color: rgba(255, 23, 68, 0.6) !important;
+          background-color: var(--bg-card-hover) !important;
+          border-color: var(--red-accent) !important;
           transform: translateY(-2px);
-          box-shadow: 0 0 20px rgba(255, 23, 68, 0.2) !important;
+          box-shadow: 0 0 20px var(--red-glow) !important;
+        }
+        .hero-tertiary-btn:hover {
+          background-color: var(--bg-card-hover) !important;
+          border-color: var(--border-glass-hover) !important;
+          transform: translateY(-2px);
+          box-shadow: 0 0 15px rgba(0, 0, 0, 0.15) !important;
+        }
+        .hero-socials-btn:hover {
+          background-color: rgba(255, 23, 68, 0.2) !important;
+          border-color: var(--red-accent) !important;
+          transform: translateY(-2px);
+          box-shadow: 0 0 25px rgba(255, 23, 68, 0.4) !important;
         }
       `}</style>
     </section>

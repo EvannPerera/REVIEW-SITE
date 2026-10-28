@@ -13,6 +13,8 @@ export type ReactionType = 'helpful' | 'heart' | 'thumbs_up';
 export interface Review {
   id: string;
   customer_name: string;
+  country_code?: string | null;
+  country_name?: string | null;
   platform: ReviewPlatform;
   rating: number;
   review_text: string;
@@ -34,6 +36,8 @@ export interface Review {
 
 export interface NewReviewSubmission {
   customer_name: string;
+  country_code: string;
+  country_name: string;
   platform: ReviewPlatform;
   rating: number;
   review_text: string;
@@ -58,5 +62,6 @@ export interface ReviewFilterState {
   searchQuery: string;
   ratingFilter: number | 'all';
   platformFilter: ReviewPlatform | 'all';
+  countryFilter: string | 'all';
   sortBy: 'newest' | 'highest_rating';
 }

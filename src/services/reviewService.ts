@@ -35,6 +35,8 @@ const getInitialLocalReviews = (): Review[] => {
     {
       id: 'rev-001',
       customer_name: 'Darius Thorne',
+      country_code: 'US',
+      country_name: 'United States',
       platform: 'Discord',
       rating: 5,
       review_text:
@@ -53,6 +55,8 @@ const getInitialLocalReviews = (): Review[] => {
     {
       id: 'rev-002',
       customer_name: 'Elena Rostova',
+      country_code: 'DE',
+      country_name: 'Germany',
       platform: 'WhatsApp',
       rating: 5,
       review_text:
@@ -70,6 +74,8 @@ const getInitialLocalReviews = (): Review[] => {
     {
       id: 'rev-003',
       customer_name: 'Marcus Vance',
+      country_code: 'LK',
+      country_name: 'Sri Lanka',
       platform: 'Instagram',
       rating: 5,
       review_text:
@@ -206,6 +212,8 @@ export const submitCustomerReview = async (
     if (isSupabaseConfigured) {
       const { error: insertError } = await supabase.from('reviews').insert({
         customer_name: input.customer_name,
+        country_code: input.country_code,
+        country_name: input.country_name,
         platform: input.platform,
         rating: input.rating,
         review_text: input.review_text,
@@ -225,6 +233,8 @@ export const submitCustomerReview = async (
       const newLocal: Review = {
         id: `rev-local-${Date.now()}`,
         customer_name: input.customer_name,
+        country_code: input.country_code,
+        country_name: input.country_name,
         platform: input.platform,
         rating: input.rating,
         review_text: input.review_text,
