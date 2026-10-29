@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { InteractiveTypography } from './InteractiveTypography';
-import { ArrowDown, MessageSquarePlus, Sparkles, ShieldCheck } from 'lucide-react';
+import { ArrowDown, MessageSquarePlus, ShieldCheck } from 'lucide-react';
 import gsap from 'gsap';
+import sriLankaFlag from '../assets/sri-lanka-flag.svg';
 
 interface HeroSectionProps {
   onExploreReviews: () => void;
@@ -18,7 +19,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 }) => {
   const heroRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const subtitleRef = useRef<HTMLDivElement>(null);
   const ctaContainerRef = useRef<HTMLDivElement>(null);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
 
@@ -87,52 +88,107 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       }}
     >
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-        {/* Cinematic Badge */}
+        {/* Premium Brand Badge: 🇱🇰 SRI LANKA'S #1 ACCOUNTS SELLER */}
         <div
           ref={badgeRef}
+          className="hero-brand-badge"
+          role="status"
+          aria-label="Sri Lanka's #1 Accounts Seller"
           style={{
             display: 'inline-flex',
             alignItems: 'center',
+            justifyContent: 'center',
             gap: '8px',
             padding: '6px 16px',
             borderRadius: '9999px',
             backgroundColor: 'rgba(255, 23, 68, 0.08)',
-            border: '1px solid rgba(255, 23, 68, 0.25)',
+            border: '1px solid rgba(255, 23, 68, 0.28)',
             marginBottom: '1.25rem',
-            boxShadow: '0 0 20px rgba(255, 23, 68, 0.15)',
+            boxShadow: '0 0 20px rgba(255, 23, 68, 0.16)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            userSelect: 'none',
           }}
         >
-          <Sparkles size={14} color="var(--red-accent)" />
+          {/* Crisp Sri Lankan National Flag Vector */}
+          <img
+            src={sriLankaFlag}
+            alt="Sri Lanka Flag"
+            width={21}
+            height={16}
+            className="hero-brand-badge-flag"
+            style={{
+              width: '21px',
+              height: '15.75px',
+              borderRadius: '2.5px',
+              objectFit: 'cover',
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.4)',
+              border: '1px solid rgba(255, 255, 255, 0.18)',
+              display: 'inline-block',
+              verticalAlign: 'middle',
+              flexShrink: 0,
+            }}
+          />
+
+          {/* Prominent "SRI LANKA'S #1" with subtle crimson-red accent */}
           <span
+            className="hero-brand-badge-primary"
             style={{
               fontFamily: 'var(--font-tech)',
-              fontSize: '0.78rem',
-              fontWeight: 600,
-              letterSpacing: '0.12em',
+              fontSize: '0.80rem',
+              fontWeight: 700,
+              letterSpacing: '0.08em',
               textTransform: 'uppercase',
-              color: 'var(--red-accent)',
+              color: '#FFFFFF',
+              display: 'inline-flex',
+              alignItems: 'center',
+              lineHeight: 1,
             }}
           >
-            Verified Client Chronicles
+            SRI LANKA'S&nbsp;
+            <span
+              className="hero-brand-badge-accent"
+              style={{
+                color: 'var(--red-accent)',
+                fontWeight: 800,
+                textShadow: '0 0 10px rgba(255, 23, 68, 0.45)',
+              }}
+            >
+              #1
+            </span>
           </span>
+
+          {/* Subtle Accent Dot Separator */}
           <span
+            className="hero-brand-badge-dot"
+            aria-hidden="true"
             style={{
               display: 'inline-block',
               width: '4px',
               height: '4px',
               borderRadius: '50%',
-              backgroundColor: 'rgba(255, 255, 255, 0.4)',
+              backgroundColor: 'var(--red-accent)',
+              opacity: 0.8,
+              flexShrink: 0,
             }}
           />
+
+          {/* Clearly readable "ACCOUNTS SELLER" in off-white */}
           <span
+            className="hero-brand-badge-secondary"
             style={{
               fontFamily: 'var(--font-tech)',
-              fontSize: '0.74rem',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              letterSpacing: '0.07em',
+              textTransform: 'uppercase',
               color: '#CBD5E1',
-              letterSpacing: '0.04em',
+              display: 'inline-flex',
+              alignItems: 'center',
+              lineHeight: 1,
             }}
           >
-            Manual Authentication
+            ACCOUNTS SELLER
           </span>
         </div>
 
@@ -151,24 +207,47 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <InteractiveTypography />
         </div>
 
-        {/* Cinematic Subtitle / Introduction */}
-        <p
+        {/* Cinematic Subtitle / Introduction: Heading + Description */}
+        <div
           ref={subtitleRef}
+          className="hero-intro-block"
           style={{
-            maxWidth: '680px',
+            maxWidth: '700px',
             margin: '0 auto 2.2rem',
-            fontFamily: 'var(--font-body)',
-            fontSize: 'clamp(0.95rem, 2vw, 1.25rem)',
-            color: '#E2E8F0',
-            lineHeight: 1.65,
-            fontWeight: 400,
-            textShadow: '0 2px 14px rgba(0, 0, 0, 0.85)',
-            padding: '0 0.5rem',
+            padding: '0 0.75rem',
+            textAlign: 'center',
           }}
         >
-          Authentic customer narratives, privately verified transactions, and
-          unfiltered experiences. Every word reviewed; every purchase manually confirmed.
-        </p>
+          <h2
+            className="hero-intro-heading"
+            style={{
+              fontFamily: 'var(--font-heading)',
+              fontSize: 'clamp(1.15rem, 2.4vw, 1.55rem)',
+              fontWeight: 700,
+              letterSpacing: '-0.015em',
+              color: '#FFFFFF',
+              lineHeight: 1.35,
+              marginBottom: '0.85rem',
+              textShadow: '0 2px 16px rgba(0, 0, 0, 0.95), 0 0 24px rgba(0, 0, 0, 0.7)',
+            }}
+          >
+            Trusted Since <span className="hero-heading-accent" style={{ color: 'var(--red-accent)', textShadow: '0 0 14px rgba(255, 23, 68, 0.45)' }}>2020</span>. Built Through Social Media.
+          </h2>
+          <p
+            className="hero-intro-description"
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 'clamp(0.92rem, 1.5vw, 1.05rem)',
+              color: '#CBD5E1',
+              lineHeight: 1.65,
+              fontWeight: 400,
+              textShadow: '0 2px 14px rgba(0, 0, 0, 0.9)',
+              margin: 0,
+            }}
+          >
+            From humble beginnings to a growing online presence, we've built our reputation through years of experience and <span className="hero-desc-highlight" style={{ color: '#FFFFFF', fontWeight: 600 }}>500+ accounts sold</span>. Every transaction is handled with care, transparency, and a commitment to customer satisfaction.
+          </p>
+        </div>
 
         {/* 4 Action Buttons as requested */}
         <div

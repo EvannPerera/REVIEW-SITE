@@ -76,6 +76,7 @@ export const GlobalVideoBackground: React.FC = () => {
           transition: 'opacity 800ms ease',
           pointerEvents: 'none',
           display: 'block',
+          filter: 'brightness(1.20) contrast(1.08) saturate(1.10)',
         }}
       />
 
@@ -100,7 +101,7 @@ export const GlobalVideoBackground: React.FC = () => {
             objectFit: 'cover',
             pointerEvents: 'none',
             display: 'block',
-            filter: 'brightness(0.68) contrast(1.15) saturate(1.1)',
+            filter: 'brightness(1.20) contrast(1.08) saturate(1.10)',
           }}
         >
           <source src={videoSrc} type="video/mp4" />
@@ -108,14 +109,15 @@ export const GlobalVideoBackground: React.FC = () => {
         </video>
       )}
 
-      {/* Fixed Dark Black Overlay with Subtle Red Tint */}
+      {/* Fixed Dark Black Overlay with Subtle Red Tint (Lightened for enhanced action & character visibility) */}
       <div
+        className="global-cinematic-overlay"
         style={{
           position: 'absolute',
           inset: 0,
           background: `
-            radial-gradient(circle at 50% 35%, rgba(176, 0, 32, 0.16) 0%, rgba(5, 5, 8, 0.74) 60%, rgba(3, 3, 5, 0.94) 100%),
-            linear-gradient(180deg, rgba(5, 5, 8, 0.72) 0%, rgba(18, 2, 6, 0.52) 50%, rgba(5, 5, 8, 0.88) 100%)
+            radial-gradient(circle at 50% 35%, rgba(176, 0, 32, 0.10) 0%, rgba(5, 5, 8, 0.38) 60%, rgba(3, 3, 5, 0.72) 100%),
+            linear-gradient(180deg, rgba(5, 5, 8, 0.48) 0%, rgba(18, 2, 6, 0.20) 45%, rgba(5, 5, 8, 0.70) 100%)
           `,
           pointerEvents: 'none',
         }}
@@ -123,10 +125,11 @@ export const GlobalVideoBackground: React.FC = () => {
 
       {/* Edge Vignette */}
       <div
+        className="global-cinematic-vignette"
         style={{
           position: 'absolute',
           inset: 0,
-          boxShadow: 'inset 0 0 100px rgba(0, 0, 0, 0.8)',
+          boxShadow: 'inset 0 0 85px rgba(0, 0, 0, 0.55)',
           pointerEvents: 'none',
         }}
       />
