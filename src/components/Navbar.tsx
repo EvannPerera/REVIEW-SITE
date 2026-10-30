@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Menu, X, Star, MessageSquarePlus, Info, Home, Share2, FileText } from 'lucide-react';
+import { Shield, Menu, X, Star, MessageSquarePlus, Info, Home, Share2, FileText, Compass } from 'lucide-react';
 import { useRouter, AppRoute } from '../routes/router';
 import { ThemeToggle } from './ThemeToggle';
+import { useReviewerGuide } from '../context/ReviewerGuideContext';
 
 interface NavbarProps {
   onOpenAdmin: () => void;
@@ -15,6 +16,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { currentRoute, navigate } = useRouter();
+  const { startGuide } = useReviewerGuide();
 
   // Compute Base URL compatible with GitHub Pages (/REVIEW-SITE/) and local development
   const rawBase = import.meta.env.BASE_URL || './';
@@ -53,6 +55,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         left: 0,
         right: 0,
         zIndex: 50,
+        paddingTop: 'env(safe-area-inset-top, 0px)',
         transition: 'all 300ms cubic-bezier(0.16, 1, 0.3, 1)',
         backgroundColor: isScrolled ? 'var(--nav-bg)' : 'transparent',
         backdropFilter: isScrolled ? 'blur(16px)' : 'none',
@@ -64,14 +67,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       }}
     >
       <div
-        className="container"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          height: isScrolled ? '68px' : '82px',
-          transition: 'height 300ms ease',
-        }}
+        className={`container navbar-container ${isScrolled ? 'scrolled' : ''}`}
       >
         {/* Brand Wordmark & Official COD:M Emblem Logo */}
         <button
@@ -172,8 +168,34 @@ export const Navbar: React.FC<NavbarProps> = ({
             );
           })}
 
+          {/* Reviewer Guide Button */}
+          <button
+            onClick={() => startGuide(0)}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 12px',
+              borderRadius: '6px',
+              fontSize: '0.82rem',
+              fontFamily: 'var(--font-tech)',
+              letterSpacing: '0.04em',
+              color: '#93C5FD',
+              border: '1px solid rgba(59, 130, 246, 0.4)',
+              backgroundColor: 'rgba(37, 99, 235, 0.12)',
+              transition: 'all 200ms ease',
+              cursor: 'pointer',
+            }}
+            title="Interactive First-Time Reviewer Guide"
+            aria-label="Start Reviewer Guide"
+            className="navbar-guide-btn"
+          >
+            <Compass size={14} color="#93C5FD" />
+            <span>Guide</span>
+          </button>
+
           {/* Theme Toggle (Light / Dark Mode) */}
-          <div style={{ marginLeft: '0.4rem' }}>
+          <div style={{ marginLeft: '0.2rem' }}>
             <ThemeToggle size="md" />
           </div>
 
@@ -309,6 +331,24 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span>My Socials</span>
           </button>
 
+          <button
+            onClick={() => {
+              setMobileMenuOpen(false);
+              startGuide(0);
+            }}
+            style={{
+              ...mobileNavLinkStyle,
+              color: '#93C5FD',
+              backgroundColor: 'rgba(37, 99, 235, 0.12)',
+              border: '1px solid rgba(59, 130, 246, 0.35)',
+              borderRadius: '8px',
+              padding: '0.8rem 1rem',
+            }}
+          >
+            <Compass size={18} color="#93C5FD" />
+            <span>How to Leave a Review (Guide)</span>
+          </button>
+
           <div
             style={{
               height: '1px',
@@ -339,6 +379,33 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Embedded CSS for responsive media query and brand styling */}
       <style>{`
+        .navbar-container {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 82px;
+          transition: height 250ms ease;
+        }
+        .navbar-container.scrolled {
+          height: 68px;
+        }
+        @media (max-width: 768px) {
+          .navbar-container {
+            height: 58px !important;
+          }
+          .navbar-container.scrolled {
+            height: 52px !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .navbar-container {
+            height: 54px !important;
+          }
+          .navbar-container.scrolled {
+            height: 48px !important;
+          }
+        }
+
         @media (min-width: 860px) {
           .desktop-nav {
             display: flex !important;

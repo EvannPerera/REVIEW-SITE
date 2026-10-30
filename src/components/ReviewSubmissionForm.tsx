@@ -10,6 +10,7 @@ import {
   Lock,
   Send,
   Image as ImageIcon,
+  Info,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { NewReviewSubmission, ReviewPlatform } from '../types/database';
@@ -20,13 +21,48 @@ interface ReviewSubmissionFormProps {
   onSubmit: (submission: NewReviewSubmission) => Promise<{ success: boolean; error?: string }>;
 }
 
+interface FieldErrors {
+  rating?: string;
+  customerName?: string;
+  country?: string;
+  reviewText?: string;
+  codmUid?: string;
+  consent?: string;
+}
+
+interface ValidationBubbleProps {
+  message: string;
+  pointer?: 'top' | 'left' | 'bottom';
+  id?: string;
+  className?: string;
+}
+
+const ValidationBubble: React.FC<ValidationBubbleProps> = ({
+  message,
+  pointer = 'top',
+  id,
+  className = '',
+}) => {
+  return (
+    <div
+      id={id}
+      role="alert"
+      aria-live="polite"
+      className={`validation-bubble validation-bubble--${pointer} ${className}`.trim()}
+    >
+      <AlertCircle size={13} style={{ flexShrink: 0, color: '#DC2626' }} aria-hidden="true" />
+      <span>{message}</span>
+    </div>
+  );
+};
+
 export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSubmit }) => {
-  // Form fields
+  // Form fields (rating starts at 0 so validation prompts reviewer if unselected)
   const [customerName, setCustomerName] = useState('');
   const [countryCode, setCountryCode] = useState('');
   const [countryName, setCountryName] = useState('');
   const [platform, setPlatform] = useState<ReviewPlatform>('Discord');
-  const [rating, setRating] = useState<number>(5);
+  const [rating, setRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [reviewText, setReviewText] = useState('');
   const [codmUid, setCodmUid] = useState('');
@@ -36,10 +72,19 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
 
   // Status and submission states
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [screenshotError, setScreenshotError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [isSubmittedSuccess, setIsSubmittedSuccess] = useState(false);
 
+  // Element refs for scrolling to first invalid field and file input
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const ratingRef = useRef<HTMLDivElement>(null);
+  const customerNameRef = useRef<HTMLInputElement>(null);
+  const countryRef = useRef<HTMLDivElement>(null);
+  const reviewTextRef = useRef<HTMLTextAreaElement>(null);
+  const codmUidRef = useRef<HTMLInputElement>(null);
+  const consentRef = useRef<HTMLDivElement>(null);
 
   const platforms: ReviewPlatform[] = [
     'Discord',
@@ -50,6 +95,100 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
     'Other',
   ];
 
+  // Helper to clear a field's validation error when it becomes valid
+  const clearFieldError = (field: keyof FieldErrors) => {
+    setFieldErrors((prev) => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+  };
+
+  // Rating select handler
+  const handleRatingSelect = (selectedStar: number) => {
+    setRating(selectedStar);
+    if (selectedStar >= 1 && selectedStar <= 5) {
+      clearFieldError('rating');
+    }
+  };
+
+  // Customer Name change & blur handlers
+  const handleCustomerNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setCustomerName(val);
+    const trimmed = val.trim();
+    if (trimmed.length >= 2 && trimmed.length <= 60) {
+      clearFieldError('customerName');
+    }
+  };
+
+  const handleCustomerNameBlur = () => {
+    const trimmed = customerName.trim();
+    if (!trimmed) {
+      setFieldErrors((prev) => ({ ...prev, customerName: 'Please enter your name.' }));
+    } else if (trimmed.length < 2) {
+      setFieldErrors((prev) => ({ ...prev, customerName: 'Please enter your name.' }));
+    } else if (trimmed.length > 60) {
+      setFieldErrors((prev) => ({ ...prev, customerName: 'Customer name cannot exceed 60 characters.' }));
+    }
+  };
+
+  // Country select handler
+  const handleCountryChange = (c: Country) => {
+    setCountryCode(c.code);
+    setCountryName(c.name);
+    clearFieldError('country');
+  };
+
+  // Review text change & blur handlers
+  const handleReviewTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value;
+    setReviewText(val);
+    const trimmed = val.trim();
+    if (trimmed.length >= 20 && trimmed.length <= 1000) {
+      clearFieldError('reviewText');
+    }
+  };
+
+  const handleReviewTextBlur = () => {
+    const trimmed = reviewText.trim();
+    if (!trimmed) {
+      setFieldErrors((prev) => ({ ...prev, reviewText: 'Please write your review.' }));
+    } else if (trimmed.length < 20) {
+      setFieldErrors((prev) => ({ ...prev, reviewText: 'Review must be at least 20 characters.' }));
+    } else if (trimmed.length > 1000) {
+      setFieldErrors((prev) => ({ ...prev, reviewText: 'Review cannot exceed 1,000 characters.' }));
+    }
+  };
+
+  // CODM UID change & blur handlers
+  const handleCodmUidChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.trim();
+    setCodmUid(val);
+    if (val.length >= 6 && val.length <= 32) {
+      clearFieldError('codmUid');
+    }
+  };
+
+  const handleCodmUidBlur = () => {
+    const trimmed = codmUid.trim();
+    if (!trimmed) {
+      setFieldErrors((prev) => ({ ...prev, codmUid: 'Please enter your CODM Account UID.' }));
+    } else if (trimmed.length < 6 || trimmed.length > 32) {
+      setFieldErrors((prev) => ({ ...prev, codmUid: 'Please enter a valid CODM Account UID (6–32 characters).' }));
+    }
+  };
+
+  // Consent checkbox handler
+  const handleConsentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    setConsentChecked(checked);
+    if (checked) {
+      clearFieldError('consent');
+    }
+  };
+
   // Handle screenshot file selection & validation
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -58,18 +197,18 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
     // Validate type (JPG, PNG, WebP)
     const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
     if (!validTypes.includes(file.type)) {
-      setFormError('Screenshot must be a valid JPG, PNG, or WebP image file.');
+      setScreenshotError('Screenshot must be a valid JPG, PNG, or WebP image file.');
       return;
     }
 
     // Validate size (max 5 MB = 5 * 1024 * 1024 bytes)
     const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
-      setFormError('Screenshot file size exceeds 5MB limit.');
+      setScreenshotError('Screenshot file size exceeds 5MB limit.');
       return;
     }
 
-    setFormError(null);
+    setScreenshotError(null);
     setScreenshotFile(file);
 
     // Create local object URL for preview
@@ -79,6 +218,7 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
 
   const handleRemoveScreenshot = () => {
     setScreenshotFile(null);
+    setScreenshotError(null);
     if (screenshotPreview) {
       URL.revokeObjectURL(screenshotPreview);
       setScreenshotPreview(null);
@@ -88,56 +228,88 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
     }
   };
 
-  // Form submit handler with rigorous client-side validation
+  // Form submit handler with field-level validation and auto-scroll
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormError(null);
+    setSubmissionError(null);
+
+    const errors: FieldErrors = {};
+
+    // Validate Rating (1-5)
+    if (!rating || rating < 1 || rating > 5) {
+      errors.rating = 'Please select a star rating.';
+    }
 
     // Validate Customer Name (2-60 chars)
     const trimmedName = customerName.trim();
-    if (trimmedName.length < 2 || trimmedName.length > 60) {
-      setFormError('Customer name must be between 2 and 60 characters.');
-      return;
+    if (!trimmedName || trimmedName.length < 2) {
+      errors.customerName = 'Please enter your name.';
+    } else if (trimmedName.length > 60) {
+      errors.customerName = 'Customer name cannot exceed 60 characters.';
     }
 
     // Validate Country (Required field)
     if (!countryCode || !countryName) {
-      setFormError('Please select your country before submitting.');
-      return;
-    }
-
-    // Validate Rating (1-5)
-    if (!rating || rating < 1 || rating > 5) {
-      setFormError('Please select a star rating between 1 and 5.');
-      return;
+      errors.country = 'Please select your country.';
     }
 
     // Validate Review Text (20-1000 chars)
     const trimmedText = reviewText.trim();
-    if (trimmedText.length < 20) {
-      setFormError('Review text must be at least 20 characters in length.');
-      return;
-    }
-    if (trimmedText.length > 1000) {
-      setFormError('Review text cannot exceed 1,000 characters.');
-      return;
+    if (!trimmedText) {
+      errors.reviewText = 'Please write your review.';
+    } else if (trimmedText.length < 20) {
+      errors.reviewText = 'Review must be at least 20 characters.';
+    } else if (trimmedText.length > 1000) {
+      errors.reviewText = 'Review cannot exceed 1,000 characters.';
     }
 
     // Validate CODM UID (Required private verification field)
     const trimmedUid = codmUid.trim();
-    if (!trimmedUid || trimmedUid.length < 6 || trimmedUid.length > 32) {
-      setFormError(
-        'Please enter a valid CODM Account UID (6–32 characters) for transaction verification.'
-      );
-      return;
+    if (!trimmedUid) {
+      errors.codmUid = 'Please enter your CODM Account UID.';
+    } else if (trimmedUid.length < 6 || trimmedUid.length > 32) {
+      errors.codmUid = 'Please enter a valid CODM Account UID (6–32 characters).';
     }
 
     // Validate Consent
     if (!consentChecked) {
-      setFormError('You must agree to the transaction verification and moderation policy.');
+      errors.consent = 'Please confirm your consent to submit.';
+    }
+
+    // If any validation errors exist, display them beside/below the fields and stop
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+
+      // Scroll smoothly to first invalid field if out of viewport
+      let firstEl: HTMLElement | null = null;
+      if (errors.rating) firstEl = ratingRef.current;
+      else if (errors.customerName) firstEl = customerNameRef.current;
+      else if (errors.country) firstEl = countryRef.current;
+      else if (errors.reviewText) firstEl = reviewTextRef.current;
+      else if (errors.codmUid) firstEl = codmUidRef.current;
+      else if (errors.consent) firstEl = consentRef.current;
+
+      if (firstEl) {
+        const rect = firstEl.getBoundingClientRect();
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        const isOutOfView = rect.top < 90 || rect.bottom > viewportHeight - 50;
+        if (isOutOfView) {
+          firstEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        if (
+          firstEl instanceof HTMLInputElement ||
+          firstEl instanceof HTMLTextAreaElement ||
+          firstEl instanceof HTMLButtonElement
+        ) {
+          firstEl.focus();
+        } else {
+          firstEl.querySelector<HTMLElement>('button, input, textarea')?.focus();
+        }
+      }
       return;
     }
 
+    setFieldErrors({});
     setIsSubmitting(true);
 
     try {
@@ -153,7 +325,7 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
       });
 
       if (!result.success) {
-        setFormError(result.error || 'Failed to submit review. Please try again.');
+        setSubmissionError(result.error || 'Failed to submit review. Please try again.');
         setIsSubmitting(false);
         return;
       }
@@ -172,13 +344,15 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
       setCountryCode('');
       setCountryName('');
       setPlatform('Discord');
-      setRating(5);
+      setRating(0);
       setReviewText('');
       setCodmUid('');
       handleRemoveScreenshot();
       setConsentChecked(false);
+      setFieldErrors({});
+      setSubmissionError(null);
     } catch (err: any) {
-      setFormError(err.message || 'An unexpected error occurred. Please try again.');
+      setSubmissionError(err.message || 'An unexpected error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -317,9 +491,26 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
             }}
             noValidate
           >
-            {/* Error Banner */}
-            {formError && (
+            {/* Information Notice at the top of the Submit Review card */}
+            <div
+              data-guide="info-notice"
+              className="submit-review-notice"
+              role="note"
+              aria-label="Transaction Record Notice"
+            >
+              <div className="submit-review-notice-icon-wrap">
+                <Info size={18} className="submit-review-notice-icon" aria-hidden="true" />
+              </div>
+              <p className="submit-review-notice-text">
+                <strong className="submit-review-notice-bold">IMPORTANT:</strong>{' '}
+                We collect these details not only to publish your review, but also to keep an accurate record of every deal. This helps us verify transactions and quickly refer to the relevant details if an issue or emergency arises.
+              </p>
+            </div>
+
+            {/* Backend / Network Submission Error Banner (Only for failed server submissions) */}
+            {submissionError && (
               <div
+                role="alert"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -333,7 +524,7 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
                 }}
               >
                 <AlertCircle size={18} style={{ flexShrink: 0 }} />
-                <span>{formError}</span>
+                <span>{submissionError}</span>
               </div>
             )}
 
@@ -355,57 +546,85 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
 
               <div
                 style={{
-                  display: 'inline-flex',
-                  gap: '8px',
-                  padding: '8px 12px',
-                  borderRadius: '10px',
-                  backgroundColor: 'var(--bg-elevated)',
-                  border: '1px solid var(--border-subtle)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '14px',
+                  flexWrap: 'wrap',
                 }}
-                role="radiogroup"
-                aria-label="Star rating selection"
               >
-                {[1, 2, 3, 4, 5].map((star) => {
-                  const isFilled =
-                    hoverRating !== null ? star <= hoverRating : star <= rating;
+                <div
+                  ref={ratingRef}
+                  data-guide="rating-field"
+                  style={{
+                    display: 'inline-flex',
+                    gap: '8px',
+                    padding: '8px 12px',
+                    borderRadius: '10px',
+                    backgroundColor: 'var(--bg-elevated)',
+                    border: fieldErrors.rating
+                      ? '1px solid #DC2626'
+                      : '1px solid var(--border-subtle)',
+                    boxShadow: fieldErrors.rating
+                      ? '0 0 0 2px rgba(220, 38, 38, 0.2)'
+                      : 'none',
+                    transition: 'border-color 200ms ease, box-shadow 200ms ease',
+                  }}
+                  role="radiogroup"
+                  aria-label="Star rating selection"
+                >
+                  {[1, 2, 3, 4, 5].map((star) => {
+                    const isFilled =
+                      hoverRating !== null ? star <= hoverRating : rating > 0 && star <= rating;
 
-                  return (
-                    <button
-                      key={star}
-                      type="button"
-                      role="radio"
-                      aria-checked={rating === star}
-                      aria-label={`${star} Stars`}
-                      onClick={() => setRating(star)}
-                      onMouseEnter={() => setHoverRating(star)}
-                      onMouseLeave={() => setHoverRating(null)}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        padding: '4px',
-                        transition: 'transform 150ms ease',
-                        transform: isFilled ? 'scale(1.15)' : 'scale(1)',
-                      }}
-                    >
-                      <Star
-                        size={28}
-                        fill={isFilled ? 'var(--red-accent)' : 'transparent'}
-                        color={isFilled ? 'var(--red-accent)' : 'rgba(255, 255, 255, 0.25)'}
+                    return (
+                      <button
+                        key={star}
+                        type="button"
+                        role="radio"
+                        aria-checked={rating === star}
+                        aria-label={`${star} Stars`}
+                        onClick={() => handleRatingSelect(star)}
+                        onMouseEnter={() => setHoverRating(star)}
+                        onMouseLeave={() => setHoverRating(null)}
                         style={{
-                          filter: isFilled
-                            ? 'drop-shadow(0 0 8px rgba(255, 23, 68, 0.6))'
-                            : 'none',
+                          background: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
+                          padding: '4px',
+                          transition: 'transform 150ms ease',
+                          transform: isFilled ? 'scale(1.15)' : 'scale(1)',
                         }}
-                      />
-                    </button>
-                  );
-                })}
+                      >
+                        <Star
+                          size={28}
+                          fill={isFilled ? 'var(--red-accent)' : 'transparent'}
+                          color={isFilled ? 'var(--red-accent)' : 'rgba(255, 255, 255, 0.25)'}
+                          style={{
+                            filter: isFilled
+                              ? 'drop-shadow(0 0 8px rgba(255, 23, 68, 0.6))'
+                              : 'none',
+                          }}
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {fieldErrors.rating && (
+                  <div className="rating-bubble-container">
+                    <ValidationBubble
+                      id="error-rating"
+                      message={fieldErrors.rating}
+                      pointer="left"
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
             {/* 2. Customer Name, Country & Platform Grid */}
             <div
+              data-guide="name-country-grid"
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
@@ -413,7 +632,7 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
               }}
             >
               {/* Customer Display Name */}
-              <div>
+              <div data-guide="name-field">
                 <label
                   htmlFor="customer_name"
                   style={{
@@ -429,35 +648,62 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
                   Customer Display Name <span style={{ color: 'var(--red-accent)' }}>*</span>
                 </label>
                 <input
+                  ref={customerNameRef}
                   id="customer_name"
                   type="text"
                   value={customerName}
-                  onChange={(e) => setCustomerName(e.target.value)}
+                  onChange={handleCustomerNameChange}
+                  onBlur={handleCustomerNameBlur}
                   placeholder="e.g. Liam V. or Phoenix"
                   maxLength={60}
                   required
-                  style={inputStyle}
+                  style={{
+                    ...inputStyle,
+                    ...(fieldErrors.customerName
+                      ? {
+                          borderColor: '#DC2626',
+                          boxShadow: '0 0 0 2px rgba(220, 38, 38, 0.2)',
+                        }
+                      : {}),
+                  }}
                 />
-                <span style={inputHelpStyle}>
-                  Your preferred public display name (2–60 characters)
-                </span>
+                {fieldErrors.customerName ? (
+                  <div style={{ marginTop: '7px' }}>
+                    <ValidationBubble
+                      id="error-customer-name"
+                      message={fieldErrors.customerName}
+                      pointer="top"
+                    />
+                  </div>
+                ) : (
+                  <span style={inputHelpStyle}>
+                    Your preferred public display name (2–60 characters)
+                  </span>
+                )}
               </div>
 
               {/* Required Country Selector */}
               <div>
-                <CountrySelect
-                  id="review_country"
-                  value={countryCode}
-                  required={true}
-                  onChange={(c: Country) => {
-                    setCountryCode(c.code);
-                    setCountryName(c.name);
-                    if (formError && formError.includes('country')) {
-                      setFormError(null);
-                    }
-                  }}
-                />
-                <span style={inputHelpStyle}>Country or territory of origin</span>
+                <div ref={countryRef} style={{ position: 'relative' }}>
+                  <CountrySelect
+                    id="review_country"
+                    value={countryCode}
+                    required={true}
+                    error={fieldErrors.country}
+                    onChange={handleCountryChange}
+                  />
+                </div>
+                {fieldErrors.country ? (
+                  <div style={{ marginTop: '7px' }}>
+                    <ValidationBubble
+                      id="error-country"
+                      message={fieldErrors.country}
+                      pointer="top"
+                    />
+                  </div>
+                ) : (
+                  <span style={inputHelpStyle}>Country or territory of origin</span>
+                )}
               </div>
 
               {/* Contact Platform Selector */}
@@ -483,7 +729,11 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
                   style={{ ...inputStyle, cursor: 'pointer' }}
                 >
                   {platforms.map((p) => (
-                    <option key={p} value={p} style={{ backgroundColor: 'var(--bg-elevated)', color: 'var(--text-primary)' }}>
+                    <option
+                      key={p}
+                      value={p}
+                      style={{ backgroundColor: 'var(--bg-elevated)', color: 'var(--text-primary)' }}
+                    >
                       {p}
                     </option>
                   ))}
@@ -493,7 +743,7 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
             </div>
 
             {/* 3. Review Narrative */}
-            <div>
+            <div data-guide="review-text-field">
               <div
                 style={{
                   display: 'flex',
@@ -529,10 +779,12 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
               </div>
 
               <textarea
+                ref={reviewTextRef}
                 id="review_text"
                 rows={4}
                 value={reviewText}
-                onChange={(e) => setReviewText(e.target.value)}
+                onChange={handleReviewTextChange}
+                onBlur={handleReviewTextBlur}
                 placeholder="Share your experience regarding delivery speed, communication, item delivery, and reliability..."
                 maxLength={1000}
                 required
@@ -541,18 +793,41 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
                   resize: 'vertical',
                   minHeight: '110px',
                   lineHeight: 1.5,
+                  ...(fieldErrors.reviewText
+                    ? {
+                        borderColor: '#DC2626',
+                        boxShadow: '0 0 0 2px rgba(220, 38, 38, 0.2)',
+                      }
+                    : {}),
                 }}
               />
-              <span style={inputHelpStyle}>Minimum 20 characters</span>
+              {fieldErrors.reviewText ? (
+                <div style={{ marginTop: '7px' }}>
+                  <ValidationBubble
+                    id="error-review-text"
+                    message={fieldErrors.reviewText}
+                    pointer="top"
+                  />
+                </div>
+              ) : (
+                <span style={inputHelpStyle}>Minimum 20 characters</span>
+              )}
             </div>
 
             {/* 4. Private CODM Account UID (Crucial Security Isolation) */}
             <div
+              data-guide="uid-card"
               style={{
                 backgroundColor: 'var(--bg-elevated)',
-                border: '1px solid var(--border-glass)',
+                border: fieldErrors.codmUid
+                  ? '1px solid #DC2626'
+                  : '1px solid var(--border-glass)',
+                boxShadow: fieldErrors.codmUid
+                  ? '0 0 0 2px rgba(220, 38, 38, 0.2)'
+                  : 'none',
                 borderRadius: '10px',
                 padding: '1.2rem',
+                transition: 'border-color 200ms ease, box-shadow 200ms ease',
               }}
             >
               <div
@@ -579,15 +854,35 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
               </div>
 
               <input
+                ref={codmUidRef}
                 id="codm_uid"
                 type="text"
                 value={codmUid}
-                onChange={(e) => setCodmUid(e.target.value.trim())}
+                onChange={handleCodmUidChange}
+                onBlur={handleCodmUidBlur}
                 placeholder="e.g. 6749321854930219485"
                 maxLength={32}
                 required
-                style={inputStyle}
+                style={{
+                  ...inputStyle,
+                  ...(fieldErrors.codmUid
+                    ? {
+                        borderColor: '#DC2626',
+                        boxShadow: '0 0 0 2px rgba(220, 38, 38, 0.2)',
+                      }
+                    : {}),
+                }}
               />
+
+              {fieldErrors.codmUid && (
+                <div style={{ marginTop: '7px' }}>
+                  <ValidationBubble
+                    id="error-codm-uid"
+                    message={fieldErrors.codmUid}
+                    pointer="top"
+                  />
+                </div>
+              )}
 
               <div
                 style={{
@@ -629,7 +924,9 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
                 <div
                   onClick={() => fileInputRef.current?.click()}
                   style={{
-                    border: '1px dashed var(--border-glass)',
+                    border: screenshotError
+                      ? '1px dashed #DC2626'
+                      : '1px dashed var(--border-glass)',
                     borderRadius: '10px',
                     padding: '1.75rem 1rem',
                     textAlign: 'center',
@@ -703,50 +1000,74 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
                   </button>
                 </div>
               )}
+
+              {screenshotError && (
+                <div style={{ marginTop: '7px' }}>
+                  <ValidationBubble message={screenshotError} pointer="top" />
+                </div>
+              )}
             </div>
 
             {/* 6. Consent Notice Checkbox */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '10px',
-                marginTop: '0.5rem',
-              }}
-            >
-              <input
-                id="consent_check"
-                type="checkbox"
-                checked={consentChecked}
-                onChange={(e) => setConsentChecked(e.target.checked)}
-                required
+            <div ref={consentRef} style={{ marginTop: '0.5rem' }}>
+              <div
                 style={{
-                  marginTop: '4px',
-                  width: '16px',
-                  height: '16px',
-                  accentColor: 'var(--red-accent)',
-                  cursor: 'pointer',
-                }}
-              />
-              <label
-                htmlFor="consent_check"
-                style={{
-                  fontSize: '0.8rem',
-                  color: 'var(--text-secondary)',
-                  lineHeight: 1.45,
-                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '10px',
                 }}
               >
-                I confirm that this evaluation represents my genuine experience. I consent to my review
-                text and display name being publicly displayed upon administrator approval. I acknowledge
-                that my UID remains private for transaction verification.
-              </label>
+                <input
+                  id="consent_check"
+                  type="checkbox"
+                  checked={consentChecked}
+                  onChange={handleConsentChange}
+                  required
+                  style={{
+                    marginTop: '4px',
+                    width: '16px',
+                    height: '16px',
+                    accentColor: 'var(--red-accent)',
+                    cursor: 'pointer',
+                    ...(fieldErrors.consent
+                      ? {
+                          outline: '2px solid #DC2626',
+                          outlineOffset: '2px',
+                          borderRadius: '3px',
+                        }
+                      : {}),
+                  }}
+                />
+                <label
+                  htmlFor="consent_check"
+                  style={{
+                    fontSize: '0.8rem',
+                    color: 'var(--text-secondary)',
+                    lineHeight: 1.45,
+                    cursor: 'pointer',
+                  }}
+                >
+                  I confirm that this evaluation represents my genuine experience. I consent to my review
+                  text and display name being publicly displayed upon administrator approval. I acknowledge
+                  that my UID remains private for transaction verification.
+                </label>
+              </div>
+              {fieldErrors.consent && (
+                <div style={{ marginTop: '8px', marginLeft: '26px' }}>
+                  <ValidationBubble
+                    id="error-consent"
+                    message={fieldErrors.consent}
+                    pointer="top"
+                  />
+                </div>
+              )}
             </div>
 
             {/* 7. Submit Action Button */}
             <div style={{ marginTop: '0.5rem' }}>
               <button
                 type="submit"
+                data-guide="submit-btn"
                 disabled={isSubmitting}
                 style={{
                   width: '100%',
@@ -789,6 +1110,156 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
       </div>
 
       <style>{`
+        /* Information Notice Component */
+        .submit-review-notice {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          padding: 12px 16px;
+          border-radius: 8px;
+          background-color: rgba(255, 23, 68, 0.08);
+          border: 1px solid rgba(255, 23, 68, 0.24);
+          transition: all 200ms ease;
+        }
+        [data-theme="light"] .submit-review-notice {
+          background-color: rgba(229, 9, 20, 0.06);
+          border: 1px solid rgba(229, 9, 20, 0.22);
+        }
+        .submit-review-notice-icon-wrap {
+          flex-shrink: 0;
+          margin-top: 2px;
+        }
+        .submit-review-notice-icon {
+          color: var(--red-accent);
+        }
+        .submit-review-notice-text {
+          margin: 0;
+          font-family: var(--font-body);
+          font-size: 0.84rem;
+          line-height: 1.5;
+          color: var(--text-secondary);
+        }
+        [data-theme="light"] .submit-review-notice-text {
+          color: #334155;
+        }
+        .submit-review-notice-bold {
+          color: var(--heading-color);
+          font-weight: 700;
+          letter-spacing: 0.03em;
+        }
+        [data-theme="light"] .submit-review-notice-bold {
+          color: #0F172A;
+        }
+        @media (max-width: 640px) {
+          .submit-review-notice {
+            padding: 10px 12px;
+            gap: 10px;
+          }
+          .submit-review-notice-text {
+            font-size: 0.8rem;
+            line-height: 1.45;
+          }
+        }
+
+        /* Speech-bubble validation messages */
+        .validation-bubble {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          background-color: #FFFFFF !important;
+          color: #DC2626 !important;
+          font-family: var(--font-heading), -apple-system, BlinkMacSystemFont, sans-serif;
+          font-size: 0.78rem;
+          font-weight: 600;
+          line-height: 1.35;
+          padding: 5px 11px;
+          border-radius: 6px;
+          border: 1px solid rgba(220, 38, 38, 0.24);
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28), 0 1px 3px rgba(0, 0, 0, 0.12);
+          filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.18));
+          z-index: 20;
+          animation: validationBubblePop 180ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .validation-bubble span {
+          color: #DC2626 !important;
+        }
+        [data-theme="light"] .validation-bubble {
+          border: 1px solid rgba(220, 38, 38, 0.32);
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        @keyframes validationBubblePop {
+          0% {
+            opacity: 0;
+            transform: scale(0.92) translateY(2px);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+
+        /* Pointer: Top */
+        .validation-bubble--top::before {
+          content: '';
+          position: absolute;
+          top: -6px;
+          left: 14px;
+          width: 0;
+          height: 0;
+          border-left: 6px solid transparent;
+          border-right: 6px solid transparent;
+          border-bottom: 6px solid #FFFFFF;
+        }
+
+        /* Pointer: Left */
+        .validation-bubble--left::before {
+          content: '';
+          position: absolute;
+          left: -6px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 0;
+          height: 0;
+          border-top: 6px solid transparent;
+          border-bottom: 6px solid transparent;
+          border-right: 6px solid #FFFFFF;
+        }
+
+        /* Pointer: Bottom */
+        .validation-bubble--bottom::before {
+          content: '';
+          position: absolute;
+          bottom: -6px;
+          left: 14px;
+          width: 0;
+          height: 0;
+          border-left: 6px solid transparent;
+          border-right: 6px solid transparent;
+          border-top: 6px solid #FFFFFF;
+        }
+
+        .rating-bubble-container {
+          display: inline-flex;
+          align-items: center;
+        }
+        @media (max-width: 640px) {
+          .rating-bubble-container {
+            display: flex;
+            width: 100%;
+            margin-top: 4px;
+          }
+          .rating-bubble-container .validation-bubble--left::before {
+            left: 14px;
+            top: -6px;
+            transform: none;
+            border-top: none;
+            border-bottom: 6px solid #FFFFFF;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+          }
+        }
+
         .upload-dropzone:hover {
           border-color: var(--red-accent) !important;
           background-color: rgba(255, 23, 68, 0.05) !important;

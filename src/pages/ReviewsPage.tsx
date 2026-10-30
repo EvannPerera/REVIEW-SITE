@@ -1,15 +1,18 @@
 import React from 'react';
 import { PublicReviewsList } from '../components/PublicReviewsList';
 import { ReviewStatsOverview } from '../components/ReviewStatsOverview';
-import { Review, ReviewStats, ReactionType } from '../types/database';
+import { Review, ReviewStats, ReactionType, NewReviewSubmission } from '../types/database';
 import { useRouter } from '../routes/router';
-import { MessageSquarePlus, Sparkles, ShieldCheck } from 'lucide-react';
+import { MessageSquarePlus, Sparkles, ShieldCheck, Compass } from 'lucide-react';
+import { useReviewerGuide } from '../context/ReviewerGuideContext';
+import { ReviewSubmissionForm } from '../components/ReviewSubmissionForm';
 
 interface ReviewsPageProps {
   reviews: Review[];
   stats: ReviewStats;
   loading: boolean;
   onReact: (reviewId: string, reactionType: ReactionType) => Promise<void>;
+  onReviewSubmit?: (submission: NewReviewSubmission) => Promise<{ success: boolean; error?: string }>;
 }
 
 export const ReviewsPage: React.FC<ReviewsPageProps> = ({
@@ -17,8 +20,17 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({
   stats,
   loading,
   onReact,
+  onReviewSubmit,
 }) => {
   const { navigate } = useRouter();
+  const { startGuide } = useReviewerGuide();
+
+  const handleScrollToSubmit = () => {
+    const el = document.getElementById('submit-review');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <div
@@ -87,10 +99,10 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({
             Every submission is checked; verified badges are awarded only through audited purchase records.
           </p>
 
-          {/* Quick Action Button to Submit Review */}
+          {/* Quick Action Buttons */}
           <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
             <button
-              onClick={() => navigate('home', 'submit-review')}
+              onClick={onReviewSubmit ? handleScrollToSubmit : () => navigate('home', 'submit-review')}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -113,18 +125,51 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({
               <MessageSquarePlus size={16} />
               <span>Leave Your Review</span>
             </button>
+
+            {/* How to Leave a Review Guide Button */}
+            <button
+              onClick={() => startGuide(0)}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '12px 20px',
+                borderRadius: '8px',
+                backgroundColor: 'rgba(37, 99, 235, 0.16)',
+                color: '#93C5FD',
+                fontFamily: 'var(--font-tech)',
+                fontWeight: 600,
+                fontSize: '0.88rem',
+                letterSpacing: '0.05em',
+                border: '1px solid rgba(59, 130, 246, 0.45)',
+                boxShadow: '0 0 15px rgba(37, 99, 235, 0.2)',
+                transition: 'all 200ms ease',
+                cursor: 'pointer',
+              }}
+              className="reviews-guide-btn"
+            >
+              <Compass size={16} color="#93C5FD" />
+              <span>How to Leave a Review</span>
+            </button>
           </div>
         </header>
 
         {/* Real Review Overview & Distribution Metrics */}
         <ReviewStatsOverview stats={stats} loading={loading} />
 
+        {/* Review Submission Form on Reviews Page (Allows direct submission & seamless guide tour) */}
+        {onReviewSubmit && (
+          <div style={{ margin: '2rem 0' }}>
+            <ReviewSubmissionForm onSubmit={onReviewSubmit} />
+          </div>
+        )}
+
         {/* Dedicated Public Reviews List */}
         <PublicReviewsList
           reviews={reviews}
           loading={loading}
           onReact={onReact}
-          onOpenSubmitForm={() => navigate('home', 'submit-review')}
+          onOpenSubmitForm={onReviewSubmit ? handleScrollToSubmit : () => navigate('home', 'submit-review')}
         />
       </div>
     </div>

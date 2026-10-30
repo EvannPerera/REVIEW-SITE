@@ -154,7 +154,11 @@ export const CountrySelect: React.FC<CountrySelectProps> = ({
           outline: 'none',
           transition: 'all 200ms ease',
           textAlign: 'left',
-          boxShadow: isOpen ? '0 0 15px var(--red-glow)' : 'none',
+          boxShadow: isOpen
+            ? '0 0 15px var(--red-glow)'
+            : error
+            ? '0 0 0 2px rgba(220, 38, 38, 0.2)'
+            : 'none',
         }}
       >
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>

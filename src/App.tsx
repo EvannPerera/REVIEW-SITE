@@ -9,6 +9,8 @@ import { SocialsPage } from './pages/SocialsPage';
 import { AboutPage } from './pages/AboutPage';
 import { ThemeProvider } from './context/ThemeContext';
 import { RouterProvider, useRouter } from './routes/router';
+import { ReviewerGuideProvider } from './context/ReviewerGuideContext';
+import { ReviewerGuideOverlay } from './components/ReviewerGuideOverlay';
 import { supabase, isSupabaseConfigured } from './lib/supabase';
 import {
   Review,
@@ -333,6 +335,7 @@ const AppContent: React.FC = () => {
             stats={stats}
             loading={loading}
             onReact={handleReact}
+            onReviewSubmit={handleReviewSubmit}
           />
         )}
 
@@ -407,7 +410,10 @@ export const App: React.FC = () => {
   return (
     <ThemeProvider>
       <RouterProvider>
-        <AppContent />
+        <ReviewerGuideProvider>
+          <AppContent />
+          <ReviewerGuideOverlay />
+        </ReviewerGuideProvider>
       </RouterProvider>
     </ThemeProvider>
   );

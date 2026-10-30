@@ -296,6 +296,58 @@ a {
   .global-cinematic-media {
     object-position: 50% 22%;
   }
+
+  /* Cinematic overlay & vignette on mobile: soften top darkening so video extends cleanly to the top */
+  .global-cinematic-overlay {
+    background: radial-gradient(circle at 50% 35%, rgba(176, 0, 32, 0.08) 0%, rgba(5, 5, 8, 0.32) 65%, rgba(3, 3, 5, 0.65) 100%),
+                linear-gradient(180deg, rgba(5, 5, 8, 0.12) 0%, rgba(18, 2, 6, 0.10) 35%, rgba(5, 5, 8, 0.65) 100%) !important;
+  }
+  .global-cinematic-vignette {
+    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.30) !important;
+  }
+
+  /* Hero Section & Page Banners on Mobile: balanced distance below the compact navbar */
+  #hero {
+    padding-top: 4.5rem !important;
+    padding-bottom: 2.5rem !important;
+    min-height: auto !important;
+  }
+
+  .reviews-page,
+  .socials-page,
+  .about-page {
+    padding-top: 4.5rem !important;
+    padding-bottom: 2.5rem !important;
+    min-height: auto !important;
+  }
+
+  .reviews-page .section-header-cinema {
+    margin-bottom: 1.75rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #hero {
+    padding-top: 4.1rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  .reviews-page,
+  .socials-page,
+  .about-page {
+    padding-top: 4.1rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  .reviews-page .section-header-cinema {
+    margin-bottom: 1.35rem !important;
+  }
+
+  .reviews-guide-btn {
+    width: 100% !important;
+    max-width: 320px;
+    justify-content: center;
+  }
 }
 
 /* Mobile Layout Helpers */

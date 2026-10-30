@@ -5,6 +5,7 @@ import { ReviewSubmissionForm } from '../components/ReviewSubmissionForm';
 import { TrustSection } from '../components/TrustSection';
 import { Review, ReviewStats, NewReviewSubmission } from '../types/database';
 import { useRouter } from '../routes/router';
+import { useReviewerGuide } from '../context/ReviewerGuideContext';
 
 interface HomePageProps {
   stats: ReviewStats;
@@ -18,6 +19,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   onReviewSubmit,
 }) => {
   const { navigate } = useRouter();
+  const { startGuide } = useReviewerGuide();
 
   const handleScrollToSubmit = () => {
     const el = document.getElementById('submit-review');
@@ -28,12 +30,13 @@ export const HomePage: React.FC<HomePageProps> = ({
 
   return (
     <div className="home-page">
-      {/* 1. Hero Section with Screen-Filling 3D Typography & 4 Action Buttons */}
+      {/* 1. Hero Section with Screen-Filling 3D Typography & Action Buttons */}
       <HeroSection
         onExploreReviews={() => navigate('reviews')}
         onLeaveReview={handleScrollToSubmit}
         onNavigateToAbout={() => navigate('about')}
         onNavigateToSocials={() => navigate('socials')}
+        onStartGuide={() => startGuide(0)}
       />
 
       {/* 2. Key Metrics Snapshot */}

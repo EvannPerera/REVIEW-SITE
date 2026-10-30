@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { InteractiveTypography } from './InteractiveTypography';
-import { ArrowDown, MessageSquarePlus, ShieldCheck } from 'lucide-react';
+import { ArrowDown, MessageSquarePlus, ShieldCheck, SquarePen, Compass } from 'lucide-react';
 import gsap from 'gsap';
 import sriLankaFlag from '../assets/sri-lanka-flag.svg';
 
@@ -9,6 +9,7 @@ interface HeroSectionProps {
   onLeaveReview: () => void;
   onNavigateToAbout: () => void;
   onNavigateToSocials: () => void;
+  onStartGuide?: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
@@ -16,6 +17,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onLeaveReview,
   onNavigateToAbout,
   onNavigateToSocials,
+  onStartGuide,
 }) => {
   const heroRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
@@ -262,10 +264,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             marginBottom: '2.5rem',
           }}
         >
-          {/* Button 1: View Reviews */}
+          {/* Button 1: View Reviews / Customer Reviews */}
           <button
             onClick={onExploreReviews}
+            data-guide="customer-reviews-btn"
             className="hero-primary-btn"
+            title="Explore verified customer reviews"
+            aria-label="View Customer Reviews"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -282,15 +287,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               border: '1px solid rgba(255, 255, 255, 0.2)',
               boxShadow: '0 0 25px rgba(255, 23, 68, 0.45)',
               transition: 'all 250ms cubic-bezier(0.16, 1, 0.3, 1)',
+              cursor: 'pointer',
             }}
           >
-            <ArrowDown size={17} />
+            <SquarePen size={17} className="hero-btn-icon" />
             <span>Customer Reviews</span>
           </button>
 
           {/* Button 2: Submit a Review (Scrolls down on homepage) */}
           <button
             onClick={onLeaveReview}
+            data-guide="submit-review-hero-btn"
             className="hero-secondary-btn"
             style={{
               display: 'inline-flex',
@@ -363,6 +370,39 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           >
             <span>MY SOCIALS</span>
           </button>
+
+          {/* Button 5: How to Leave a Review (Interactive Guide) */}
+          {onStartGuide && (
+            <button
+              onClick={onStartGuide}
+              className="hero-guide-btn"
+              title="Learn how to leave an authenticated review step-by-step"
+              aria-label="Start How to Leave a Review guide"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '13px 22px',
+                borderRadius: '10px',
+                backgroundColor: 'rgba(37, 99, 235, 0.16)',
+                color: '#93C5FD',
+                fontFamily: 'var(--font-tech)',
+                fontWeight: 700,
+                fontSize: '0.9rem',
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                border: '1px solid rgba(59, 130, 246, 0.45)',
+                boxShadow: '0 0 20px rgba(37, 99, 235, 0.25)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                transition: 'all 250ms cubic-bezier(0.16, 1, 0.3, 1)',
+                cursor: 'pointer',
+              }}
+            >
+              <Compass size={17} className="hero-guide-icon" />
+              <span>How to Leave a Review</span>
+            </button>
+          )}
         </div>
 
         {/* Trust Highlight Under Buttons */}
@@ -432,6 +472,28 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           border-color: var(--border-glass-hover) !important;
           transform: translateY(-2px);
           box-shadow: 0 0 15px rgba(0, 0, 0, 0.15) !important;
+        }
+        .hero-primary-btn .hero-btn-icon {
+          transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hero-primary-btn:hover .hero-btn-icon {
+          transform: rotate(-12deg) scale(1.18);
+        }
+        .hero-guide-btn {
+          cursor: pointer;
+        }
+        .hero-guide-btn .hero-guide-icon {
+          transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hero-guide-btn:hover {
+          background-color: rgba(37, 99, 235, 0.28) !important;
+          border-color: #60A5FA !important;
+          color: #FFFFFF !important;
+          transform: translateY(-2px);
+          box-shadow: 0 0 25px rgba(59, 130, 246, 0.5) !important;
+        }
+        .hero-guide-btn:hover .hero-guide-icon {
+          transform: rotate(35deg) scale(1.15);
         }
         .hero-socials-btn:hover {
           background-color: rgba(255, 23, 68, 0.2) !important;
