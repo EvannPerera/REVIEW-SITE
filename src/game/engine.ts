@@ -90,20 +90,27 @@ export class GameEngine {
    * Resize canvas backing store to high-DPI
    */
   public handleResize(): void {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2.0);
+    const parent = this.canvas.parentElement;
     const rect = this.canvas.getBoundingClientRect();
-    const displayWidth = rect.width || this.virtualWidth;
-    const displayHeight = rect.height || this.virtualHeight;
+    const displayWidth = Math.max(280, (parent ? parent.clientWidth : rect.width) || this.virtualWidth);
+    const displayHeight = Math.max(160, (parent ? parent.clientHeight : rect.height) || this.virtualHeight);
+
+    // Fixed virtual height of 420 ensures identical jump arc, gravity, and ground height (345)
+    this.virtualHeight = 420;
+    // Adapt virtual width proportionally to the exact display aspect ratio
+    this.virtualWidth = Math.round(420 * (displayWidth / displayHeight));
 
     this.canvas.width = Math.round(displayWidth * dpr);
     this.canvas.height = Math.round(displayHeight * dpr);
 
-    // Scale context to virtual coordinate space
+    // Dynamic player X position: keeps player comfortably placed from left edge on narrow screens
+    this.player.x = Math.max(50, Math.min(90, Math.round(this.virtualWidth * 0.11)));
+
+    // Uniform proportional scale in both dimensions (ZERO stretching or distortion!)
     this.ctx.resetTransform?.();
-    this.ctx.scale(
-      (this.canvas.width / this.virtualWidth),
-      (this.canvas.height / this.virtualHeight)
-    );
+    const scale = this.canvas.width / this.virtualWidth;
+    this.ctx.scale(scale, scale);
   }
 
   /**
