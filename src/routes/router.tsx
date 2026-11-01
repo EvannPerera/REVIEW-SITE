@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
-export type AppRoute = 'home' | 'reviews' | 'about' | 'socials' | 'admin';
+export type AppRoute = 'home' | 'reviews' | 'about' | 'socials' | 'admin' | 'game';
 
 interface RouterContextType {
   currentRoute: AppRoute;
@@ -18,6 +18,7 @@ const ROUTE_TO_HASH: Record<AppRoute, string> = {
   about: '#/about',
   socials: '#/socials',
   admin: '#/admin',
+  game: '#/game',
 };
 
 const parseHashToRoute = (hash: string): { route: AppRoute; sectionId?: string } => {
@@ -36,6 +37,9 @@ const parseHashToRoute = (hash: string): { route: AppRoute; sectionId?: string }
   if (path === '/admin' || path === 'admin') {
     return { route: 'admin', sectionId: section };
   }
+  if (path === '/game' || path === 'game') {
+    return { route: 'game', sectionId: section };
+  }
 
   // Also check standard pathname if hash is empty (e.g. user arrived via direct link)
   if (typeof window !== 'undefined' && (!hash || hash === '' || hash === '#/')) {
@@ -44,6 +48,7 @@ const parseHashToRoute = (hash: string): { route: AppRoute; sectionId?: string }
     if (pathname.endsWith('/about')) return { route: 'about' };
     if (pathname.endsWith('/socials')) return { route: 'socials' };
     if (pathname.endsWith('/admin')) return { route: 'admin' };
+    if (pathname.endsWith('/game')) return { route: 'game' };
   }
 
   return { route: 'home', sectionId: section };
@@ -94,16 +99,9 @@ export const RouterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setTargetSection(null);
   }, []);
 
-  // Update page title dynamically for SEO and UX
+  // Ensure browser tab title remains consistently "Évann Perera" across all routes
   useEffect(() => {
-    const titleMap: Record<AppRoute, string> = {
-      home: 'ÉVANN_STORIES — Cinematic Verified Customer Reviews',
-      reviews: 'Customer Reviews — ÉVANN_STORIES',
-      about: 'About Évann & Service Policies — ÉVANN_STORIES',
-      socials: 'My Socials & Official Hubs — ÉVANN_STORIES',
-      admin: 'Admin Verification Portal — ÉVANN_STORIES',
-    };
-    document.title = titleMap[currentRoute] || 'ÉVANN_STORIES';
+    document.title = 'Évann Perera';
   }, [currentRoute]);
 
   return (

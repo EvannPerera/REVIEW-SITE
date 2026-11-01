@@ -124,12 +124,18 @@ export const ReviewerGuideProvider: React.FC<{ children: React.ReactNode }> = ({
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [showIntroPrompt, setShowIntroPrompt] = useState(false);
 
-  // Check if first-time visitor
+  // Check if first-time visitor with route-aware suppression
   useEffect(() => {
+    // If on game page, suppress the automatic review guide notification completely
+    if (currentRoute === 'game') {
+      setShowIntroPrompt(false);
+      return;
+    }
+
     try {
       const hasSeen = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (!hasSeen) {
-        // Show gentle intro prompt after short initial delay
+        // Show gentle intro prompt after short initial delay on appropriate pages
         const timer = setTimeout(() => {
           setShowIntroPrompt(true);
         }, 1200);
@@ -138,7 +144,7 @@ export const ReviewerGuideProvider: React.FC<{ children: React.ReactNode }> = ({
     } catch {
       // Ignore localStorage errors (e.g. private browsing restrictions)
     }
-  }, []);
+  }, [currentRoute]);
 
   const markGuideAsSeen = () => {
     try {

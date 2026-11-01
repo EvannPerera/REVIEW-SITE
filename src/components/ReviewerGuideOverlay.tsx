@@ -37,6 +37,11 @@ export const ReviewerGuideOverlay: React.FC = () => {
 
   const { currentRoute } = useRouter();
 
+  // Route-aware suppression: NEVER display review guide prompts or bubbles on the game page!
+  if (currentRoute === 'game') {
+    return null;
+  }
+
   const [targetRect, setTargetRect] = useState<TargetRect | null>(null);
   const [bubblePos, setBubblePos] = useState<{
     top: number;

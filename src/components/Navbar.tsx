@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Menu, X, Star, MessageSquarePlus, Info, Home, Share2, FileText, Compass } from 'lucide-react';
+import { Shield, Menu, X, Star, MessageSquarePlus, Home, Share2, FileText, Compass, Gamepad2 } from 'lucide-react';
 import { useRouter, AppRoute } from '../routes/router';
 import { ThemeToggle } from './ThemeToggle';
 import { useReviewerGuide } from '../context/ReviewerGuideContext';
@@ -124,16 +124,17 @@ export const Navbar: React.FC<NavbarProps> = ({
           </span>
         </button>
 
-        {/* Desktop Navigation Links */}
+        {/* Desktop Navigation Controls: Links -> Game Icon -> Theme Toggle -> Admin Portal */}
         <nav
           style={{
             display: 'none',
             alignItems: 'center',
-            gap: '1.6rem',
+            gap: '1.4rem',
           }}
           className="desktop-nav"
           aria-label="Desktop Navigation Links"
         >
+          {/* 1. Existing Navigation Links */}
           {navItems.map((item) => {
             const isActive = currentRoute === item.route && !item.sectionId;
 
@@ -174,8 +175,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             style={{
               display: 'inline-flex',
               alignItems: 'center',
+              justifyContent: 'center',
               gap: '6px',
-              padding: '6px 12px',
+              height: '36px',
+              padding: '0 12px',
               borderRadius: '6px',
               fontSize: '0.82rem',
               fontFamily: 'var(--font-tech)',
@@ -185,6 +188,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               backgroundColor: 'rgba(37, 99, 235, 0.12)',
               transition: 'all 200ms ease',
               cursor: 'pointer',
+              flexShrink: 0,
             }}
             title="Interactive First-Time Reviewer Guide"
             aria-label="Start Reviewer Guide"
@@ -194,19 +198,56 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span>Guide</span>
           </button>
 
-          {/* Theme Toggle (Light / Dark Mode) */}
-          <div style={{ marginLeft: '0.2rem' }}>
+          {/* 2. Small Dedicated Game Icon Button (Immediately BEFORE Theme Toggle) */}
+          <button
+            onClick={() => handleRouteClick('game')}
+            type="button"
+            role="button"
+            aria-label="Play Survival Run"
+            title="Play Survival Run"
+            aria-current={currentRoute === 'game' ? 'page' : undefined}
+            className={`nav-game-icon-btn ${currentRoute === 'game' ? 'active' : ''}`}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '36px',
+              height: '36px',
+              borderRadius: '8px',
+              border: currentRoute === 'game'
+                ? '1px solid var(--red-accent)'
+                : '1px solid rgba(255, 23, 68, 0.35)',
+              backgroundColor: currentRoute === 'game'
+                ? 'var(--red-accent)'
+                : 'rgba(255, 23, 68, 0.08)',
+              color: currentRoute === 'game' ? '#FFFFFF' : 'var(--red-accent)',
+              boxShadow: currentRoute === 'game'
+                ? '0 0 16px rgba(255, 23, 68, 0.5)'
+                : '0 0 8px rgba(255, 23, 68, 0.12)',
+              cursor: 'pointer',
+              transition: 'all 200ms cubic-bezier(0.16, 1, 0.3, 1)',
+              flexShrink: 0,
+              outline: 'none',
+            }}
+          >
+            <Gamepad2 size={18} />
+          </button>
+
+          {/* 3. Existing Light / Dark Mode Toggle */}
+          <div style={{ display: 'inline-flex', alignItems: 'center' }}>
             <ThemeToggle size="md" />
           </div>
 
-          {/* Discreet Admin Portal Link */}
+          {/* 4. Existing Remaining Controls: Discreet Admin Portal Link */}
           <button
             onClick={onOpenAdmin}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
+              justifyContent: 'center',
               gap: '6px',
-              padding: '6px 12px',
+              height: '36px',
+              padding: '0 12px',
               borderRadius: '6px',
               fontSize: '0.82rem',
               fontFamily: 'var(--font-tech)',
@@ -217,6 +258,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 : '1px solid var(--border-subtle)',
               backgroundColor: isAdminLoggedIn ? 'rgba(255, 23, 68, 0.08)' : 'transparent',
               transition: 'all 200ms ease',
+              cursor: 'pointer',
+              flexShrink: 0,
             }}
             aria-label="Discreet Admin Login Portal"
             title="Administrator Portal"
@@ -226,7 +269,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
         </nav>
 
-        {/* Mobile Right Controls: Theme Toggle & Hamburger */}
+        {/* Mobile Right Controls: Game Icon -> Theme Toggle -> Hamburger Menu */}
         <div
           style={{
             display: 'flex',
@@ -235,23 +278,61 @@ export const Navbar: React.FC<NavbarProps> = ({
           }}
           className="mobile-controls"
         >
-          <div className="mobile-theme-btn" style={{ display: 'flex' }}>
+          {/* Small Dedicated Game Icon Button for Mobile (Immediately BEFORE Theme Toggle) */}
+          <button
+            onClick={() => handleRouteClick('game')}
+            type="button"
+            role="button"
+            aria-label="Play Survival Run"
+            title="Play Survival Run"
+            aria-current={currentRoute === 'game' ? 'page' : undefined}
+            className={`nav-game-icon-btn mobile ${currentRoute === 'game' ? 'active' : ''}`}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '36px',
+              height: '36px',
+              borderRadius: '8px',
+              border: currentRoute === 'game'
+                ? '1px solid var(--red-accent)'
+                : '1px solid rgba(255, 23, 68, 0.35)',
+              backgroundColor: currentRoute === 'game'
+                ? 'var(--red-accent)'
+                : 'rgba(255, 23, 68, 0.08)',
+              color: currentRoute === 'game' ? '#FFFFFF' : 'var(--red-accent)',
+              boxShadow: currentRoute === 'game'
+                ? '0 0 14px rgba(255, 23, 68, 0.5)'
+                : 'none',
+              cursor: 'pointer',
+              transition: 'all 200ms ease',
+              flexShrink: 0,
+            }}
+          >
+            <Gamepad2 size={18} />
+          </button>
+
+          {/* Theme Toggle (Mobile) */}
+          <div className="mobile-theme-btn" style={{ display: 'inline-flex', alignItems: 'center' }}>
             <ThemeToggle size="sm" />
           </div>
 
+          {/* Hamburger Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
             style={{
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '40px',
-              height: '40px',
+              width: '36px',
+              height: '36px',
               borderRadius: '8px',
               border: '1px solid var(--border-glass)',
               backgroundColor: 'var(--bg-card)',
               color: 'var(--text-primary)',
+              cursor: 'pointer',
+              flexShrink: 0,
             }}
             className="mobile-toggle"
           >
@@ -299,6 +380,37 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <Star size={18} color="var(--red-accent)" />
             <span>Reviews</span>
+          </button>
+
+          <button
+            onClick={() => handleRouteClick('game')}
+            style={{
+              ...mobileNavLinkStyle,
+              color: currentRoute === 'game' ? '#FFFFFF' : 'var(--red-accent)',
+              backgroundColor: currentRoute === 'game' ? 'rgba(255, 23, 68, 0.28)' : 'rgba(255, 23, 68, 0.08)',
+              border: '1px solid rgba(255, 23, 68, 0.45)',
+              borderRadius: '8px',
+              padding: '0.75rem 1rem',
+              fontWeight: 700,
+              boxShadow: currentRoute === 'game' ? '0 0 16px rgba(255, 23, 68, 0.4)' : 'none',
+            }}
+          >
+            <Gamepad2 size={18} color="var(--red-accent)" />
+            <span>🎮 SURVIVAL RUN</span>
+            <span
+              style={{
+                marginLeft: 'auto',
+                fontSize: '0.68rem',
+                backgroundColor: 'var(--red-accent)',
+                color: '#FFFFFF',
+                padding: '2px 8px',
+                borderRadius: '10px',
+                fontFamily: 'var(--font-tech)',
+                letterSpacing: '0.04em',
+              }}
+            >
+              ARCADE
+            </span>
           </button>
 
           <button
@@ -413,6 +525,17 @@ export const Navbar: React.FC<NavbarProps> = ({
           .mobile-controls {
             display: none !important;
           }
+        }
+
+        .nav-game-icon-btn:hover {
+          transform: translateY(-1px) scale(1.08);
+          box-shadow: 0 0 20px rgba(255, 23, 68, 0.55) !important;
+          border-color: var(--red-accent) !important;
+        }
+        .nav-game-icon-btn:active {
+          transform: scale(0.96);
+        }
+
         .nav-item:hover {
           color: var(--red-accent) !important;
         }

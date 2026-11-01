@@ -7,6 +7,7 @@ import { HomePage } from './pages/HomePage';
 import { ReviewsPage } from './pages/ReviewsPage';
 import { SocialsPage } from './pages/SocialsPage';
 import { AboutPage } from './pages/AboutPage';
+import { GamePage } from './pages/GamePage';
 import { ThemeProvider } from './context/ThemeContext';
 import { RouterProvider, useRouter } from './routes/router';
 import { ReviewerGuideProvider } from './context/ReviewerGuideContext';
@@ -342,6 +343,8 @@ const AppContent: React.FC = () => {
         {currentRoute === 'socials' && <SocialsPage />}
 
         {currentRoute === 'about' && <AboutPage />}
+
+        {currentRoute === 'game' && <GamePage />}
       </main>
 
       {/* Professional Responsive Footer */}
