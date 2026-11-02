@@ -137,18 +137,18 @@ export const ABOUT_AND_POLICIES_DATA = {
     channels: [
       {
         name: 'WhatsApp Business Support',
-        placeholder: '[ADD YOUR OFFICIAL WHATSAPP SUPPORT NUMBER OR LINK]',
-        availability: '[ADD YOUR WORKING HOURS - e.g. 10:00 AM - 10:00 PM GMT+5:30]',
+        placeholder: 'https://wa.me/message/J5GD7AI5QQCIF1',
+        availability: 'Direct Customer Support & Order Verification',
       },
       {
-        name: 'Discord Support Tickets',
-        placeholder: '[ADD YOUR DISCORD SUPPORT SERVER / TICKET CHANNEL LINK]',
-        availability: '[ADD YOUR DISCORD RESPONSE TIME - e.g. Under 1 hour]',
+        name: 'Discord Community Support',
+        placeholder: 'Private Access via WhatsApp Business',
+        availability: 'Contact privately to request server access',
       },
       {
         name: 'Instagram Direct Support',
-        placeholder: '[ADD YOUR OFFICIAL INSTAGRAM DM LINK]',
-        availability: '[ADD YOUR INSTAGRAM RESPONSE TIME]',
+        placeholder: 'https://www.instagram.com/accounts.with_evann',
+        availability: 'Daily updates & direct DM assistance',
       },
     ],
   },
