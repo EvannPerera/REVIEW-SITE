@@ -40,7 +40,7 @@ export const GUIDE_STEPS: GuideStepConfig[] = [
     title: 'Review Information Notice',
     content: "You're in the right place! Before you start, take a quick look at the information notice at the top of the form. We'll ask for some details to help record and verify transactions if an issue arises.",
     targetSelector: '[data-guide="info-notice"]',
-    targetRoute: 'reviews',
+    targetRoute: 'home',
     preferredPlacement: 'bottom',
   },
   {
@@ -197,8 +197,8 @@ export const ReviewerGuideProvider: React.FC<{ children: React.ReactNode }> = ({
     const nextConfig = GUIDE_STEPS[nextIdx];
 
     // Check if moving to step that requires route transition (e.g. Step 2 -> Step 3)
-    if (nextConfig.id === 'explain-notice' && currentRoute !== 'reviews') {
-      navigate('reviews');
+    if (nextConfig.id === 'explain-notice' && currentRoute !== 'home') {
+      navigate('home', 'submit-review');
     }
 
     setCurrentStepIndex(nextIdx);

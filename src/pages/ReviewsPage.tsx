@@ -1,18 +1,16 @@
 import React from 'react';
 import { PublicReviewsList } from '../components/PublicReviewsList';
 import { ReviewStatsOverview } from '../components/ReviewStatsOverview';
-import { Review, ReviewStats, ReactionType, NewReviewSubmission } from '../types/database';
+import { Review, ReviewStats, ReactionType } from '../types/database';
 import { useRouter } from '../routes/router';
-import { MessageSquarePlus, Sparkles, ShieldCheck, Compass } from 'lucide-react';
+import { MessageSquarePlus, Sparkles, Compass } from 'lucide-react';
 import { useReviewerGuide } from '../context/ReviewerGuideContext';
-import { ReviewSubmissionForm } from '../components/ReviewSubmissionForm';
 
 interface ReviewsPageProps {
   reviews: Review[];
   stats: ReviewStats;
   loading: boolean;
   onReact: (reviewId: string, reactionType: ReactionType) => Promise<void>;
-  onReviewSubmit?: (submission: NewReviewSubmission) => Promise<{ success: boolean; error?: string }>;
 }
 
 export const ReviewsPage: React.FC<ReviewsPageProps> = ({
@@ -20,17 +18,9 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({
   stats,
   loading,
   onReact,
-  onReviewSubmit,
 }) => {
   const { navigate } = useRouter();
   const { startGuide } = useReviewerGuide();
-
-  const handleScrollToSubmit = () => {
-    const el = document.getElementById('submit-review');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
     <div
@@ -102,7 +92,7 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({
           {/* Quick Action Buttons */}
           <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
             <button
-              onClick={onReviewSubmit ? handleScrollToSubmit : () => navigate('home', 'submit-review')}
+              onClick={() => navigate('home', 'submit-review')}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -157,19 +147,12 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({
         {/* Real Review Overview & Distribution Metrics */}
         <ReviewStatsOverview stats={stats} loading={loading} />
 
-        {/* Review Submission Form on Reviews Page (Allows direct submission & seamless guide tour) */}
-        {onReviewSubmit && (
-          <div style={{ margin: '2rem 0' }}>
-            <ReviewSubmissionForm onSubmit={onReviewSubmit} />
-          </div>
-        )}
-
-        {/* Dedicated Public Reviews List */}
+        {/* Dedicated Public Reviews List - Displaying approved reviews only */}
         <PublicReviewsList
           reviews={reviews}
           loading={loading}
           onReact={onReact}
-          onOpenSubmitForm={onReviewSubmit ? handleScrollToSubmit : () => navigate('home', 'submit-review')}
+          onOpenSubmitForm={() => navigate('home', 'submit-review')}
         />
       </div>
     </div>

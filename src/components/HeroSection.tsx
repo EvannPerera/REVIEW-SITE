@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { InteractiveTypography } from './InteractiveTypography';
-import { ArrowDown, MessageSquarePlus, ShieldCheck, SquarePen, Compass } from 'lucide-react';
+import { ArrowDown, MessageSquarePlus, ShieldCheck, SquarePen, Compass, CircleUser, Share2 } from 'lucide-react';
 import gsap from 'gsap';
 import sriLankaFlag from '../assets/sri-lanka-flag.svg';
 
@@ -325,6 +325,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <button
             onClick={onNavigateToAbout}
             className="hero-tertiary-btn"
+            title="Learn more about Évann"
+            aria-label="About Évann"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -341,8 +343,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               backdropFilter: 'blur(12px)',
               WebkitBackdropFilter: 'blur(12px)',
               transition: 'all 250ms cubic-bezier(0.16, 1, 0.3, 1)',
+              cursor: 'pointer',
             }}
           >
+            <CircleUser size={17} color="var(--red-accent)" className="hero-btn-icon" />
             <span>About Évann</span>
           </button>
 
@@ -350,6 +354,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <button
             onClick={onNavigateToSocials}
             className="hero-socials-btn"
+            title="Connect on social media"
+            aria-label="My Socials"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -366,8 +372,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               border: '1px solid rgba(255, 23, 68, 0.4)',
               boxShadow: '0 0 15px rgba(255, 23, 68, 0.18)',
               transition: 'all 250ms cubic-bezier(0.16, 1, 0.3, 1)',
+              cursor: 'pointer',
             }}
           >
+            <Share2 size={17} color="var(--red-accent)" className="hero-btn-icon" />
             <span>MY SOCIALS</span>
           </button>
 
@@ -424,9 +432,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       </div>
 
       {/* Floating Scroll Indicator */}
-      <div
-        ref={scrollIndicatorRef}
-        onClick={onExploreReviews}
+      <button
+        ref={scrollIndicatorRef as any}
+        onClick={onLeaveReview}
+        type="button"
         style={{
           position: 'absolute',
           bottom: '1.8rem',
@@ -438,8 +447,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           color: '#CBD5E1',
           textShadow: '0 1px 8px rgba(0, 0, 0, 0.85)',
           transition: 'color 200ms ease',
+          background: 'none',
+          border: 'none',
+          padding: 0,
         }}
-        aria-label="Scroll down to view reviews"
+        aria-label="Scroll down to submit review form"
       >
         <span
           style={{
@@ -452,7 +464,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           Scroll Down
         </span>
         <ArrowDown size={16} color="var(--red-accent)" />
-      </div>
+      </button>
 
       {/* Button Hover Micro-interactions */}
       <style>{`
@@ -473,11 +485,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           transform: translateY(-2px);
           box-shadow: 0 0 15px rgba(0, 0, 0, 0.15) !important;
         }
-        .hero-primary-btn .hero-btn-icon {
+        .hero-primary-btn .hero-btn-icon,
+        .hero-secondary-btn svg,
+        .hero-tertiary-btn .hero-btn-icon,
+        .hero-socials-btn .hero-btn-icon {
           transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
         }
         .hero-primary-btn:hover .hero-btn-icon {
           transform: rotate(-12deg) scale(1.18);
+        }
+        .hero-secondary-btn:hover svg {
+          transform: scale(1.15);
+        }
+        .hero-tertiary-btn:hover .hero-btn-icon {
+          transform: scale(1.15);
+        }
+        .hero-socials-btn:hover .hero-btn-icon {
+          transform: rotate(15deg) scale(1.15);
         }
         .hero-guide-btn {
           cursor: pointer;

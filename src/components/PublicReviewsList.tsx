@@ -722,42 +722,113 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
           </div>
         )}
 
-        {/* Empty State when no reviews match filters */}
+        {/* Empty State when no reviews or no filter matches */}
         {!loading && filteredReviews.length === 0 && (
           <div
             className="glass-panel"
             style={{
-              padding: '3rem 1.5rem',
+              padding: '3.5rem 1.5rem',
               textAlign: 'center',
+              maxWidth: '620px',
+              margin: '0 auto',
             }}
           >
-            <p
-              style={{
-                color: 'var(--text-secondary)',
-                fontSize: '1.05rem',
-                marginBottom: '1rem',
-              }}
-            >
-              No reviews match the selected filter criteria.
-            </p>
-            <button
-              onClick={() => {
-                setSearchQuery('');
-                setPlatformFilter('all');
-                setStarFilter('all');
-              }}
-              style={{
-                padding: '8px 18px',
-                borderRadius: '6px',
-                border: '1px solid rgba(255, 23, 68, 0.4)',
-                backgroundColor: 'rgba(255, 23, 68, 0.1)',
-                color: 'var(--heading-color)',
-                fontFamily: 'var(--font-heading)',
-                fontSize: '0.85rem',
-              }}
-            >
-              Reset Filters
-            </button>
+            {reviews.length === 0 ? (
+              <>
+                <div
+                  style={{
+                    width: '54px',
+                    height: '54px',
+                    borderRadius: '50%',
+                    backgroundColor: 'rgba(255, 23, 68, 0.1)',
+                    border: '1px solid rgba(255, 23, 68, 0.3)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 1.25rem',
+                    color: 'var(--red-accent)',
+                  }}
+                >
+                  <Star size={24} />
+                </div>
+                <h3
+                  style={{
+                    color: 'var(--heading-color)',
+                    fontSize: '1.25rem',
+                    fontFamily: 'var(--font-heading)',
+                    fontWeight: 700,
+                    marginBottom: '0.75rem',
+                  }}
+                >
+                  No approved reviews yet. Be the first to share your experience!
+                </h3>
+                <p
+                  style={{
+                    color: 'var(--text-secondary)',
+                    fontSize: '0.94rem',
+                    marginBottom: '1.5rem',
+                    lineHeight: 1.6,
+                  }}
+                >
+                  Every customer review goes through our verified audit protocol before public publication.
+                </p>
+                <button
+                  onClick={onOpenSubmitForm}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '12px 24px',
+                    borderRadius: '8px',
+                    backgroundColor: 'var(--red-accent)',
+                    color: '#FFFFFF',
+                    fontFamily: 'var(--font-tech)',
+                    fontWeight: 700,
+                    fontSize: '0.9rem',
+                    letterSpacing: '0.06em',
+                    textTransform: 'uppercase',
+                    boxShadow: '0 0 20px rgba(255, 23, 68, 0.4)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    cursor: 'pointer',
+                    transition: 'all 200ms ease',
+                  }}
+                >
+                  <span>Share Your Experience</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <p
+                  style={{
+                    color: 'var(--text-secondary)',
+                    fontSize: '1.05rem',
+                    marginBottom: '1rem',
+                  }}
+                >
+                  No reviews match the selected filter criteria.
+                </p>
+                <button
+                  onClick={() => {
+                    setSearchQuery('');
+                    setPlatformFilter('all');
+                    setStarFilter('all');
+                    setCountryFilter('all');
+                  }}
+                  style={{
+                    padding: '8px 18px',
+                    borderRadius: '6px',
+                    border: '1px solid rgba(255, 23, 68, 0.4)',
+                    backgroundColor: 'rgba(255, 23, 68, 0.1)',
+                    color: 'var(--heading-color)',
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: '0.85rem',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Reset Filters
+                </button>
+              </>
+            )}
           </div>
         )}
 

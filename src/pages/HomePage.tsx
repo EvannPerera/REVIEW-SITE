@@ -18,15 +18,30 @@ export const HomePage: React.FC<HomePageProps> = ({
   loading,
   onReviewSubmit,
 }) => {
-  const { navigate } = useRouter();
+  const { navigate, targetSection, clearTargetSection } = useRouter();
   const { startGuide } = useReviewerGuide();
 
-  const handleScrollToSubmit = () => {
+  const handleScrollToSubmit = React.useCallback(() => {
     const el = document.getElementById('submit-review');
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      el.scrollIntoView({
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+        block: 'start',
+      });
     }
-  };
+  }, []);
+
+  // Handle in-page scrolling when navigating back with targetSection or hash
+  React.useEffect(() => {
+    if (targetSection === 'submit-review') {
+      const timer = setTimeout(() => {
+        handleScrollToSubmit();
+        clearTargetSection();
+      }, 60);
+      return () => clearTimeout(timer);
+    }
+  }, [targetSection, clearTargetSection, handleScrollToSubmit]);
 
   return (
     <div className="home-page">

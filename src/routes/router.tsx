@@ -99,9 +99,9 @@ export const RouterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setTargetSection(null);
   }, []);
 
-  // Ensure browser tab title remains consistently "Évann Perera" across all routes
+  // Ensure browser tab title remains consistently "Évann_stories" across all routes
   useEffect(() => {
-    document.title = 'Évann Perera';
+    document.title = 'Évann_stories';
   }, [currentRoute]);
 
   return (

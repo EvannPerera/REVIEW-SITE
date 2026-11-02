@@ -278,40 +278,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           }}
           className="mobile-controls"
         >
-          {/* Small Dedicated Game Icon Button for Mobile (Immediately BEFORE Theme Toggle) */}
-          <button
-            onClick={() => handleRouteClick('game')}
-            type="button"
-            role="button"
-            aria-label="Play Survival Run"
-            title="Play Survival Run"
-            aria-current={currentRoute === 'game' ? 'page' : undefined}
-            className={`nav-game-icon-btn mobile ${currentRoute === 'game' ? 'active' : ''}`}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '36px',
-              height: '36px',
-              borderRadius: '8px',
-              border: currentRoute === 'game'
-                ? '1px solid var(--red-accent)'
-                : '1px solid rgba(255, 23, 68, 0.35)',
-              backgroundColor: currentRoute === 'game'
-                ? 'var(--red-accent)'
-                : 'rgba(255, 23, 68, 0.08)',
-              color: currentRoute === 'game' ? '#FFFFFF' : 'var(--red-accent)',
-              boxShadow: currentRoute === 'game'
-                ? '0 0 14px rgba(255, 23, 68, 0.5)'
-                : 'none',
-              cursor: 'pointer',
-              transition: 'all 200ms ease',
-              flexShrink: 0,
-            }}
-          >
-            <Gamepad2 size={18} />
-          </button>
-
           {/* Theme Toggle (Mobile) */}
           <div className="mobile-theme-btn" style={{ display: 'inline-flex', alignItems: 'center' }}>
             <ThemeToggle size="sm" />
@@ -380,37 +346,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <Star size={18} color="var(--red-accent)" />
             <span>Reviews</span>
-          </button>
-
-          <button
-            onClick={() => handleRouteClick('game')}
-            style={{
-              ...mobileNavLinkStyle,
-              color: currentRoute === 'game' ? '#FFFFFF' : 'var(--red-accent)',
-              backgroundColor: currentRoute === 'game' ? 'rgba(255, 23, 68, 0.28)' : 'rgba(255, 23, 68, 0.08)',
-              border: '1px solid rgba(255, 23, 68, 0.45)',
-              borderRadius: '8px',
-              padding: '0.75rem 1rem',
-              fontWeight: 700,
-              boxShadow: currentRoute === 'game' ? '0 0 16px rgba(255, 23, 68, 0.4)' : 'none',
-            }}
-          >
-            <Gamepad2 size={18} color="var(--red-accent)" />
-            <span>🎮 SURVIVAL RUN</span>
-            <span
-              style={{
-                marginLeft: 'auto',
-                fontSize: '0.68rem',
-                backgroundColor: 'var(--red-accent)',
-                color: '#FFFFFF',
-                padding: '2px 8px',
-                borderRadius: '10px',
-                fontFamily: 'var(--font-tech)',
-                letterSpacing: '0.04em',
-              }}
-            >
-              ARCADE
-            </span>
           </button>
 
           <button
@@ -485,6 +420,40 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <Shield size={18} color="var(--red-accent)" />
             <span>Administrator Portal</span>
+          </button>
+
+          {/* Final item at bottom/end of mobile navigation menu: Game */}
+          <button
+            onClick={() => handleRouteClick('game')}
+            aria-label="Game"
+            style={{
+              ...mobileNavLinkStyle,
+              color: currentRoute === 'game' ? '#FFFFFF' : 'var(--red-accent)',
+              backgroundColor: currentRoute === 'game' ? 'rgba(255, 23, 68, 0.28)' : 'rgba(255, 23, 68, 0.08)',
+              border: '1px solid rgba(255, 23, 68, 0.45)',
+              borderRadius: '8px',
+              padding: '0.75rem 1rem',
+              fontWeight: 700,
+              boxShadow: currentRoute === 'game' ? '0 0 16px rgba(255, 23, 68, 0.4)' : 'none',
+              marginTop: '0.35rem',
+            }}
+          >
+            <Gamepad2 size={18} color="var(--red-accent)" />
+            <span>Game — SURVIVAL RUN</span>
+            <span
+              style={{
+                marginLeft: 'auto',
+                fontSize: '0.68rem',
+                backgroundColor: 'var(--red-accent)',
+                color: '#FFFFFF',
+                padding: '2px 8px',
+                borderRadius: '10px',
+                fontFamily: 'var(--font-tech)',
+                letterSpacing: '0.04em',
+              }}
+            >
+              ARCADE
+            </span>
           </button>
         </div>
       )}

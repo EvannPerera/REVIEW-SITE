@@ -336,7 +336,6 @@ const AppContent: React.FC = () => {
             stats={stats}
             loading={loading}
             onReact={handleReact}
-            onReviewSubmit={handleReviewSubmit}
           />
         )}
 
