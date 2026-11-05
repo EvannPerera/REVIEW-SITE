@@ -90,23 +90,54 @@ export const ABOUT_AND_POLICIES_DATA = {
 
   refundAndCancellation: {
     title: 'Refund & Cancellation Policy',
-    highlight: 'Please review these terms carefully prior to initiating transactions.',
-    rules: [
+    introduction:
+      'Please review these terms carefully before initiating any transaction. By proceeding with a purchase, customers acknowledge and agree to the following conditions.',
+    categories: [
       {
+        id: 'cancellation-prior-to-processing',
+        number: '1',
         title: 'Cancellation Prior to Processing',
-        detail: '[ADD YOUR CANCELLATION RULES BEFORE ORDER PROCESSING COMMENCES]',
+        primaryText:
+          'A deal becomes difficult to cancel once processing has started.',
+        secondaryText:
+          'Please make sure you are certain about your purchase before confirming the transaction. Once the processing stage begins, cancellation may no longer be possible.',
+        warning:
+          'Once the processing stage begins, cancellation may no longer be possible.',
       },
       {
+        id: 'non-delivery-service-failure',
+        number: '2',
         title: 'Non-Delivery or Service Failure Refund Terms',
-        detail: '[ADD YOUR REFUND POLICY IN CASE OF SERVICE INABILITY OR NON-DELIVERY]',
+        primaryText:
+          'If an account is sold or becomes unavailable while your payment is delayed, we may be unable to proceed with the transaction.',
+        secondaryText:
+          'Please complete your payment promptly after confirming a deal. Account availability is not guaranteed during payment delays.',
+        actionNote:
+          'If the account becomes unavailable before the transaction is completed, contact us directly to discuss the available options.',
       },
       {
+        id: 'completed-service-policy',
+        number: '3',
         title: 'Completed Service Policy',
-        detail: '[ADD YOUR POLICY REGARDING COMPLETED DIGITAL SERVICES AND TRANSFERS]',
+        primaryText:
+          'Once the deal is completed and the account has been handed over, customers may log in and use the account.',
+        securityWarning: {
+          title: 'IMPORTANT SECURITY INSTRUCTION',
+          instruction:
+            'Do not attempt to log in, change passwords, modify account credentials, or make account-related changes until I explicitly instruct you to do so.',
+        },
+        followUpNote:
+          'Please follow the instructions provided during the transaction to avoid account access or security issues.',
       },
       {
+        id: 'refund-processing-time',
+        number: '4',
         title: 'Processing Time for Approved Refunds',
-        detail: '[ADD YOUR REFUND PROCESSING TIMEFRAME - e.g. 24–48 hours to original payment method]',
+        timeframeBadge: '24–48 Hours',
+        primaryText:
+          'Approved refunds will generally be processed within 24–48 hours and returned to the original payment method, where supported by the payment provider.',
+        secondaryText:
+          'Actual processing and settlement times may depend on the payment provider.',
       },
     ],
   },
@@ -133,22 +164,28 @@ export const ABOUT_AND_POLICIES_DATA = {
   customerSupport: {
     title: 'Customer Support & Dispute Resolution',
     instructions:
-      'For prompt assistance, reach out through one of our official support channels listed below. Please have your transaction reference or CODM UID ready.',
+      "Need help with a purchase, have a concern, or want to resolve a dispute? Contact Evann Stories directly through any of the official channels below. I'm here to help.",
     channels: [
       {
-        name: 'WhatsApp Business Support',
-        placeholder: 'https://wa.me/message/J5GD7AI5QQCIF1',
-        availability: 'Direct Customer Support & Order Verification',
+        name: 'WhatsApp Business',
+        url: 'https://wa.me/message/J5GD7AI5QQCIF1',
+        buttonLabel: 'Contact on WhatsApp',
+        platformId: 'whatsapp',
+        description: 'Instant direct messaging, order assistance, and dispute resolution.',
       },
       {
-        name: 'Discord Community Support',
-        placeholder: 'Private Access via WhatsApp Business',
-        availability: 'Contact privately to request server access',
+        name: 'Instagram',
+        url: 'https://www.instagram.com/accounts.with_evann?exln=MWJhdXprdXRuZ2g0ZA%3D%3D&utm_source=qr',
+        buttonLabel: 'Message on Instagram',
+        platformId: 'instagram',
+        description: 'Direct DM support, official story announcements, and order updates.',
       },
       {
-        name: 'Instagram Direct Support',
-        placeholder: 'https://www.instagram.com/accounts.with_evann',
-        availability: 'Daily updates & direct DM assistance',
+        name: 'Telegram',
+        url: 'https://t.me/Evann_stories',
+        buttonLabel: 'Contact on Telegram',
+        platformId: 'telegram',
+        description: 'Fast, secure direct messaging and direct dispute resolution.',
       },
     ],
   },

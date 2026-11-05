@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { ABOUT_AND_POLICIES_DATA } from '../config/policyContent';
 import {
   ShieldCheck,
+  ShieldAlert,
+  Clock,
   FileText,
   CreditCard,
   RotateCcw,
@@ -327,25 +329,251 @@ export const AboutPage: React.FC = () => {
                 </div>
               </div>
 
-              <p style={{ ...paragraphStyle, marginTop: '1rem' }}>
-                {ABOUT_AND_POLICIES_DATA.refundAndCancellation.highlight}
-              </p>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: '1.25rem', marginTop: '1.25rem' }}>
-                {ABOUT_AND_POLICIES_DATA.refundAndCancellation.rules.map((rule, idx) => (
-                  <div
-                    key={idx}
+              {/* Introduction */}
+              <div
+                style={{
+                  marginTop: '1.25rem',
+                  padding: '1.1rem 1.25rem',
+                  borderRadius: '10px',
+                  backgroundColor: 'rgba(255, 23, 68, 0.05)',
+                  border: '1px solid rgba(255, 23, 68, 0.22)',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '12px',
+                }}
+              >
+                <AlertTriangle size={18} color="var(--red-accent)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                <div>
+                  <span
                     style={{
-                      padding: '1.25rem',
-                      borderRadius: '10px',
-                      backgroundColor: 'var(--bg-elevated)',
-                      border: '1px solid var(--border-subtle)',
+                      fontFamily: 'var(--font-tech)',
+                      fontSize: '0.74rem',
+                      fontWeight: 800,
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                      color: 'var(--red-accent)',
+                      display: 'block',
+                      marginBottom: '0.25rem',
                     }}
                   >
-                    <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: '1.05rem', color: 'var(--heading-color)', marginBottom: '0.5rem' }}>
-                      {rule.title}
-                    </h3>
-                    <div style={placeholderTagStyle}>{rule.detail}</div>
+                    Introduction & Terms Acknowledgement
+                  </span>
+                  <p style={{ margin: 0, fontSize: '0.94rem', color: 'var(--text-primary)', lineHeight: 1.6 }}>
+                    {ABOUT_AND_POLICIES_DATA.refundAndCancellation.introduction}
+                  </p>
+                </div>
+              </div>
+
+              {/* Four Distinct Policy Categories */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
+                  gap: '1.25rem',
+                  marginTop: '1.5rem',
+                }}
+              >
+                {ABOUT_AND_POLICIES_DATA.refundAndCancellation.categories.map((cat) => (
+                  <div
+                    key={cat.id}
+                    className="policy-category-card"
+                    style={{
+                      padding: '1.5rem',
+                      borderRadius: '12px',
+                      backgroundColor: 'var(--bg-elevated)',
+                      border: '1px solid var(--border-subtle)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      transition: 'all 220ms cubic-bezier(0.16, 1, 0.3, 1)',
+                    }}
+                  >
+                    <div>
+                      {/* Category Header with Distinct Number Badge and Title */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1rem' }}>
+                        <span
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '28px',
+                            height: '28px',
+                            borderRadius: '7px',
+                            backgroundColor: 'rgba(255, 23, 68, 0.12)',
+                            border: '1px solid rgba(255, 23, 68, 0.35)',
+                            color: 'var(--red-accent)',
+                            fontFamily: 'var(--font-tech)',
+                            fontSize: '0.82rem',
+                            fontWeight: 800,
+                            flexShrink: 0,
+                          }}
+                        >
+                          {cat.number}
+                        </span>
+                        <h3
+                          style={{
+                            fontFamily: 'var(--font-heading)',
+                            fontWeight: 700,
+                            fontSize: '1.08rem',
+                            color: 'var(--heading-color)',
+                            margin: 0,
+                            lineHeight: 1.3,
+                          }}
+                        >
+                          {cat.title}
+                        </h3>
+                      </div>
+
+                      {/* Primary Text */}
+                      <p
+                        style={{
+                          fontSize: '0.92rem',
+                          color: 'var(--text-primary)',
+                          lineHeight: 1.6,
+                          marginBottom: '0.75rem',
+                          fontWeight: 500,
+                        }}
+                      >
+                        {cat.primaryText}
+                      </p>
+
+                      {/* Secondary Text */}
+                      {cat.secondaryText && (
+                        <p
+                          style={{
+                            fontSize: '0.88rem',
+                            color: 'var(--text-secondary)',
+                            lineHeight: 1.6,
+                            marginBottom: cat.warning || cat.securityWarning || cat.actionNote ? '0.75rem' : 0,
+                          }}
+                        >
+                          {cat.secondaryText}
+                        </p>
+                      )}
+
+                      {/* Category 1 Warning: Cancellation Prior to Processing */}
+                      {cat.warning && (
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'flex-start',
+                            gap: '8px',
+                            padding: '10px 12px',
+                            borderRadius: '8px',
+                            backgroundColor: 'rgba(255, 23, 68, 0.08)',
+                            border: '1px solid rgba(255, 23, 68, 0.25)',
+                            marginTop: '0.75rem',
+                          }}
+                        >
+                          <AlertTriangle size={15} color="var(--red-accent)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                          <span style={{ fontSize: '0.84rem', color: 'var(--text-primary)', lineHeight: 1.5, fontWeight: 500 }}>
+                            {cat.warning}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Category 2 Action Note: Non-Delivery or Payment Delay */}
+                      {cat.actionNote && (
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'flex-start',
+                            gap: '8px',
+                            padding: '10px 12px',
+                            borderRadius: '8px',
+                            backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                            border: '1px solid rgba(59, 130, 246, 0.25)',
+                            marginTop: '0.75rem',
+                          }}
+                        >
+                          <HelpCircle size={15} color="#60A5FA" style={{ flexShrink: 0, marginTop: '2px' }} />
+                          <span style={{ fontSize: '0.84rem', color: 'var(--text-primary)', lineHeight: 1.5 }}>
+                            {cat.actionNote}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Category 3 Highlighted Warning: IMPORTANT SECURITY INSTRUCTION */}
+                      {cat.securityWarning && (
+                        <div
+                          style={{
+                            padding: '0.9rem 1.1rem',
+                            borderRadius: '8px',
+                            backgroundColor: 'rgba(255, 23, 68, 0.1)',
+                            border: '1px solid rgba(255, 23, 68, 0.45)',
+                            marginTop: '0.75rem',
+                            marginBottom: '0.75rem',
+                            boxShadow: '0 0 15px rgba(255, 23, 68, 0.12)',
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.35rem' }}>
+                            <ShieldAlert size={16} color="var(--red-accent)" />
+                            <span
+                              style={{
+                                fontFamily: 'var(--font-tech)',
+                                fontSize: '0.78rem',
+                                fontWeight: 800,
+                                letterSpacing: '0.08em',
+                                textTransform: 'uppercase',
+                                color: 'var(--red-accent)',
+                              }}
+                            >
+                              {cat.securityWarning.title}
+                            </span>
+                          </div>
+                          <p
+                            style={{
+                              margin: 0,
+                              fontSize: '0.88rem',
+                              color: 'var(--text-primary)',
+                              fontWeight: 600,
+                              lineHeight: 1.55,
+                            }}
+                          >
+                            {cat.securityWarning.instruction}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Category 3 Follow-up Guidance */}
+                      {cat.followUpNote && (
+                        <p
+                          style={{
+                            margin: 0,
+                            fontSize: '0.84rem',
+                            color: 'var(--text-secondary)',
+                            lineHeight: 1.55,
+                            fontStyle: 'italic',
+                          }}
+                        >
+                          {cat.followUpNote}
+                        </p>
+                      )}
+
+                      {/* Category 4 Turnaround Timeframe Badge */}
+                      {cat.timeframeBadge && (
+                        <div
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            padding: '5px 12px',
+                            borderRadius: '9999px',
+                            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                            border: '1px solid rgba(34, 197, 94, 0.3)',
+                            color: '#22C55E',
+                            fontFamily: 'var(--font-tech)',
+                            fontSize: '0.76rem',
+                            fontWeight: 700,
+                            letterSpacing: '0.04em',
+                            marginTop: '0.75rem',
+                          }}
+                        >
+                          <Clock size={13} color="#22C55E" />
+                          <span>{cat.timeframeBadge} Processing Window</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -432,28 +660,145 @@ export const AboutPage: React.FC = () => {
                 </div>
               </div>
 
-              <p style={{ ...paragraphStyle, marginTop: '1rem' }}>
+              <p style={{ ...paragraphStyle, marginTop: '1rem', fontSize: '0.98rem', lineHeight: 1.7 }}>
                 {ABOUT_AND_POLICIES_DATA.customerSupport.instructions}
               </p>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: '1.25rem', marginTop: '1.25rem' }}>
-                {ABOUT_AND_POLICIES_DATA.customerSupport.channels.map((chan, idx) => (
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+                  gap: '1.25rem',
+                  marginTop: '1.75rem',
+                }}
+              >
+                {ABOUT_AND_POLICIES_DATA.customerSupport.channels.map((chan) => (
                   <div
-                    key={idx}
+                    key={chan.name}
+                    className="support-channel-card"
                     style={{
-                      padding: '1.25rem',
-                      borderRadius: '10px',
+                      padding: '1.4rem',
+                      borderRadius: '12px',
                       backgroundColor: 'var(--bg-elevated)',
                       border: '1px solid var(--border-subtle)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      transition: 'all 220ms cubic-bezier(0.16, 1, 0.3, 1)',
                     }}
                   >
-                    <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: '1.05rem', color: 'var(--heading-color)', marginBottom: '0.4rem' }}>
-                      {chan.name}
-                    </h3>
-                    <div style={placeholderTagStyle}>{chan.placeholder}</div>
-                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontFamily: 'var(--font-tech)', marginTop: '0.5rem' }}>
-                      Response Window: {chan.availability}
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '0.9rem' }}>
+                        <div
+                          style={{
+                            width: '44px',
+                            height: '44px',
+                            borderRadius: '10px',
+                            backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                            border: '1px solid var(--border-glass)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                          }}
+                        >
+                          {chan.platformId === 'whatsapp' && (
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="#25D366" aria-hidden="true">
+                              <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm0 1.67c2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24zm4.52 11.53c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.01-1.24-.74-.66-1.24-1.48-1.39-1.73-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.78 2.72 4.31 3.81.6.26 1.07.42 1.44.53.61.19 1.16.17 1.6.1 0 0 .5-.2 1.03-.84.53-.63.53-1.18.37-1.31-.15-.13-.39-.2-.64-.33z" />
+                            </svg>
+                          )}
+                          {chan.platformId === 'instagram' && (
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E1306C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                            </svg>
+                          )}
+                          {chan.platformId === 'telegram' && (
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="#229ED9" aria-hidden="true">
+                              <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.458c.538-.196 1.006.128.832.953z" />
+                            </svg>
+                          )}
+                        </div>
+                        <div>
+                          <h3
+                            style={{
+                              fontFamily: 'var(--font-heading)',
+                              fontWeight: 700,
+                              fontSize: '1.1rem',
+                              color: 'var(--heading-color)',
+                              margin: 0,
+                              lineHeight: 1.25,
+                            }}
+                          >
+                            {chan.name}
+                          </h3>
+                          <span
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '5px',
+                              fontSize: '0.74rem',
+                              fontFamily: 'var(--font-tech)',
+                              color: '#10B981',
+                              marginTop: '3px',
+                            }}
+                          >
+                            <span
+                              style={{
+                                width: '6px',
+                                height: '6px',
+                                borderRadius: '50%',
+                                backgroundColor: '#10B981',
+                                display: 'inline-block',
+                              }}
+                            />
+                            Official Support
+                          </span>
+                        </div>
+                      </div>
+
+                      <p
+                        style={{
+                          fontSize: '0.88rem',
+                          color: 'var(--text-secondary)',
+                          lineHeight: 1.55,
+                          marginBottom: '1.25rem',
+                        }}
+                      >
+                        {chan.description}
+                      </p>
                     </div>
+
+                    <a
+                      href={chan.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="support-contact-btn"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px',
+                        width: '100%',
+                        padding: '11px 16px',
+                        borderRadius: '8px',
+                        backgroundColor: 'rgba(255, 23, 68, 0.12)',
+                        border: '1px solid rgba(255, 23, 68, 0.35)',
+                        color: 'var(--red-accent)',
+                        fontFamily: 'var(--font-tech)',
+                        fontWeight: 700,
+                        fontSize: '0.88rem',
+                        letterSpacing: '0.04em',
+                        textDecoration: 'none',
+                        transition: 'all 200ms ease',
+                        cursor: 'pointer',
+                        boxShadow: '0 0 12px rgba(255, 23, 68, 0.12)',
+                      }}
+                    >
+                      <span>{chan.buttonLabel}</span>
+                      <ExternalLink size={14} />
+                    </a>
                   </div>
                 ))}
               </div>
@@ -532,6 +877,25 @@ export const AboutPage: React.FC = () => {
             </section>
           </div>
         </div>
+        <style>{`
+          .policy-category-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 23, 68, 0.35) !important;
+            box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 23, 68, 0.08) !important;
+          }
+          .support-channel-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 23, 68, 0.45) !important;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 23, 68, 0.12) !important;
+          }
+          .support-contact-btn:hover {
+            background-color: var(--red-accent) !important;
+            color: #FFFFFF !important;
+            border-color: var(--red-accent) !important;
+            box-shadow: 0 0 20px rgba(255, 23, 68, 0.5) !important;
+            transform: translateY(-1px);
+          }
+        `}</style>
       </div>
     </div>
   );
