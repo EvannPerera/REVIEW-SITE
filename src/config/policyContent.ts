@@ -28,62 +28,206 @@ export const ABOUT_AND_POLICIES_DATA = {
 
   services: {
     title: 'Services & Digital Offerings',
-    disclaimer: 'ÉVANN_STORIES operates as an independent community facilitator. We are NOT officially affiliated with, endorsed by, or partnered with Activision, Tencent, TiMi Studios, or Call of Duty: Mobile.',
-    items: [
-      {
-        title: 'CODM Account Services & In-Game Assistance',
-        description:
-          'Assistance with account consultations, safe progression guidance, and digital community transactions within Call of Duty: Mobile.',
-        note: '[ADD YOUR SPECIFIC CODM SERVICE PACKAGES AND DETAILS HERE]',
+    disclaimer: {
+      title: 'Impartiality Disclaimer',
+      paragraphs: [
+        'ÉVANN_STORIES operates independently as a community facilitator and digital gaming account service provider.',
+        'We are NOT officially affiliated with, endorsed by, sponsored by, or partnered with Activision, Tencent, TiMi Studios, or Call of Duty: Mobile.',
+        'All services are independently operated.',
+      ],
+    },
+    buyingAndSelling: {
+      id: 'buying-and-selling',
+      number: '1',
+      title: 'CODM Accounts Buying & Selling',
+      intro:
+        'ÉVANN_STORIES provides Call of Duty: Mobile (CODM) account buying and selling services.',
+      offerings: [
+        {
+          label: 'Account Sales',
+          description: 'Browse and purchase available CODM accounts from our current stock.',
+        },
+        {
+          label: 'Account Purchases',
+          description: 'We also buy CODM accounts from individuals looking to sell their accounts.',
+        },
+      ],
+      description:
+        'Whether you are looking to buy an account or sell one, contact ÉVANN_STORIES directly to discuss availability, account details, valuation, and transaction arrangements.',
+      pricingNote:
+        'All offers and prices are discussed individually before a transaction is confirmed.',
+      cta: {
+        label: 'Inquire About Buying or Selling',
+        url: 'https://wa.me/message/J5GD7AI5QQCIF1',
       },
-      {
-        title: 'Account Listings & Digital Marketplace Facilitation',
-        description:
-          'Peer-to-peer listing facilitation and transfer security audits for verified community members looking to acquire or showcase accounts.',
-        note: '[ADD YOUR SPECIFIC LISTING CRITERIA AND GUIDELINES HERE]',
+    },
+    marketplaceListings: {
+      id: 'marketplace-listings',
+      number: '2',
+      title: 'Account Listings & Digital Marketplace Facilitation',
+      question:
+        "Want to sell your CODM account but don't have the audience or reach to find a suitable buyer?",
+      intro:
+        'You can submit your account to ÉVANN_STORIES for promotional listing and marketplace facilitation.',
+      description:
+        'We help account owners showcase their accounts to potential buyers through our community and social media platforms.',
+      requirementsTitle: 'Requirements for account listing:',
+      requirements: [
+        'You must have legitimate access and control of the account.',
+        'You must understand and trust the agreed listing and selling process.',
+        'You must clearly confirm that you intend to sell the account before the process begins.',
+        'Once the listing and selling process has started, you must remain committed to the agreed selling arrangement.',
+        "Do not change the account's credentials, listing details, or selling decision midway through an active transaction without communicating with ÉVANN_STORIES first.",
+      ],
+      feeNotice:
+        'Account listings, promotional arrangements, and applicable service fees will be discussed before proceeding.',
+      contactNote: 'Contact us privately to discuss listing your account.',
+      cta: {
+        label: 'Discuss Listing Your Account',
+        url: 'https://wa.me/message/J5GD7AI5QQCIF1',
       },
-      {
-        title: 'Legitimate Account Access & Unlinking Guidance',
-        description:
-          'Advisory guidance for legitimate platform unlinking and credential hygiene, where officially supported by game publishers.',
-        note: '[ADD YOUR SPECIFIC ACCESS OR UNLINKING SCOPE HERE]',
+    },
+    accessAndUnlinking: {
+      id: 'access-and-unlinking',
+      number: '3',
+      title: 'Legitimate Account Access & Unlinking Guidance',
+      intro:
+        'ÉVANN_STORIES provides account access assistance and paid unlinking-related services for supported account situations.',
+      platformsIntro:
+        'Our services may include assistance with account-linking issues involving:',
+      platforms: ['Facebook', 'Google', 'LINE', 'Apple', 'Game Center', 'Activision'],
+      investigationNote:
+        'We also offer paid assistance for investigating and resolving unauthorized or unwanted linked-account situations, subject to account ownership verification, available platform procedures, and technical limitations.',
+      conditionsTitle: 'Important conditions:',
+      conditions: [
+        'The customer must be the legitimate account owner or have proper authorization.',
+        'Account ownership and relevant access must be verified before assistance begins.',
+        'Unlinking or credential changes must be performed only through legitimate, authorized methods.',
+        'We cannot guarantee that every platform or account-linking situation can be resolved.',
+        'Some unlinking requests may be restricted by the game publisher or the relevant platform.',
+      ],
+      pricingNotice: 'Service availability and pricing depend on the specific issue.',
+      cta: {
+        label: 'Request Access & Unlinking Assistance',
+        url: 'https://wa.me/message/J5GD7AI5QQCIF1',
       },
-      {
-        title: 'Community Gaming & Digital Resources',
+    },
+    communityResources: {
+      id: 'community-resources',
+      number: '4',
+      title: 'Community Gaming & Digital Resources',
+      intro:
+        'Join the ÉVANN_STORIES community to stay updated with CODM-related activities, announcements, and opportunities.',
+      activitiesIntro: 'Our community activities include:',
+      activities: [
+        'Giveaways and special promotions.',
+        'Community tournaments and competitive gaming events.',
+        'CODM-related announcements and updates.',
+        'Gaming discussions and community engagement.',
+        'Special opportunities shared with our followers.',
+      ],
+      stayConnectedNotice: {
+        title: 'Stay connected!',
         description:
-          'Community hubs, tournaments, strategy discussions, and real-time updates for competitive mobile gamers.',
-        note: '[ADD DETAILS OF ANY TOURNAMENTS OR COMMUNITY BENEFITS HERE]',
+          'Giveaways, tournaments, and important announcements are published across our social media platforms.',
+        instruction:
+          "Follow all our official social media channels so you don't miss announcements, participation opportunities, or community events.",
       },
-    ],
+      cta: {
+        label: 'Follow All Official Social Channels',
+        route: 'socials',
+      },
+    },
   },
 
   purchaseAndPayment: {
     title: 'Purchase & Payment Policy',
+    introduction:
+      'Please review the following payment conditions carefully before proceeding with a purchase.',
+    paymentMethods: [
+      { name: 'Binance Pay', id: 'binance-pay' },
+      { name: 'Cryptocurrency (Crypto)', id: 'crypto' },
+      { name: 'Bank Transfer', id: 'bank-transfer' },
+      { name: 'PayPal', id: 'paypal' },
+      { name: 'Wise', id: 'wise' },
+      { name: 'Skrill', id: 'skrill' },
+      { name: 'Remitly', id: 'remitly' },
+    ],
     sections: [
       {
-        heading: 'Accepted Payment Methods',
-        placeholder: '[ADD YOUR ACCEPTED PAYMENT METHODS HERE - e.g. Binance Pay, Crypto, Bank Transfer, PayPal, Wise]',
-        guidance: 'Ensure you verify the exact payment address or account name provided in direct communication before dispatching any payment.',
+        id: 'accepted-methods',
+        number: '1',
+        title: 'Accepted Payment Methods',
+        description: 'We currently accept the following payment methods:',
+        securityNotice: {
+          title: 'IMPORTANT PAYMENT SECURITY NOTICE',
+          rules: [
+            'Always verify the exact payment address, wallet address, or recipient account name provided through direct communication with Évann Stories before sending any payment.',
+            'Do not rely on previously saved payment details or information provided by unauthorized individuals. Always confirm the payment instructions for each transaction.',
+          ],
+        },
       },
       {
-        heading: 'Payment Confirmation & Verification',
-        placeholder: '[ADD YOUR PAYMENT CONFIRMATION PROCESS HERE - e.g. Send screenshot of transaction ID to WhatsApp or Discord]',
-        guidance: 'All transactions require verifiable receipt data (Transaction Hash, Reference Number, or Bank Receipt).',
+        id: 'payment-confirmation',
+        number: '2',
+        title: 'Payment Confirmation & Verification',
+        description: 'All transactions require verifiable proof of payment.',
+        acceptedEvidenceIntro: 'Accepted verification evidence includes:',
+        acceptedEvidence: [
+          'Transaction verification screenshots.',
+          'Bank payment receipts.',
+          'Transaction IDs or payment references.',
+        ],
+        instructions:
+          'After completing your payment, send a screenshot containing the transaction ID or relevant payment reference to the same communication platform used to arrange your purchase.',
+        finalNote:
+          'Your transaction will proceed only after the payment has been successfully verified.',
       },
       {
-        heading: 'Pricing & Additional Fees',
-        placeholder: '[ADD YOUR PRICING STRUCTURE AND ANY APPLICABLE NETWORK/SERVICE FEES HERE]',
-        guidance: 'Prices are transparently discussed prior to transaction confirmation. Network transaction fees are typically the responsibility of the sender.',
+        id: 'pricing-and-fees',
+        number: '3',
+        title: 'Pricing & Additional Fees',
+        description:
+          'All prices will be transparently communicated and agreed upon before the transaction is confirmed.',
+        feeNotice: {
+          highlight:
+            'All additional network, transaction, transfer, or payment service fees must be covered by the buyer.',
+          details:
+            'This includes any fees charged by banks, cryptocurrency networks, payment processors, or third-party transfer services.',
+        },
+        exclusionNote:
+          'The agreed purchase price does not include additional fees unless explicitly stated otherwise.',
       },
       {
-        heading: 'Service Delivery & Turnaround Time',
-        placeholder: '[ADD YOUR EXPECTED DELIVERY TIMEFRAMES HERE - e.g. 5 minutes to 2 hours depending on queue]',
-        guidance: 'Delivery commences once payment verification has cleared on the blockchain or recipient banking portal.',
+        id: 'service-delivery-time',
+        number: '4',
+        title: 'Service Delivery & Turnaround Time',
+        description:
+          'Delivery will commence once the payment has been successfully verified through the relevant blockchain network or recipient banking/payment portal.',
+        availabilityWarning: {
+          highlight: 'Please complete your payment promptly after confirming an offer.',
+          details:
+            'Account availability and pricing may change while payment is pending. Another buyer may make a higher offer during this period, so delays in payment may result in the account becoming unavailable.',
+          finalNote:
+            'A purchase is not considered confirmed until payment verification has been completed.',
+        },
       },
       {
-        heading: 'Delayed Transactions Protocol',
-        placeholder: '[ADD YOUR STEP-BY-STEP DELAY RESOLUTION INSTRUCTIONS HERE]',
-        guidance: 'If your delivery exceeds the estimated timeframe, open a ticket on Discord or message Évann directly on WhatsApp with your Order Reference.',
+        id: 'delayed-transactions-protocol',
+        number: '5',
+        title: 'Delayed Transactions Protocol',
+        description:
+          'If your delivery exceeds the estimated timeframe communicated during the transaction, please contact Évann Stories directly.',
+        optionsIntro: 'You can:',
+        options: [
+          'Open a support ticket through our Discord server.',
+          'Message Évann Stories directly through WhatsApp Business.',
+        ],
+        orderRefNotice:
+          'When contacting support, always provide your Order Reference and relevant transaction details so the issue can be investigated efficiently.',
+        whatsappUrl: 'https://wa.me/message/J5GD7AI5QQCIF1',
+        discordNote:
+          'For Discord support, customers must request private server access.',
       },
     ],
   },

@@ -15,6 +15,17 @@ import {
   Sparkles,
   ChevronRight,
   ExternalLink,
+  ArrowRightLeft,
+  Globe,
+  Wallet,
+  Building2,
+  Coins,
+  ShoppingBag,
+  Megaphone,
+  KeyRound,
+  Trophy,
+  Gamepad2,
+  Users,
 } from 'lucide-react';
 import { useRouter } from '../routes/router';
 
@@ -243,44 +254,760 @@ export const AboutPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Legal Disclaimer Box */}
+              {/* Impartiality Disclaimer Box */}
               <div
                 style={{
-                  margin: '1.25rem 0',
-                  padding: '1rem 1.25rem',
+                  marginTop: '1.25rem',
+                  padding: '1.25rem',
+                  borderRadius: '10px',
                   backgroundColor: 'rgba(255, 23, 68, 0.06)',
                   border: '1px solid rgba(255, 23, 68, 0.25)',
-                  borderRadius: '8px',
-                  fontSize: '0.85rem',
-                  color: 'var(--text-secondary)',
-                  lineHeight: 1.6,
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '12px',
                 }}
               >
-                <strong style={{ color: 'var(--red-accent)' }}>Impartiality Disclaimer:</strong>{' '}
-                {ABOUT_AND_POLICIES_DATA.services.disclaimer}
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: '1.25rem', marginTop: '1.25rem' }}>
-                {ABOUT_AND_POLICIES_DATA.services.items.map((svc, idx) => (
-                  <div
-                    key={idx}
+                <ShieldAlert size={20} color="var(--red-accent)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                <div>
+                  <span
                     style={{
-                      padding: '1.25rem',
-                      borderRadius: '10px',
-                      backgroundColor: 'var(--bg-elevated)',
-                      border: '1px solid var(--border-subtle)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '0.6rem',
+                      fontFamily: 'var(--font-tech)',
+                      fontSize: '0.76rem',
+                      fontWeight: 800,
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                      color: 'var(--red-accent)',
+                      display: 'block',
+                      marginBottom: '0.35rem',
                     }}
                   >
-                    <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: '1.1rem', color: 'var(--heading-color)' }}>
-                      {svc.title}
-                    </h3>
-                    <p style={{ ...paragraphStyle, margin: 0, fontSize: '0.88rem' }}>{svc.description}</p>
-                    <div style={placeholderTagStyle}>{svc.note}</div>
+                    {ABOUT_AND_POLICIES_DATA.services.disclaimer.title}
+                  </span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                    {ABOUT_AND_POLICIES_DATA.services.disclaimer.paragraphs.map((para, pIdx) => (
+                      <p
+                        key={pIdx}
+                        style={{
+                          margin: 0,
+                          fontSize: '0.92rem',
+                          color: 'var(--text-secondary)',
+                          lineHeight: 1.6,
+                        }}
+                      >
+                        {para}
+                      </p>
+                    ))}
                   </div>
-                ))}
+                </div>
+              </div>
+
+              {/* Four Service Categories */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginTop: '1.5rem' }}>
+                {/* Category 1: CODM Accounts Buying & Selling */}
+                {(() => {
+                  const cat1 = ABOUT_AND_POLICIES_DATA.services.buyingAndSelling;
+                  return (
+                    <div
+                      key={cat1.id}
+                      className="policy-category-card"
+                      style={{
+                        padding: '1.5rem',
+                        borderRadius: '12px',
+                        backgroundColor: 'var(--bg-elevated)',
+                        border: '1px solid var(--border-subtle)',
+                        transition: 'all 220ms cubic-bezier(0.16, 1, 0.3, 1)',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', marginBottom: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: '28px',
+                              height: '28px',
+                              borderRadius: '7px',
+                              backgroundColor: 'rgba(255, 23, 68, 0.12)',
+                              border: '1px solid rgba(255, 23, 68, 0.35)',
+                              color: 'var(--red-accent)',
+                              fontFamily: 'var(--font-tech)',
+                              fontSize: '0.82rem',
+                              fontWeight: 800,
+                              flexShrink: 0,
+                            }}
+                          >
+                            0{cat1.number}
+                          </span>
+                          <h3
+                            style={{
+                              fontFamily: 'var(--font-heading)',
+                              fontWeight: 700,
+                              fontSize: '1.15rem',
+                              color: 'var(--heading-color)',
+                              margin: 0,
+                            }}
+                          >
+                            {cat1.title}
+                          </h3>
+                        </div>
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-tech)',
+                            fontSize: '0.72rem',
+                            fontWeight: 700,
+                            letterSpacing: '0.08em',
+                            textTransform: 'uppercase',
+                            padding: '4px 10px',
+                            borderRadius: '9999px',
+                            backgroundColor: 'rgba(255, 23, 68, 0.08)',
+                            border: '1px solid rgba(255, 23, 68, 0.25)',
+                            color: 'var(--red-accent)',
+                          }}
+                        >
+                          Account Trading
+                        </span>
+                      </div>
+
+                      <p style={{ ...paragraphStyle, margin: '0 0 1rem 0', fontSize: '0.94rem' }}>
+                        {cat1.intro}
+                      </p>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '0.85rem', marginBottom: '1rem' }}>
+                        {cat1.offerings.map((off, oIdx) => (
+                          <div
+                            key={oIdx}
+                            style={{
+                              padding: '1rem',
+                              borderRadius: '8px',
+                              backgroundColor: 'var(--bg-card)',
+                              border: '1px solid var(--border-subtle)',
+                              display: 'flex',
+                              alignItems: 'flex-start',
+                              gap: '10px',
+                            }}
+                          >
+                            <div
+                              style={{
+                                width: '32px',
+                                height: '32px',
+                                borderRadius: '6px',
+                                backgroundColor: 'rgba(255, 23, 68, 0.08)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0,
+                              }}
+                            >
+                              {oIdx === 0 ? <ShoppingBag size={16} color="var(--red-accent)" /> : <Coins size={16} color="var(--red-accent)" />}
+                            </div>
+                            <div>
+                              <strong style={{ display: 'block', color: 'var(--heading-color)', fontSize: '0.92rem', marginBottom: '0.2rem' }}>
+                                {off.label}
+                              </strong>
+                              <span style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                                {off.description}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <p style={{ ...paragraphStyle, margin: '0 0 0.75rem 0', fontSize: '0.92rem' }}>
+                        {cat1.description}
+                      </p>
+
+                      <div
+                        style={{
+                          padding: '0.85rem 1rem',
+                          borderRadius: '8px',
+                          backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                          border: '1px dashed var(--border-subtle)',
+                          fontSize: '0.88rem',
+                          color: 'var(--text-muted)',
+                          marginBottom: '1.25rem',
+                        }}
+                      >
+                        {cat1.pricingNote}
+                      </div>
+
+                      <div>
+                        <a
+                          href={cat1.cta.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="support-contact-btn"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            padding: '9px 18px',
+                            borderRadius: '8px',
+                            backgroundColor: 'rgba(255, 23, 68, 0.12)',
+                            border: '1px solid rgba(255, 23, 68, 0.35)',
+                            color: 'var(--red-accent)',
+                            fontFamily: 'var(--font-tech)',
+                            fontWeight: 700,
+                            fontSize: '0.86rem',
+                            letterSpacing: '0.04em',
+                            textDecoration: 'none',
+                            transition: 'all 200ms ease',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          <ShoppingBag size={14} />
+                          <span>{cat1.cta.label}</span>
+                          <ExternalLink size={14} />
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* Category 2: Account Listings & Digital Marketplace Facilitation */}
+                {(() => {
+                  const cat2 = ABOUT_AND_POLICIES_DATA.services.marketplaceListings;
+                  return (
+                    <div
+                      key={cat2.id}
+                      className="policy-category-card"
+                      style={{
+                        padding: '1.5rem',
+                        borderRadius: '12px',
+                        backgroundColor: 'var(--bg-elevated)',
+                        border: '1px solid var(--border-subtle)',
+                        transition: 'all 220ms cubic-bezier(0.16, 1, 0.3, 1)',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', marginBottom: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: '28px',
+                              height: '28px',
+                              borderRadius: '7px',
+                              backgroundColor: 'rgba(255, 23, 68, 0.12)',
+                              border: '1px solid rgba(255, 23, 68, 0.35)',
+                              color: 'var(--red-accent)',
+                              fontFamily: 'var(--font-tech)',
+                              fontSize: '0.82rem',
+                              fontWeight: 800,
+                              flexShrink: 0,
+                            }}
+                          >
+                            0{cat2.number}
+                          </span>
+                          <h3
+                            style={{
+                              fontFamily: 'var(--font-heading)',
+                              fontWeight: 700,
+                              fontSize: '1.15rem',
+                              color: 'var(--heading-color)',
+                              margin: 0,
+                            }}
+                          >
+                            {cat2.title}
+                          </h3>
+                        </div>
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-tech)',
+                            fontSize: '0.72rem',
+                            fontWeight: 700,
+                            letterSpacing: '0.08em',
+                            textTransform: 'uppercase',
+                            padding: '4px 10px',
+                            borderRadius: '9999px',
+                            backgroundColor: 'rgba(255, 23, 68, 0.08)',
+                            border: '1px solid rgba(255, 23, 68, 0.25)',
+                            color: 'var(--red-accent)',
+                          }}
+                        >
+                          Marketplace Reach
+                        </span>
+                      </div>
+
+                      <div
+                        style={{
+                          marginBottom: '1rem',
+                          padding: '0.9rem 1.1rem',
+                          borderRadius: '8px',
+                          backgroundColor: 'rgba(255, 23, 68, 0.04)',
+                          border: '1px solid rgba(255, 23, 68, 0.18)',
+                        }}
+                      >
+                        <p style={{ margin: 0, fontWeight: 600, color: 'var(--heading-color)', fontSize: '0.94rem', lineHeight: 1.5 }}>
+                          {cat2.question}
+                        </p>
+                      </div>
+
+                      <p style={{ ...paragraphStyle, margin: '0 0 0.5rem 0', fontSize: '0.92rem' }}>
+                        {cat2.intro}
+                      </p>
+                      <p style={{ ...paragraphStyle, margin: '0 0 1.25rem 0', fontSize: '0.92rem' }}>
+                        {cat2.description}
+                      </p>
+
+                      {/* Requirements box */}
+                      <div
+                        style={{
+                          padding: '1.25rem',
+                          borderRadius: '10px',
+                          backgroundColor: 'var(--bg-card)',
+                          border: '1px solid var(--border-subtle)',
+                          marginBottom: '1rem',
+                        }}
+                      >
+                        <h4
+                          style={{
+                            fontFamily: 'var(--font-tech)',
+                            fontSize: '0.82rem',
+                            fontWeight: 800,
+                            letterSpacing: '0.06em',
+                            textTransform: 'uppercase',
+                            color: 'var(--red-accent)',
+                            margin: '0 0 0.85rem 0',
+                          }}
+                        >
+                          {cat2.requirementsTitle}
+                        </h4>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                          {cat2.requirements.map((req, rIdx) => (
+                            <div key={rIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                              <CheckCircle2
+                                size={15}
+                                color="var(--red-accent)"
+                                style={{ flexShrink: 0, marginTop: '3px' }}
+                              />
+                              <span style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
+                                {req}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '1.25rem' }}>
+                        <p style={{ ...paragraphStyle, margin: 0, fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+                          {cat2.feeNotice}
+                        </p>
+                        <p style={{ ...paragraphStyle, margin: 0, fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                          {cat2.contactNote}
+                        </p>
+                      </div>
+
+                      <div>
+                        <a
+                          href={cat2.cta.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="support-contact-btn"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            padding: '9px 18px',
+                            borderRadius: '8px',
+                            backgroundColor: 'rgba(255, 23, 68, 0.12)',
+                            border: '1px solid rgba(255, 23, 68, 0.35)',
+                            color: 'var(--red-accent)',
+                            fontFamily: 'var(--font-tech)',
+                            fontWeight: 700,
+                            fontSize: '0.86rem',
+                            letterSpacing: '0.04em',
+                            textDecoration: 'none',
+                            transition: 'all 200ms ease',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          <Megaphone size={14} />
+                          <span>{cat2.cta.label}</span>
+                          <ExternalLink size={14} />
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* Category 3: Legitimate Account Access & Unlinking Guidance */}
+                {(() => {
+                  const cat3 = ABOUT_AND_POLICIES_DATA.services.accessAndUnlinking;
+                  return (
+                    <div
+                      key={cat3.id}
+                      className="policy-category-card"
+                      style={{
+                        padding: '1.5rem',
+                        borderRadius: '12px',
+                        backgroundColor: 'var(--bg-elevated)',
+                        border: '1px solid var(--border-subtle)',
+                        transition: 'all 220ms cubic-bezier(0.16, 1, 0.3, 1)',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', marginBottom: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: '28px',
+                              height: '28px',
+                              borderRadius: '7px',
+                              backgroundColor: 'rgba(255, 23, 68, 0.12)',
+                              border: '1px solid rgba(255, 23, 68, 0.35)',
+                              color: 'var(--red-accent)',
+                              fontFamily: 'var(--font-tech)',
+                              fontSize: '0.82rem',
+                              fontWeight: 800,
+                              flexShrink: 0,
+                            }}
+                          >
+                            0{cat3.number}
+                          </span>
+                          <h3
+                            style={{
+                              fontFamily: 'var(--font-heading)',
+                              fontWeight: 700,
+                              fontSize: '1.15rem',
+                              color: 'var(--heading-color)',
+                              margin: 0,
+                            }}
+                          >
+                            {cat3.title}
+                          </h3>
+                        </div>
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-tech)',
+                            fontSize: '0.72rem',
+                            fontWeight: 700,
+                            letterSpacing: '0.08em',
+                            textTransform: 'uppercase',
+                            padding: '4px 10px',
+                            borderRadius: '9999px',
+                            backgroundColor: 'rgba(255, 23, 68, 0.08)',
+                            border: '1px solid rgba(255, 23, 68, 0.25)',
+                            color: 'var(--red-accent)',
+                          }}
+                        >
+                          Technical Advisory
+                        </span>
+                      </div>
+
+                      <p style={{ ...paragraphStyle, margin: '0 0 1rem 0', fontSize: '0.94rem' }}>
+                        {cat3.intro}
+                      </p>
+
+                      {/* Platforms pills */}
+                      <div style={{ marginBottom: '1.25rem' }}>
+                        <span
+                          style={{
+                            fontSize: '0.86rem',
+                            fontWeight: 600,
+                            color: 'var(--heading-color)',
+                            display: 'block',
+                            marginBottom: '0.65rem',
+                          }}
+                        >
+                          {cat3.platformsIntro}
+                        </span>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                          {cat3.platforms.map((plat) => (
+                            <span
+                              key={plat}
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                padding: '6px 14px',
+                                borderRadius: '6px',
+                                backgroundColor: 'var(--bg-card)',
+                                border: '1px solid var(--border-subtle)',
+                                color: 'var(--text-primary)',
+                                fontSize: '0.84rem',
+                                fontWeight: 600,
+                                letterSpacing: '0.02em',
+                              }}
+                            >
+                              <Lock size={12} color="var(--red-accent)" />
+                              {plat}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <p style={{ ...paragraphStyle, margin: '0 0 1.25rem 0', fontSize: '0.92rem' }}>
+                        {cat3.investigationNote}
+                      </p>
+
+                      {/* Important conditions */}
+                      <div
+                        style={{
+                          padding: '1.25rem',
+                          borderRadius: '10px',
+                          backgroundColor: 'rgba(255, 23, 68, 0.04)',
+                          border: '1px solid rgba(255, 23, 68, 0.2)',
+                          marginBottom: '1rem',
+                        }}
+                      >
+                        <h4
+                          style={{
+                            fontFamily: 'var(--font-tech)',
+                            fontSize: '0.82rem',
+                            fontWeight: 800,
+                            letterSpacing: '0.06em',
+                            textTransform: 'uppercase',
+                            color: 'var(--red-accent)',
+                            margin: '0 0 0.85rem 0',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                          }}
+                        >
+                          <AlertTriangle size={15} />
+                          {cat3.conditionsTitle}
+                        </h4>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                          {cat3.conditions.map((cond, cIdx) => (
+                            <div key={cIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                              <span
+                                style={{
+                                  display: 'inline-block',
+                                  width: '5px',
+                                  height: '5px',
+                                  borderRadius: '50%',
+                                  backgroundColor: 'var(--red-accent)',
+                                  marginTop: '7px',
+                                  flexShrink: 0,
+                                }}
+                              />
+                              <span style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
+                                {cond}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <p style={{ ...paragraphStyle, margin: '0 0 1.25rem 0', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+                        {cat3.pricingNotice}
+                      </p>
+
+                      <div>
+                        <a
+                          href={cat3.cta.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="support-contact-btn"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            padding: '9px 18px',
+                            borderRadius: '8px',
+                            backgroundColor: 'rgba(255, 23, 68, 0.12)',
+                            border: '1px solid rgba(255, 23, 68, 0.35)',
+                            color: 'var(--red-accent)',
+                            fontFamily: 'var(--font-tech)',
+                            fontWeight: 700,
+                            fontSize: '0.86rem',
+                            letterSpacing: '0.04em',
+                            textDecoration: 'none',
+                            transition: 'all 200ms ease',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          <KeyRound size={14} />
+                          <span>{cat3.cta.label}</span>
+                          <ExternalLink size={14} />
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* Category 4: Community Gaming & Digital Resources */}
+                {(() => {
+                  const cat4 = ABOUT_AND_POLICIES_DATA.services.communityResources;
+                  return (
+                    <div
+                      key={cat4.id}
+                      className="policy-category-card"
+                      style={{
+                        padding: '1.5rem',
+                        borderRadius: '12px',
+                        backgroundColor: 'var(--bg-elevated)',
+                        border: '1px solid var(--border-subtle)',
+                        transition: 'all 220ms cubic-bezier(0.16, 1, 0.3, 1)',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', marginBottom: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: '28px',
+                              height: '28px',
+                              borderRadius: '7px',
+                              backgroundColor: 'rgba(255, 23, 68, 0.12)',
+                              border: '1px solid rgba(255, 23, 68, 0.35)',
+                              color: 'var(--red-accent)',
+                              fontFamily: 'var(--font-tech)',
+                              fontSize: '0.82rem',
+                              fontWeight: 800,
+                              flexShrink: 0,
+                            }}
+                          >
+                            0{cat4.number}
+                          </span>
+                          <h3
+                            style={{
+                              fontFamily: 'var(--font-heading)',
+                              fontWeight: 700,
+                              fontSize: '1.15rem',
+                              color: 'var(--heading-color)',
+                              margin: 0,
+                            }}
+                          >
+                            {cat4.title}
+                          </h3>
+                        </div>
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-tech)',
+                            fontSize: '0.72rem',
+                            fontWeight: 700,
+                            letterSpacing: '0.08em',
+                            textTransform: 'uppercase',
+                            padding: '4px 10px',
+                            borderRadius: '9999px',
+                            backgroundColor: 'rgba(255, 23, 68, 0.08)',
+                            border: '1px solid rgba(255, 23, 68, 0.25)',
+                            color: 'var(--red-accent)',
+                          }}
+                        >
+                          Community Hub
+                        </span>
+                      </div>
+
+                      <p style={{ ...paragraphStyle, margin: '0 0 1.25rem 0', fontSize: '0.94rem' }}>
+                        {cat4.intro}
+                      </p>
+
+                      {/* Activities grid */}
+                      <div style={{ marginBottom: '1.25rem' }}>
+                        <span
+                          style={{
+                            fontSize: '0.86rem',
+                            fontWeight: 600,
+                            color: 'var(--heading-color)',
+                            display: 'block',
+                            marginBottom: '0.65rem',
+                          }}
+                        >
+                          {cat4.activitiesIntro}
+                        </span>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: '0.75rem' }}>
+                          {cat4.activities.map((act, aIdx) => (
+                            <div
+                              key={aIdx}
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '10px',
+                                padding: '0.85rem 1rem',
+                                borderRadius: '8px',
+                                backgroundColor: 'var(--bg-card)',
+                                border: '1px solid var(--border-subtle)',
+                              }}
+                            >
+                              <Sparkles size={15} color="var(--red-accent)" style={{ flexShrink: 0 }} />
+                              <span style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>
+                                {act}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Stay connected banner */}
+                      <div
+                        style={{
+                          padding: '1.25rem',
+                          borderRadius: '10px',
+                          backgroundColor: 'rgba(255, 23, 68, 0.06)',
+                          border: '1px solid rgba(255, 23, 68, 0.22)',
+                          marginBottom: '1.25rem',
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '12px',
+                        }}
+                      >
+                        <Trophy size={20} color="var(--red-accent)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                        <div>
+                          <strong
+                            style={{
+                              display: 'block',
+                              fontFamily: 'var(--font-tech)',
+                              fontSize: '0.82rem',
+                              fontWeight: 800,
+                              letterSpacing: '0.06em',
+                              textTransform: 'uppercase',
+                              color: 'var(--red-accent)',
+                              marginBottom: '0.35rem',
+                            }}
+                          >
+                            {cat4.stayConnectedNotice.title}
+                          </strong>
+                          <p style={{ margin: '0 0 0.35rem 0', fontSize: '0.9rem', color: 'var(--text-primary)', lineHeight: 1.55 }}>
+                            {cat4.stayConnectedNotice.description}
+                          </p>
+                          <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
+                            {cat4.stayConnectedNotice.instruction}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <a
+                          href="#/socials"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigate('socials');
+                          }}
+                          className="support-contact-btn"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            padding: '9px 18px',
+                            borderRadius: '8px',
+                            backgroundColor: 'rgba(255, 23, 68, 0.12)',
+                            border: '1px solid rgba(255, 23, 68, 0.35)',
+                            color: 'var(--red-accent)',
+                            fontFamily: 'var(--font-tech)',
+                            fontWeight: 700,
+                            fontSize: '0.86rem',
+                            letterSpacing: '0.04em',
+                            textDecoration: 'none',
+                            transition: 'all 200ms ease',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          <Gamepad2 size={14} />
+                          <span>{cat4.cta.label}</span>
+                          <ChevronRight size={14} />
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             </section>
 
@@ -296,22 +1023,331 @@ export const AboutPage: React.FC = () => {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginTop: '1.5rem' }}>
-                {ABOUT_AND_POLICIES_DATA.purchaseAndPayment.sections.map((sec, idx) => (
-                  <div
-                    key={idx}
+              {/* Introduction */}
+              <div
+                style={{
+                  marginTop: '1.25rem',
+                  padding: '1.1rem 1.25rem',
+                  borderRadius: '10px',
+                  backgroundColor: 'rgba(255, 23, 68, 0.05)',
+                  border: '1px solid rgba(255, 23, 68, 0.22)',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '12px',
+                }}
+              >
+                <AlertTriangle size={18} color="var(--red-accent)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                <div>
+                  <span
                     style={{
-                      padding: '1.25rem',
-                      borderRadius: '10px',
-                      backgroundColor: 'var(--bg-elevated)',
-                      border: '1px solid var(--border-subtle)',
+                      fontFamily: 'var(--font-tech)',
+                      fontSize: '0.74rem',
+                      fontWeight: 800,
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                      color: 'var(--red-accent)',
+                      display: 'block',
+                      marginBottom: '0.25rem',
                     }}
                   >
-                    <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: '1.1rem', color: 'var(--heading-color)', marginBottom: '0.4rem' }}>
-                      {sec.heading}
-                    </h3>
-                    <p style={{ ...paragraphStyle, marginBottom: '0.75rem', fontSize: '0.88rem' }}>{sec.guidance}</p>
-                    <div style={placeholderTagStyle}>{sec.placeholder}</div>
+                    Payment Conditions Notice
+                  </span>
+                  <p style={{ margin: 0, fontSize: '0.94rem', color: 'var(--text-primary)', lineHeight: 1.6 }}>
+                    {ABOUT_AND_POLICIES_DATA.purchaseAndPayment.introduction}
+                  </p>
+                </div>
+              </div>
+
+              {/* Five Distinct Policy Subsections */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginTop: '1.5rem' }}>
+                {ABOUT_AND_POLICIES_DATA.purchaseAndPayment.sections.map((sec) => (
+                  <div
+                    key={sec.id}
+                    className="policy-category-card"
+                    style={{
+                      padding: '1.5rem',
+                      borderRadius: '12px',
+                      backgroundColor: 'var(--bg-elevated)',
+                      border: '1px solid var(--border-subtle)',
+                      transition: 'all 220ms cubic-bezier(0.16, 1, 0.3, 1)',
+                    }}
+                  >
+                    {/* Header with Number Badge and Title */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1rem' }}>
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '7px',
+                          backgroundColor: 'rgba(255, 23, 68, 0.12)',
+                          border: '1px solid rgba(255, 23, 68, 0.35)',
+                          color: 'var(--red-accent)',
+                          fontFamily: 'var(--font-tech)',
+                          fontSize: '0.82rem',
+                          fontWeight: 800,
+                          flexShrink: 0,
+                        }}
+                      >
+                        {sec.number}
+                      </span>
+                      <h3
+                        style={{
+                          fontFamily: 'var(--font-heading)',
+                          fontWeight: 700,
+                          fontSize: '1.1rem',
+                          color: 'var(--heading-color)',
+                          margin: 0,
+                          lineHeight: 1.3,
+                        }}
+                      >
+                        {sec.title}
+                      </h3>
+                    </div>
+
+                    <p style={{ ...paragraphStyle, marginBottom: '0.75rem', fontSize: '0.92rem', color: 'var(--text-primary)' }}>
+                      {sec.description}
+                    </p>
+
+                    {/* SUBSECTION 1: Accepted Payment Methods */}
+                    {sec.id === 'accepted-methods' && (
+                      <>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', margin: '0.9rem 0 1.25rem' }}>
+                          {ABOUT_AND_POLICIES_DATA.purchaseAndPayment.paymentMethods.map((pm) => (
+                            <div
+                              key={pm.name}
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                padding: '8px 14px',
+                                borderRadius: '8px',
+                                backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                                border: '1px solid var(--border-glass)',
+                                fontSize: '0.86rem',
+                                fontFamily: 'var(--font-tech)',
+                                fontWeight: 600,
+                                color: 'var(--text-primary)',
+                                boxShadow: 'var(--shadow-subtle)',
+                              }}
+                            >
+                              {pm.id === 'binance-pay' && <Coins size={16} color="var(--red-accent)" />}
+                              {pm.id === 'crypto' && <Coins size={16} color="var(--red-accent)" />}
+                              {pm.id === 'bank-transfer' && <Building2 size={16} color="var(--red-accent)" />}
+                              {pm.id === 'paypal' && <Wallet size={16} color="var(--red-accent)" />}
+                              {pm.id === 'wise' && <Globe size={16} color="var(--red-accent)" />}
+                              {pm.id === 'skrill' && <CreditCard size={16} color="var(--red-accent)" />}
+                              {pm.id === 'remitly' && <ArrowRightLeft size={16} color="var(--red-accent)" />}
+                              <span>{pm.name}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Security Notice Callout */}
+                        {sec.securityNotice && (
+                          <div
+                            style={{
+                              padding: '1rem 1.25rem',
+                              borderRadius: '8px',
+                              backgroundColor: 'rgba(255, 23, 68, 0.08)',
+                              border: '1px solid rgba(255, 23, 68, 0.35)',
+                              boxShadow: '0 0 15px rgba(255, 23, 68, 0.1)',
+                              marginTop: '1rem',
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.5rem' }}>
+                              <ShieldAlert size={16} color="var(--red-accent)" />
+                              <span
+                                style={{
+                                  fontFamily: 'var(--font-tech)',
+                                  fontSize: '0.78rem',
+                                  fontWeight: 800,
+                                  letterSpacing: '0.08em',
+                                  textTransform: 'uppercase',
+                                  color: 'var(--red-accent)',
+                                }}
+                              >
+                                {sec.securityNotice.title}
+                              </span>
+                            </div>
+                            {sec.securityNotice.rules.map((rule, rIdx) => (
+                              <p
+                                key={rIdx}
+                                style={{
+                                  margin: rIdx === 0 ? '0 0 0.5rem' : 0,
+                                  fontSize: '0.88rem',
+                                  color: rIdx === 0 ? 'var(--text-primary)' : 'var(--text-secondary)',
+                                  lineHeight: 1.55,
+                                  fontWeight: rIdx === 0 ? 500 : 400,
+                                }}
+                              >
+                                {rule}
+                              </p>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    )}
+
+                    {/* SUBSECTION 2: Payment Confirmation & Verification */}
+                    {sec.id === 'payment-confirmation' && (
+                      <>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', margin: '0.85rem 0 1rem' }}>
+                          <span style={{ fontSize: '0.86rem', color: 'var(--text-muted)', fontFamily: 'var(--font-tech)' }}>
+                            {sec.acceptedEvidenceIntro}
+                          </span>
+                          {sec.acceptedEvidence?.map((ev, eIdx) => (
+                            <div
+                              key={eIdx}
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                padding: '8px 12px',
+                                borderRadius: '6px',
+                                backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                                border: '1px solid var(--border-subtle)',
+                                fontSize: '0.88rem',
+                                color: 'var(--text-secondary)',
+                              }}
+                            >
+                              <CheckCircle2 size={15} color="var(--red-accent)" style={{ flexShrink: 0 }} />
+                              <span>{ev}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <p style={{ ...paragraphStyle, fontSize: '0.88rem', marginBottom: '0.6rem' }}>
+                          {sec.instructions}
+                        </p>
+                        <p style={{ ...paragraphStyle, fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-primary)', margin: 0 }}>
+                          {sec.finalNote}
+                        </p>
+                      </>
+                    )}
+
+                    {/* SUBSECTION 3: Pricing & Additional Fees */}
+                    {sec.id === 'pricing-and-fees' && (
+                      <>
+                        {sec.feeNotice && (
+                          <div
+                            style={{
+                              padding: '1rem 1.25rem',
+                              borderRadius: '8px',
+                              backgroundColor: 'rgba(255, 23, 68, 0.08)',
+                              border: '1px solid rgba(255, 23, 68, 0.3)',
+                              margin: '0.9rem 0',
+                            }}
+                          >
+                            <p style={{ margin: '0 0 0.4rem', fontSize: '0.92rem', color: 'var(--text-primary)', fontWeight: 700, lineHeight: 1.55 }}>
+                              {sec.feeNotice.highlight}
+                            </p>
+                            <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
+                              {sec.feeNotice.details}
+                            </p>
+                          </div>
+                        )}
+                        <p style={{ ...paragraphStyle, fontSize: '0.88rem', margin: 0, fontStyle: 'italic' }}>
+                          {sec.exclusionNote}
+                        </p>
+                      </>
+                    )}
+
+                    {/* SUBSECTION 4: Service Delivery & Turnaround Time */}
+                    {sec.id === 'service-delivery-time' && (
+                      <>
+                        {sec.availabilityWarning && (
+                          <div
+                            style={{
+                              padding: '1rem 1.25rem',
+                              borderRadius: '8px',
+                              backgroundColor: 'rgba(245, 158, 11, 0.08)',
+                              border: '1px solid rgba(245, 158, 11, 0.35)',
+                              margin: '0.9rem 0',
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.4rem' }}>
+                              <AlertTriangle size={16} color="#F59E0B" />
+                              <span
+                                style={{
+                                  fontFamily: 'var(--font-tech)',
+                                  fontSize: '0.78rem',
+                                  fontWeight: 800,
+                                  letterSpacing: '0.06em',
+                                  textTransform: 'uppercase',
+                                  color: '#F59E0B',
+                                }}
+                              >
+                                Account Availability Notice
+                              </span>
+                            </div>
+                            <p style={{ margin: '0 0 0.4rem', fontSize: '0.9rem', color: 'var(--text-primary)', fontWeight: 700, lineHeight: 1.55 }}>
+                              {sec.availabilityWarning.highlight}
+                            </p>
+                            <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
+                              {sec.availabilityWarning.details}
+                            </p>
+                          </div>
+                        )}
+                        <p style={{ ...paragraphStyle, fontSize: '0.88rem', margin: 0, fontWeight: 600, color: 'var(--text-primary)' }}>
+                          {sec.availabilityWarning?.finalNote}
+                        </p>
+                      </>
+                    )}
+
+                    {/* SUBSECTION 5: Delayed Transactions Protocol */}
+                    {sec.id === 'delayed-transactions-protocol' && (
+                      <>
+                        <div style={{ margin: '0.85rem 0' }}>
+                          <span style={{ fontSize: '0.86rem', color: 'var(--text-muted)', fontFamily: 'var(--font-tech)' }}>
+                            {sec.optionsIntro}
+                          </span>
+                          <ul style={{ margin: '0.5rem 0 1rem 1.25rem', padding: 0, color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.6 }}>
+                            {sec.options?.map((opt, oIdx) => (
+                              <li key={oIdx} style={{ marginBottom: '4px' }}>{opt}</li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <p style={{ ...paragraphStyle, fontSize: '0.88rem', marginBottom: '1rem' }}>
+                          {sec.orderRefNotice}
+                        </p>
+
+                        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1rem', marginTop: '0.5rem' }}>
+                          <a
+                            href={sec.whatsappUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="support-contact-btn"
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '8px',
+                              padding: '9px 18px',
+                              borderRadius: '8px',
+                              backgroundColor: 'rgba(255, 23, 68, 0.12)',
+                              border: '1px solid rgba(255, 23, 68, 0.35)',
+                              color: 'var(--red-accent)',
+                              fontFamily: 'var(--font-tech)',
+                              fontWeight: 700,
+                              fontSize: '0.86rem',
+                              letterSpacing: '0.04em',
+                              textDecoration: 'none',
+                              transition: 'all 200ms ease',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            <span>WhatsApp Business Support</span>
+                            <ExternalLink size={14} />
+                          </a>
+
+                          <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                            {sec.discordNote}
+                          </span>
+                        </div>
+                      </>
+                    )}
                   </div>
                 ))}
               </div>
