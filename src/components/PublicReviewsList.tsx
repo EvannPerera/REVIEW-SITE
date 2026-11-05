@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import type { Review, ReviewPlatform, ReactionType } from '../types/database';
 import { getCountryByCode } from '../data/countries';
+import { ReviewDateNotice } from './ReviewDateNotice';
 
 interface PublicReviewsListProps {
   reviews: Review[];
@@ -137,6 +138,9 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
       }}
     >
       <div className="container">
+        {/* Important Informational Notice: Review Publication Dates */}
+        <ReviewDateNotice />
+
         {/* Section Header */}
         <div className="section-header-cinema" style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <span
