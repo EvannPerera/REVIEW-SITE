@@ -587,7 +587,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                               <span
                                 key={s}
                                 style={{
-                                  color: s <= review.rating ? 'var(--red-accent)' : 'rgba(255,255,255,0.2)',
+                                  color: s <= review.rating ? '#FFD700' : 'rgba(148, 163, 184, 0.3)',
                                   fontSize: '0.85rem',
                                 }}
                               >
@@ -627,9 +627,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                 gap: '4px',
                                 padding: '3px 8px',
                                 borderRadius: '4px',
-                                backgroundColor: 'rgba(0, 230, 118, 0.12)',
-                                border: '1px solid rgba(0, 230, 118, 0.35)',
-                                color: '#00E676',
+                                backgroundColor: 'rgba(34, 197, 94, 0.12)',
+                                border: '1px solid rgba(34, 197, 94, 0.35)',
+                                color: '#22C55E',
                                 fontSize: '0.72rem',
                                 fontFamily: 'var(--font-tech)',
                               }}

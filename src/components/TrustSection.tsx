@@ -123,14 +123,14 @@ export const TrustSection: React.FC = () => {
                 width: '48px',
                 height: '48px',
                 borderRadius: '10px',
-                backgroundColor: 'rgba(255, 23, 68, 0.1)',
-                border: '1px solid rgba(255, 23, 68, 0.3)',
+                backgroundColor: 'rgba(34, 197, 94, 0.12)',
+                border: '1px solid rgba(34, 197, 94, 0.35)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <ShieldCheck size={24} color="var(--red-accent)" />
+              <ShieldCheck size={24} color="#22C55E" />
             </div>
             <h3
               style={{

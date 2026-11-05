@@ -480,34 +480,19 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
                         </div>
                       </div>
 
-                      {/* Verified Badge — ONLY rendered if purchase_verified is TRUE! */}
+                      {/* Verified Badge — ONLY rendered if purchase_verified is TRUE! (Green verified styling) */}
                       {review.purchase_verified && (
                         <div
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            padding: '4px 8px',
-                            borderRadius: '4px',
-                            backgroundColor: 'rgba(255, 23, 68, 0.12)',
-                            border: '1px solid rgba(255, 23, 68, 0.35)',
-                            color: 'var(--red-accent)',
-                            fontSize: '0.72rem',
-                            fontFamily: 'var(--font-tech)',
-                            fontWeight: 600,
-                            letterSpacing: '0.04em',
-                            flexShrink: 0,
-                            boxShadow: '0 0 10px rgba(255, 23, 68, 0.2)',
-                          }}
+                          className="review-verified-badge"
                           title="Verified Purchase manually authenticated by administrator"
                         >
-                          <ShieldCheck size={13} />
+                          <ShieldCheck size={13} strokeWidth={2.4} />
                           <span>Verified Purchase</span>
                         </div>
                       )}
                     </div>
 
-                    {/* Star Rating Display */}
+                    {/* Star Rating Display (Gold) */}
                     <div
                       style={{
                         display: 'flex',
@@ -520,18 +505,16 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
                         <Star
                           key={star}
                           size={16}
-                          fill={
-                            star <= review.rating ? 'var(--red-accent)' : 'transparent'
-                          }
+                          fill={star <= review.rating ? '#FFD700' : 'transparent'}
                           color={
                             star <= review.rating
-                              ? 'var(--red-accent)'
-                              : 'rgba(255, 255, 255, 0.2)'
+                              ? '#FFD700'
+                              : 'var(--star-unselected, rgba(148, 163, 184, 0.32))'
                           }
                           style={{
                             filter:
                               star <= review.rating
-                                ? 'drop-shadow(0 0 4px rgba(255, 23, 68, 0.4))'
+                                ? 'drop-shadow(0 0 5px rgba(255, 215, 0, 0.5))'
                                 : 'none',
                           }}
                         />
@@ -740,16 +723,16 @@ export const PublicReviewsList: React.FC<PublicReviewsListProps> = ({
                     width: '54px',
                     height: '54px',
                     borderRadius: '50%',
-                    backgroundColor: 'rgba(255, 23, 68, 0.1)',
-                    border: '1px solid rgba(255, 23, 68, 0.3)',
+                    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                    border: '1px solid rgba(255, 215, 0, 0.35)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     margin: '0 auto 1.25rem',
-                    color: 'var(--red-accent)',
+                    color: '#FFD700',
                   }}
                 >
-                  <Star size={24} />
+                  <Star size={24} fill="#FFD700" />
                 </div>
                 <h3
                   style={{

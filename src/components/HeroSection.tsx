@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { InteractiveTypography } from './InteractiveTypography';
-import { ArrowDown, MessageSquarePlus, ShieldCheck, SquarePen, Compass, CircleUser, Share2 } from 'lucide-react';
+import { ArrowDown, MessageSquarePlus, ShieldCheck, SquarePen, Compass, CircleUser, Share2, Award } from 'lucide-react';
 import gsap from 'gsap';
 import sriLankaFlag from '../assets/sri-lanka-flag.svg';
 
@@ -90,7 +90,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       }}
     >
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-        {/* Premium Brand Badge: 🇱🇰 SRI LANKA'S #1 ACCOUNTS SELLER */}
+        {/* Premium Brand Badge: 🇱🇰 SRI LANKA'S #1 ACCOUNTS SELLER (Prestigious Award Design) */}
         <div
           ref={badgeRef}
           className="hero-brand-badge"
@@ -100,45 +100,56 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '8px',
-            padding: '6px 16px',
+            gap: '10px',
+            padding: '8px 22px',
             borderRadius: '9999px',
-            backgroundColor: 'rgba(255, 23, 68, 0.08)',
-            border: '1px solid rgba(255, 23, 68, 0.28)',
-            marginBottom: '1.25rem',
-            boxShadow: '0 0 20px rgba(255, 23, 68, 0.16)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
+            backgroundColor: 'rgba(18, 18, 24, 0.85)',
+            border: '1px solid rgba(255, 215, 0, 0.35)',
+            marginBottom: '1.5rem',
+            boxShadow: '0 0 25px rgba(255, 215, 0, 0.18), 0 0 40px rgba(255, 23, 68, 0.12)',
+            backdropFilter: 'blur(14px)',
+            WebkitBackdropFilter: 'blur(14px)',
             userSelect: 'none',
           }}
         >
+          {/* Subtle Golden Award Icon */}
+          <Award
+            size={18}
+            color="#FFD700"
+            className="hero-brand-badge-award"
+            style={{
+              flexShrink: 0,
+              filter: 'drop-shadow(0 0 6px rgba(255, 215, 0, 0.55))',
+            }}
+          />
+
           {/* Crisp Sri Lankan National Flag Vector */}
           <img
             src={sriLankaFlag}
             alt="Sri Lanka Flag"
-            width={21}
-            height={16}
+            width={25}
+            height={19}
             className="hero-brand-badge-flag"
             style={{
-              width: '21px',
-              height: '15.75px',
-              borderRadius: '2.5px',
+              width: '25px',
+              height: '18.75px',
+              borderRadius: '3px',
               objectFit: 'cover',
-              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.4)',
-              border: '1px solid rgba(255, 255, 255, 0.18)',
+              boxShadow: '0 2px 5px rgba(0, 0, 0, 0.45)',
+              border: '1px solid rgba(255, 255, 255, 0.22)',
               display: 'inline-block',
               verticalAlign: 'middle',
               flexShrink: 0,
             }}
           />
 
-          {/* Prominent "SRI LANKA'S #1" with subtle crimson-red accent */}
+          {/* Prominent "SRI LANKA'S #1" with prestigious gold achievement badge */}
           <span
             className="hero-brand-badge-primary"
             style={{
               fontFamily: 'var(--font-tech)',
-              fontSize: '0.80rem',
-              fontWeight: 700,
+              fontSize: '0.90rem',
+              fontWeight: 800,
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
               color: '#FFFFFF',
@@ -147,30 +158,38 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               lineHeight: 1,
             }}
           >
-            SRI LANKA'S&nbsp;
+            SRI LANKA'S
             <span
               className="hero-brand-badge-accent"
               style={{
-                color: 'var(--red-accent)',
-                fontWeight: 800,
-                textShadow: '0 0 10px rgba(255, 23, 68, 0.45)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '2px 7px',
+                marginLeft: '6px',
+                borderRadius: '5px',
+                backgroundColor: 'rgba(255, 215, 0, 0.15)',
+                border: '1px solid rgba(255, 215, 0, 0.45)',
+                color: '#FFD700',
+                fontWeight: 900,
+                fontSize: '0.95rem',
+                textShadow: '0 0 10px rgba(255, 215, 0, 0.65)',
+                letterSpacing: '0.04em',
               }}
             >
               #1
             </span>
           </span>
 
-          {/* Subtle Accent Dot Separator */}
+          {/* Subtle Gold Divider */}
           <span
-            className="hero-brand-badge-dot"
+            className="hero-brand-badge-divider"
             aria-hidden="true"
             style={{
               display: 'inline-block',
-              width: '4px',
-              height: '4px',
-              borderRadius: '50%',
-              backgroundColor: 'var(--red-accent)',
-              opacity: 0.8,
+              width: '1px',
+              height: '14px',
+              backgroundColor: 'rgba(255, 215, 0, 0.35)',
               flexShrink: 0,
             }}
           />
@@ -180,11 +199,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             className="hero-brand-badge-secondary"
             style={{
               fontFamily: 'var(--font-tech)',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              letterSpacing: '0.07em',
+              fontSize: '0.84rem',
+              fontWeight: 700,
+              letterSpacing: '0.08em',
               textTransform: 'uppercase',
-              color: '#CBD5E1',
+              color: '#F1F5F9',
               display: 'inline-flex',
               alignItems: 'center',
               lineHeight: 1,

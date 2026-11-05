@@ -213,18 +213,18 @@ export const ReviewStatsOverview: React.FC<ReviewStatsOverviewProps> = ({
                       size={22}
                       fill={
                         star <= Math.round(stats.averageRating)
-                          ? 'var(--red-accent)'
+                          ? '#FFD700'
                           : 'transparent'
                       }
                       color={
                         star <= Math.round(stats.averageRating)
-                          ? 'var(--red-accent)'
-                          : 'rgba(255, 255, 255, 0.2)'
+                          ? '#FFD700'
+                          : 'var(--star-unselected, rgba(148, 163, 184, 0.32))'
                       }
                       style={{
                         filter:
                           star <= Math.round(stats.averageRating)
-                            ? 'drop-shadow(0 0 6px rgba(255, 23, 68, 0.5))'
+                            ? 'drop-shadow(0 0 6px rgba(255, 215, 0, 0.5))'
                             : 'none',
                       }}
                     />
@@ -305,7 +305,7 @@ export const ReviewStatsOverview: React.FC<ReviewStatsOverviewProps> = ({
                           color: 'var(--text-secondary)',
                         }}
                       >
-                        {stars} <Star size={13} fill="currentColor" color="var(--red-accent)" />
+                        {stars} <Star size={13} fill="currentColor" color="#FFD700" />
                       </span>
 
                       {/* Bar track */}

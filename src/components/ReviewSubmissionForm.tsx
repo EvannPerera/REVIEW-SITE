@@ -597,12 +597,17 @@ export const ReviewSubmissionForm: React.FC<ReviewSubmissionFormProps> = ({ onSu
                       >
                         <Star
                           size={28}
-                          fill={isFilled ? 'var(--red-accent)' : 'transparent'}
-                          color={isFilled ? 'var(--red-accent)' : 'rgba(255, 255, 255, 0.25)'}
+                          fill={isFilled ? '#FFD700' : 'transparent'}
+                          color={
+                            isFilled
+                              ? '#FFD700'
+                              : 'var(--star-unselected, rgba(148, 163, 184, 0.35))'
+                          }
                           style={{
                             filter: isFilled
-                              ? 'drop-shadow(0 0 8px rgba(255, 23, 68, 0.6))'
+                              ? 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.65))'
                               : 'none',
+                            transition: 'filter 180ms ease, color 180ms ease',
                           }}
                         />
                       </button>
