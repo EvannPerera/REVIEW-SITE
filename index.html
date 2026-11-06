@@ -1,53 +1,59 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23FF1744'>É</text></svg>" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#050505" />
-    <meta name="color-scheme" content="dark" />
-    <meta name="description" content="ÉVANN_STORIES — Cinematic animated customer review platform with verified transaction authentication, community reactions, and transparent moderation. Sri Lanka's #1 Accounts Seller." />
-    
-    <!-- Open Graph / Facebook / WhatsApp Link Preview Metadata -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Évann_stories" />
-    <meta property="og:description" content="ÉVANN_STORIES — Cinematic animated customer review platform with verified transaction authentication, community reactions, and transparent moderation. Sri Lanka's #1 Accounts Seller." />
-    
-    <!-- Twitter Cards Metadata -->
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Évann_stories" />
-    <meta name="twitter:description" content="ÉVANN_STORIES — Cinematic animated customer review platform with verified transaction authentication, community reactions, and transparent moderation. Sri Lanka's #1 Accounts Seller." />
-    
-    <!-- Premium Google Fonts: Russo One (Cinematic 3D Heavy) + Dela Gothic One + Syne + Manrope (Professional Headings) + Outfit & Space Grotesk -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Russo+One&family=Comfortaa:wght@700;800;900&family=Manrope:wght@500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet" />
-    <link href="https://db.onlinewebfonts.com/c/28c11a2f6fb39fca8cf5c66e2c34cb34?family=Nexa+Round" rel="stylesheet" />
-    
-    <title>Évann_stories</title>
-    
-    <!-- Instant Theme Detection Script (Guarantees Dark Mode as Default) -->
-    <script>
-      (function() {
-        try {
-          var saved = localStorage.getItem('evann_stories_theme');
-          var theme = (saved === 'light' || saved === 'dark') ? saved : 'dark';
-          document.documentElement.setAttribute('data-theme', theme);
-          if (theme === 'light') {
-            document.documentElement.classList.add('light-mode');
-            var meta = document.querySelector('meta[name="theme-color"]');
-            if (meta) meta.setAttribute('content', '#F8FAFC');
-          } else {
-            document.documentElement.classList.add('dark-mode');
-            var meta = document.querySelector('meta[name="theme-color"]');
-            if (meta) meta.setAttribute('content', '#050505');
-          }
-        } catch (e) {}
-      })();
-    </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23FF1744'>É</text></svg>" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="description" content="ÉVANN_STORIES — 🇱🇰 Sri Lanka's #1 Accounts Seller." />
+
+  <!-- Open Graph / Facebook / WhatsApp Link Preview Metadata -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Évann_stories" />
+  <meta property="og:description" content="ÉVANN_STORIES — 🇱🇰 Sri Lanka's #1 Accounts Seller." />
+
+  <!-- Twitter Cards Metadata -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Évann_stories" />
+  <meta name="twitter:description" content="ÉVANN_STORIES — 🇱🇰 Sri Lanka's #1 Accounts Seller." />
+
+  <!-- Premium Google Fonts: Russo One (Cinematic 3D Heavy) + Dela Gothic One + Syne + Manrope (Professional Headings) + Outfit & Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Russo+One&family=Comfortaa:wght@700;800;900&family=Manrope:wght@500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800;900&display=swap"
+    rel="stylesheet" />
+  <link href="https://db.onlinewebfonts.com/c/28c11a2f6fb39fca8cf5c66e2c34cb34?family=Nexa+Round" rel="stylesheet" />
+
+  <title>Évann_stories</title>
+
+  <!-- Instant Theme Detection Script (Guarantees Dark Mode as Default) -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('evann_stories_theme');
+        var theme = (saved === 'light' || saved === 'dark') ? saved : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+        if (theme === 'light') {
+          document.documentElement.classList.add('light-mode');
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', '#F8FAFC');
+        } else {
+          document.documentElement.classList.add('dark-mode');
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', '#050505');
+        }
+      } catch (e) { }
+    })();
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>
